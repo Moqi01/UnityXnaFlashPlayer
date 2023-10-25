@@ -487,7 +487,7 @@ namespace XnaFlash.Swf
             if (code != "FWS" && code != "CWS") throw new SwfCorruptedException("Invalid format header found!");
 
             Version = mBitStream.ReadByte();
-            if (Version > SupportedVersion) throw new SwfCorruptedException("Only SWF up to version " + SupportedVersion + " are supported!");
+            //if (Version > SupportedVersion) throw new SwfCorruptedException("Only SWF up to version " + SupportedVersion + " are supported!");
 
             Length = ReadUInt();
             Compressed = code == "CWS";
@@ -514,27 +514,52 @@ namespace XnaFlash.Swf
         }
         internal ISwfTag ReadTag()
         {
-            ushort id  = ReadUShort();
+            ushort v  = ReadUShort();
+            ushort id = v;
+            v >>= 6;
 
+            bool _isLongTag = false;
+           
             int length = id & 0x3F;
-            if (length == 0x3F)
-                length = ReadInt();
 
-            id >>= 6;
+            if (length > 0x3E)
+            {
+                length = ReadInt();
+                _isLongTag = (length <= 0x3E);
+            }
+
             mTagStart = mBitStream.Position;
-            
+            id >>= 6;
+           
+
             string name = string.Empty;
             var tag = SwfTagFactory.LoadTag(this, id, (uint)length, Version, ref name);
+            if(num==317)
+            {
+
+            }
+            //UnityEngine.Debug.Log(num++);
             if (tag == null)
             {
                 mBitStream.Skip(length);
                 if (!mUnknownTags.Contains(id))
                     mUnknownTags.Add(id);
+            }else
+            {
+                if(mTagStart!=mBitStream.Position)
+                if ((mTagStart + length) == mBitStream.Position)
+                {
+
+                }
+                else
+                {
+
+                }
             }
             
             return tag;
         }
-
+        int num;
         #endregion
 
         public void Dispose()

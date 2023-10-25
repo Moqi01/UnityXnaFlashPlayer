@@ -23,13 +23,13 @@ namespace Microsoft.Xna.Framework.Graphics
         private static void InitializeAdapterList()
         {
             //throw new NotImplementedException();
-            UnityEngine.Debug.Log("?");
+            UnityEngine.Debug.Log("InitializeAdapterList");
         }
 
         private static void InitalizeGraphics()
         {
             //throw new NotImplementedException();
-            UnityEngine.Debug.Log("?");
+            UnityEngine.Debug.Log("InitalizeGraphics");
         }
 
         private DisplayMode _currentDisplayMode;
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (this._currentDisplayMode == null)
                 {
-                    UnityEngine.Debug.Log("?");
+                    UnityEngine.Debug.Log("getCurrentDisplayMode");
                     DisplayMode displayMode = new DisplayMode(UnityEngine.Screen.width, UnityEngine.Screen.height,SurfaceFormat.Rgb32 );
                     this._currentDisplayMode = displayMode;
                     if (displayMode._format < SurfaceFormat.Color)

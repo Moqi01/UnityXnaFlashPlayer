@@ -17,5 +17,6 @@ namespace XnaVGPipeline
         {
             return new Vector2((float)point.X, (float)-point.Y);
         }
+
     }
 }

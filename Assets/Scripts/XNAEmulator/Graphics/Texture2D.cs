@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal static Texture2D FromStream(GraphicsDevice graphicsDevice, MemoryStream memoryStream)
         {
-            Texture2D texture = new Texture2D();
+            Texture2D texture = new Texture2D(graphicsDevice,graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
             byte[] date = memoryStream.ToArray();
             texture.SetData(date, 0, date.Length);
             return texture;
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
         {
             Debug.Log("PlatformSetData");
-            unityTexture.SetPixelData<T>(data ,level);
+            unityTexture2D.SetPixelData<T>(data ,level);
         }
         public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
         {
@@ -101,9 +101,18 @@ namespace Microsoft.Xna.Framework.Graphics
                 unityTexture = new UnityEngine.Texture2D(m_width, m_height, TextureFormat.R8, MipMap);
                 //unityTexture = new UnityEngine.Texture2D(m_width, m_height, TextureFormat.Alpha8, MipMap);
             }
-            unityTexture.SetPixelData(dataNew, 0);
+            if(unityTexture==null)
+            {
+                UnityEngine.Texture2D unityTexture2D = new UnityEngine.Texture2D(1024, 1024);
+                unityTexture2D.LoadImage(dataNew);
+                unityTexture = unityTexture2D;
+                m_width = unityTexture.width;
+                m_height = unityTexture.height;
+                return;
+            }
+            unityTexture2D.SetPixelData(dataNew, 0);
             unityTexture.filterMode = FilterMode.Point;
-            unityTexture.Apply(updateMipmaps: true);
+            unityTexture2D.Apply(updateMipmaps: true);
             //OutputRt(unityTexture.EncodeToPNG(), num.ToString ());
         }
 
@@ -114,8 +123,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void GetData(byte[] data)
         {
-            data = this.UnityTexture.EncodeToPNG();
+            data = this.unityTexture2D.EncodeToPNG();
 
+        }
+
+        internal void GetData(Color[] data)
+        {
+          byte[]  dataS = this.unityTexture2D.EncodeToPNG();
+            for(int i=0;i< dataS.Length;)
+            {
+                data[i] = new Color(dataS[i], dataS[i+1], dataS[i +2], dataS[i + 3]);
+                i+=4;
+            }
         }
 
         static int num = 100; 
@@ -141,7 +160,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentNullException("data");
             }
            
-            this.UnityTexture.SetPixels(GetColors(data));
+            this.unityTexture2D.SetPixels(GetColors(data));
         }
 
         protected virtual void Dispose([MarshalAs(UnmanagedType.U1)] bool A_1)
@@ -238,6 +257,9 @@ namespace Microsoft.Xna.Framework.Graphics
             this._parent = graphicsDevice;
             Format = format;
             MipMap = mipMap;
+            
+            UnityTexture = new UnityEngine.Texture2D(width, height);
+
         }
         protected GraphicsDevice _parent;
        

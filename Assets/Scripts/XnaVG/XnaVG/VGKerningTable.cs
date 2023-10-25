@@ -30,7 +30,9 @@ namespace XnaVG
 
         public void Add(char left, char right, float kerning)
         {
-            _table.Add(MakeKey(left, right), kerning);
+            int v = MakeKey(left, right);
+            if(!_table.ContainsKey(v))
+            _table.Add(v, kerning);
         }
 
         public bool Contains(char left, char right)

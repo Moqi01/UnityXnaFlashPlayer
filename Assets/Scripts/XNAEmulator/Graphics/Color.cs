@@ -1153,6 +1153,62 @@ namespace Microsoft.Xna.Framework
             return (uint)(a << 24) + (uint)(r << 16) + (uint)(g << 8) + b;
         }
 
+        internal static Color FromNonPremultiplied(Vector4 value)
+        {
+            return new Color(value);
+        }
+
         #endregion Private Members
+    }
+
+    public struct Bgr565
+    {
+
+    }
+
+    public struct Bgra5551
+    {
+
+    }
+    public struct Bgra4444
+    {
+
+    }
+    public struct NormalizedByte2
+    {
+
+    }
+    public struct NormalizedByte4
+    {
+
+    }
+    public struct Rgba1010102
+    {
+
+    }
+
+    public struct Rg32
+    {
+
+    }
+    public struct Rgba64
+    {
+
+    }
+    public struct Alpha8
+    {
+
+    }
+    public struct HalfSingle
+    {
+
+    }
+    public struct HalfVector2
+    {
+
+    }
+    public struct HalfVector4
+    {
+
     }
 }

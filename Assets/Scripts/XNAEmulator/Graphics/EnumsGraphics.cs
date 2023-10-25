@@ -226,7 +226,8 @@ namespace Microsoft.Xna.Framework.Graphics
         Depth32 = 52,
         Depth16 = 54,
         Depth15Stencil1 = 56,
-        ColorBgraEXT
+        ColorBgraEXT,
+        HdrBlendable
     }
 
 

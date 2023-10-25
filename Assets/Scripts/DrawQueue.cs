@@ -34,6 +34,7 @@ public class DrawQueue
     }
     public void EnqueueSprite(DrawSpriteCall drawSpriteCall)
     {
+        if(spriteQueue .Count<100)
         spriteQueue.Add(drawSpriteCall);
     }
 

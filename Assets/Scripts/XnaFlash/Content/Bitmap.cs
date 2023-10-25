@@ -40,6 +40,7 @@ namespace XnaFlash.Content
                 if (t3 != null && t3.HasAlpha)
                 {
                     var alpha = Swf.BitmapUtils.DecompressAlphaValues(t3.CompressedAlpha, texture.Width, texture.Height);
+                    
                     var data = new Color[texture.Width * texture.Height];
                     texture.GetData(data);
                     for (int i = data.Length - 1; i >= 0; data[i].A = alpha[i], i--) ;

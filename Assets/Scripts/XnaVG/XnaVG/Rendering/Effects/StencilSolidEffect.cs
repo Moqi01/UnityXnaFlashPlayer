@@ -23,7 +23,7 @@ namespace XnaVG.Rendering.Effects
         {
             _projection.SetValue(projection);
             _transformation.SetValue(transformation);
-            _pass.Apply();
+            _pass?.Apply();
         }
         
         public void Dispose()

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEngine;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -23,11 +24,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void DrawPrimitives(PrimitiveType triangleList, int vertexOffset, int triangleCount)
         {
-            throw new NotImplementedException();
+            //Debug.Log("DrawPrimitives");
+            DrawGL.ins.SetPrimitiveTypes(triangleList);
+            DrawGL.ins.SetVectors ( m_VertexBuffer.vertices);
+            
         }
+        private VertexBuffer m_VertexBuffer;
 
         public void SetVertexBuffer(VertexBuffer _bufferedGlyphs)
         {
+            m_VertexBuffer = _bufferedGlyphs;
 
         }
 
@@ -49,26 +55,41 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetRenderTarget(RenderTarget2D renderTarget)
         {
-            UnityEngine.Debug.Log("?");
+            //UnityEngine.Debug.Log("SetRenderTarget");
             if (renderTarget != null)
             {
-                //RenderTargetBinding renderTargetBinding = new RenderTargetBinding(renderTarget);
-                //this.SetRenderTargets(renderTargetBinding, 1);
+                renderTarget.GraphicsDevice = this;
+                RenderTargetBinding renderTargetBinding = new RenderTargetBinding(renderTarget);
+                this.SetRenderTargets(new RenderTargetBinding[] { renderTargetBinding }, 1);
+
+                UnityEngine.Graphics.SetRenderTarget(renderTarget.UnityTexture as RenderTexture);
+                GL.Clear(true, true, UnityEngine.Color.green);
+                //GL.PushMatrix();
+                GL.LoadPixelMatrix(0, renderTarget.UnityTexture.width, renderTarget.UnityTexture.height, 0);
             }
             else
             {
                 //this.SetRenderTargets(null, 0);
+                //GL.PopMatrix();
+                UnityEngine.Graphics.SetRenderTarget(null);
+                //  GL.PushMatrix();
+                GL.LoadPixelMatrix(0, Screen.width, Screen.height, 0);
             }
         }
+        private RenderTargetBinding[] currentRenderTargetBindings;
+        private int currentRenderTargetCount=1;
+        
+        internal VertexBufferBinding[] currentVertexBuffers;
 
-        internal RenderTargetBinding[] GetRenderTargets()
-        {
-            throw new NotImplementedException();
-        }
+        // Token: 0x040000D0 RID: 208
+        internal int currentVertexBufferCount=1;
 
         internal VertexBufferBinding[] GetVertexBuffers()
         {
-            throw new NotImplementedException();
+            int num = this.currentVertexBufferCount;
+            VertexBufferBinding[] array = new VertexBufferBinding[num];
+            //Array.Copy(this.currentVertexBuffers, array, num);
+            return array;
         }
 
         internal void OnDeviceReset()
@@ -79,43 +100,49 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void SetRenderTargets(RenderTargetBinding[] renderTargets)
+        internal void SetRenderTargets(RenderTargetBinding[] renderTargets,int i=1)
         {
-            throw new NotImplementedException();
+            currentRenderTargetBindings = renderTargets;
+        }
+
+        internal RenderTargetBinding[] GetRenderTargets()
+        {
+            int num = this.currentRenderTargetCount;
+            RenderTargetBinding[] array = new RenderTargetBinding[num];
+            //Array.Copy(this.currentRenderTargetBindings, array, num);
+            return array;
         }
 
         internal void SetVertexBuffers(VertexBufferBinding[] vertexBuffers)
         {
-            throw new NotImplementedException();
+            currentVertexBuffers = vertexBuffers;
         }
 
         public void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount) where T : struct, IVertexType
         {
             // this.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, primitiveCount, VertexDeclarationCache<T>.VertexDeclaration);
             UnityEngine.Debug.Log("DrawUserPrimitives");
+           
+
         }
 
         internal void Reset(PresentationParameters parameters)
         {
-            UnityEngine.Debug.Log("ResetParameters");
+            PresentationParameters = parameters.Clone();
         }
 
-        public void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
+        internal void DrawUserPrimitives(PrimitiveType triangleStrip, Vector2[] rectangle, int v1, int v2, VertexDeclaration solidDecl)
         {
-            //UnityEngine.Debug.Log("DrawUserPrimitives");
-            
+            //DrawGL.ins.SetVectors(rectangle);
         }
 
         internal void Clear(ClearOptions clearOptions, Vector4 vector4, float v1, int v2)
         {
-            
+            //GL.Clear(true, true, new UnityEngine.Color(vector4.X, vector4.Y, vector4.Z, vector4.W));
+            DrawGL.ins.Clear(new UnityEngine.Color(vector4.X, vector4.Y, vector4.Z, vector4.W));
         }
 
-        //public void DrawUserPrimitives(PrimitiveType primitiveType, xnaMugen.Video.Vertex[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) 
-        //{
-        //    DrawGame.instance.DrawUserPrimitives(primitiveType, vertexData, vertexOffset, primitiveCount, vertexDeclaration);
 
-        //}
 
         public GraphicsDevice(DrawQueue drawQueue, PresentationParameters presentationParameters=null)
         {
@@ -134,8 +161,15 @@ namespace Microsoft.Xna.Framework.Graphics
             SamplerStates = new SamplerStateCollection(this, 4, false);
         }
 
+        internal void DrawIndexedPrimitives(PrimitiveType primitiveType, int v1, int v2, int vertexCount, int startVertex, int primitiveCount)
+        {
+            throw new NotImplementedException();
+        }
+
         public GraphicsDevice(GraphicsAdapter Adapter, GraphicsProfile Profile, PresentationParameters parameters)
         {
+            this.drawQueue = new DrawQueue();
+            SamplerStates = new SamplerStateCollection(this, 4, false);
             this.Adapter = Adapter;
             DisplayMode =Adapter.CurrentDisplayMode;
             pPublicCachedParams = parameters.Clone();
@@ -151,13 +185,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public  void Clear(Color color)
         {
+            GL.Clear(true, true, UnityEngine.Color.yellow);
 
         }
-        private TextureCollection pTextureCollection;
+        private TextureCollection pTextureCollection ;
         public TextureCollection Textures
         {
             get
             {
+                if (pTextureCollection == null)
+                    pTextureCollection = new TextureCollection(this, 4, false);
                 return this.pTextureCollection;
             }
         }
@@ -207,10 +244,266 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Present(Rectangle sourceRectangle, object p, IntPtr handle)
         {
-            throw new NotImplementedException();
+            ResetPools();
+            if (lastMaterial != null)
+                lastMaterial.SetPass(0);
+        }
+        private Material lastMaterial;
+        //private DynamicAtlas atlas;
+        public void ResetPools()
+        {
+            //_materialPool.Reset();
+            _meshPool.Reset();
+        }
+        private readonly MeshPool _meshPool = new MeshPool();
+        public Material GetMat(Texture2D text)
+        {
+            return _materialPool.Get(text);
+        }
+
+        private readonly MaterialPool _materialPool = new MaterialPool();
+        public MeshHolder GetMesh(int primCCount)
+        {
+            return _meshPool.Get(primCCount);
+        }
+
+       
+    }
+    public class MeshHolder
+    {
+        public readonly int SpriteCount;
+        public readonly Mesh Mesh;
+
+        public readonly UnityEngine.Vector3[] Vertices;
+        public readonly UnityEngine.Vector2[] UVs;
+        public readonly Color32[] Colors;
+
+        public MeshHolder(int spriteCount)
+        {
+            Mesh = new Mesh();
+            Mesh.MarkDynamic(); //Seems to be a win on wp8
+
+            SpriteCount = NextPowerOf2(spriteCount);
+            int vCount = SpriteCount * 4;
+
+            Vertices = new UnityEngine.Vector3[vCount];
+            UVs = new UnityEngine.Vector2[vCount];
+            Colors = new Color32[vCount];
+
+            //Put some random crap in this so we can just set the triangles once
+            //if these are not populated then unity totally fucks up our mesh and never draws it
+            for (var i = 0; i < vCount; i++)
+            {
+                Vertices[i] = new UnityEngine.Vector3(1, i);
+                UVs[i] = new UnityEngine.Vector2(0, i);
+                Colors[i] = new Color32(255, 255, 255, 255);
+            }
+
+            var triangles = new int[SpriteCount * 6];
+            for (var i = 0; i < SpriteCount; i++)
+            {
+                /*
+                 *  TL    TR
+                 *   0----1 0,1,2,3 = index offsets for vertex indices
+                 *   |   /| TL,TR,BL,BR are vertex references in SpriteBatchItem.
+                 *   |  / |
+                 *   | /  |
+                 *   |/   |
+                 *   2----3
+                 *  BL    BR
+                 */
+                // Triangle 1
+                triangles[i * 6 + 0] = i * 4;
+                triangles[i * 6 + 1] = i * 4 + 1;
+                triangles[i * 6 + 2] = i * 4 + 2;
+                // Triangle 2
+                triangles[i * 6 + 3] = i * 4 + 1;
+                triangles[i * 6 + 4] = i * 4 + 3;
+                triangles[i * 6 + 5] = i * 4 + 2;
+            }
+
+            Mesh.vertices = Vertices;
+            Mesh.uv = UVs;
+            Mesh.colors32 = Colors;
+            Mesh.triangles = triangles;
+        }
+
+        internal void Populate(ClassicUO.Renderer.PositionNormalTextureColor[] vertexData, int numVertices)
+        {
+            for (int i = 0; i < numVertices; i++)
+            {
+                var p = vertexData[i].Position;
+                Vertices[i] = new UnityEngine.Vector3(p.X, p.Y, p.Z);
+
+                var uv = vertexData[i].TextureCoordinate;
+                UVs[i] = new UnityEngine.Vector2(uv.X, /*1 - */uv.Y);
+
+                var c = vertexData[i].Normal;
+                // Colors[i] = new Color32( c.R, c.G, c.B, c.A );
+            }
+            //we could clearly less if we remembered how many we used last time
+            Array.Clear(Vertices, numVertices, Vertices.Length - numVertices);
+
+            Mesh.vertices = Vertices;
+            Mesh.uv = UVs;
+            //Mesh.colors32 = Colors;
+        }
+        public void Populate(ClassicUO.Renderer.SpriteVertex[] vertexData, int numVertices)
+        {
+            for (int i = 0; i < numVertices; i++)
+            {
+                var p = vertexData[i].Position;
+                Vertices[i] = new UnityEngine.Vector3(p.X, p.Y, p.Z);
+
+                var uv = vertexData[i].TextureCoordinate;
+                UVs[i] = new UnityEngine.Vector2(uv.X, /*1 - */uv.Y);
+
+                var c = vertexData[i].Normal;
+                // Colors[i] = new Color32( c.R, c.G, c.B, c.A );
+            }
+            //we could clearly less if we remembered how many we used last time
+            Array.Clear(Vertices, numVertices, Vertices.Length - numVertices);
+
+            Mesh.vertices = Vertices;
+            Mesh.uv = UVs;
+            //Mesh.colors32 = Colors;
+        }
+
+
+        public void Populate(VertexPositionColorTexture[] vertexData, int numVertices)
+        {
+            for (int i = 0; i < numVertices; i++)
+            {
+                var p = vertexData[i].Position;
+                Vertices[i] = new UnityEngine.Vector3(p.X, p.Y, p.Z);
+
+                var uv = vertexData[i].TextureCoordinate;
+                UVs[i] = new UnityEngine.Vector2(uv.X, 1 - uv.Y);
+
+                var c = vertexData[i].Color;
+                Colors[i] = new Color32(c.R, c.G, c.B, c.A);
+            }
+            //we could clearly less if we remembered how many we used last time
+            Array.Clear(Vertices, numVertices, Vertices.Length - numVertices);
+
+            Mesh.vertices = Vertices;
+            Mesh.uv = UVs;
+            Mesh.colors32 = Colors;
+        }
+
+        public int NextPowerOf2(int minimum)
+        {
+            int result = 1;
+
+            while (result < minimum)
+                result *= 2;
+
+            return result;
         }
     }
+    public class MaterialPool
+    {
+        private class MaterialHolder
+        {
+            public readonly Material Material;
+            public readonly Texture2D Texture2D;
 
+            public MaterialHolder(Material material, Texture2D texture2D)
+            {
+                Material = material;
+                Texture2D = texture2D;
+            }
+        }
+
+        private readonly List<MaterialHolder> _materials = new List<MaterialHolder>();
+        private int _index;
+        private readonly Shader _shader = Shader.Find("Unlit/HueShader");
+
+        private MaterialHolder Create(Texture2D texture)
+        {
+            var mat = new Material(_shader);
+            mat.mainTexture = texture.UnityTexture;
+            //mat.SetTexture( "_HueTex", texture.GraphicDevice.Textures[1].UnityTexture );
+            mat.renderQueue += _materials.Count;
+            return new MaterialHolder(mat, texture);
+        }
+
+        public Material Get(Texture2D texture)
+        {
+            while (_index < _materials.Count)
+            {
+                if (_materials[_index].Texture2D == texture)
+                {
+                    _index++;
+                    return _materials[_index - 1].Material;
+                }
+
+                _index++;
+            }
+
+            var material = Create(texture);
+            _materials.Add(material);
+            _index++;
+            return _materials[_index - 1].Material;
+        }
+
+        public void Reset()
+        {
+            _index = 0;
+        }
+    }
+    public class MeshPool
+    {
+        private List<MeshHolder> _unusedMeshes = new List<MeshHolder>();
+        private List<MeshHolder> _usedMeshes = new List<MeshHolder>();
+
+        private List<MeshHolder> _otherMeshes = new List<MeshHolder>();
+        //private int _index;
+
+        /// <summary>
+        /// get a mesh with at least this many triangles
+        /// </summary>
+        public MeshHolder Get(int spriteCount)
+        {
+            MeshHolder best = null;
+            int bestIndex = -1;
+            for (int i = 0; i < _unusedMeshes.Count; i++)
+            {
+                var unusedMesh = _unusedMeshes[i];
+                if ((best == null || best.SpriteCount > unusedMesh.SpriteCount) && unusedMesh.SpriteCount >= spriteCount)
+                {
+                    best = unusedMesh;
+                    bestIndex = i;
+                }
+            }
+            if (best == null)
+            {
+                best = new MeshHolder(spriteCount);
+            }
+            else
+            {
+                _unusedMeshes.RemoveAt(bestIndex);
+            }
+            _usedMeshes.Add(best);
+
+            return best;
+        }
+
+        public void Reset()
+        {
+            //Double Buffer our Meshes (Doesnt seem to be a win on wp8)
+            //Ref http://forum.unity3d.com/threads/118723-Huge-performance-loss-in-Mesh-CreateVBO-for-dynamic-meshes-IOS
+
+            //meshes from last frame are now unused
+            _unusedMeshes.AddRange(_otherMeshes);
+            _otherMeshes.Clear();
+
+            //swap our use meshes and the now empty other meshes
+            var temp = _otherMeshes;
+            _otherMeshes = _usedMeshes;
+            _usedMeshes = temp;
+        }
+    }
     // Token: 0x02000113 RID: 275
     public sealed class SamplerStateCollection
     {
@@ -459,9 +752,12 @@ namespace Microsoft.Xna.Framework.Graphics
         public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage) : base()
         {
             VertexDeclaration = vertexDeclaration;
-        }
+           this. graphicsDevice = graphicsDevice;
+         _vertexCount= (uint)vertexCount;
 
-        public VertexBuffer()
+    }
+
+    public VertexBuffer()
         {
 
         }
@@ -494,10 +790,15 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             UnityEngine.Debug.Log("SetData!");
             //this.SetData<T>(0, data, 0, elementCount, 0);
-            //vertices = (XnaVG.Rendering.Tesselation.StencilVertex[])data;
+            vertices = data as XnaVG.Rendering.Tesselation.StencilVertex[];
         }
 
-        XnaVG.Rendering.Tesselation.StencilVertex[] vertices;
+        internal void SetData<T>(T[] ts, int index, int count) where T : struct
+        {
+            SetData(ts);
+        }
+
+       public XnaVG.Rendering.Tesselation.StencilVertex[] vertices;
 
         internal uint _vertexCount;
 
@@ -531,6 +832,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw;
             }
         }
+
+        public DynamicVertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage) : base(graphicsDevice, vertexDeclaration, vertexCount, usage)
+        {
+            _parent = graphicsDevice;
+        }
+
         protected GraphicsDevice _parent;
 
         public bool IsContentLost

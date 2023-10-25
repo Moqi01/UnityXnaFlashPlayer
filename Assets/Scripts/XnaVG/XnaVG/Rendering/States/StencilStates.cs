@@ -13,7 +13,8 @@ namespace XnaVG.Rendering.States
 
         public StencilStates(VGStencilMasks writeMask, VGStencilMasks readMask)
         {
-            Set = Clone(_Set);            
+            if(!DrawGL.ins.OpenStencil) return;
+            Set = Clone(_Set);
             EvenOdd = Clone(_EvenOdd);
             NonZero = Clone(_NonZero);
             Cover = Clone(_Cover);

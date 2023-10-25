@@ -73,8 +73,19 @@ namespace Microsoft.Xna.Framework.Content
 			}
             else if(type==typeof (Effect))
             {
-                Effect effect = new Effect(Game.Instance.GraphicsDevice);
-                return (T1)Convert.ChangeType(effect, type); ;
+
+				//XnaFlashPlayer.GraphicsDeviceService..GraphicsDevice;
+				Effect effect = null;
+				if (Game.Instance!=null)
+				  effect = new Effect(Game.Instance.GraphicsDevice);
+				else
+                {
+					XnaFlashPlayer.FlashPlayerControl s = (XnaFlashPlayer.FlashPlayerControl)serviceProvider.GetService(typeof(XnaFlash.ISystemServices));
+				effect = new Effect(s.GraphicsDevice);
+
+				}
+				if(effect!=null)
+				   return (T1)Convert.ChangeType(effect, type); ;
             }
 
             UnityEngine.Debug.Log(asset);

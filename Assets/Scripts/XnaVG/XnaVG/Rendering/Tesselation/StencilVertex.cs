@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XnaVG.Rendering.Tesselation
 {
-    internal struct StencilVertex
+    public struct StencilVertex
     {
         private Vector4 position;
 

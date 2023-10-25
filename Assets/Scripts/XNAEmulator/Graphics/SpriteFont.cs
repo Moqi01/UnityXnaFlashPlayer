@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -10,20 +11,15 @@ namespace Microsoft.Xna.Framework.Graphics
         #region Fields
         private string fontName;
         private float size;
-		private float spacing;
+		
         private bool useKerning;
         private string style;
-        private readonly Texture2D _texture;
+       
         #endregion
 
         #region Properties
-        public Texture2D Texture
-        {
-            get
-            {
-                return this._texture;
-            }
-        }
+        public float Spacing { get; }
+        public Texture2D Texture { get; }
 
         public string FontName
         {
@@ -41,13 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 		
-        public float Spacing
-        {
-            get
-            {
-                return this.spacing;
-            }
-        }
+        
 
         public string Style
         {
@@ -68,13 +58,34 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public SpriteFont(string fontName, float size, float spacing, bool useKerning, string style,Texture2D texture)
         {
-            this._texture = texture;
+            this.Texture = texture;
             this.fontName = fontName;
             this.size = size;
-			this.spacing = spacing;
+			this.Spacing = spacing;
             this.useKerning = useKerning;
             this.style = style;
         }
+        private SpriteFont(Texture2D texture, List<Rectangle> glyph, List<Rectangle> cropping, List<char> characters, int lineSpacing, float spacing, List<Vector3> kerning, char? defaultCharacter)
+        {
+            Characters = new ReadOnlyCollection<char>(characters.ToArray());
+            DefaultCharacter = defaultCharacter;
+            LineSpacing = lineSpacing;
+            Spacing = spacing;
+
+            Texture = texture;
+            GlyphData = glyph;
+            CroppingData = cropping;
+            Kerning = kerning;
+            CharacterMap = characters;
+        }
+        public ReadOnlyCollection<char> Characters { get; }
+        public char? DefaultCharacter { get; }
+      
+       
+        public List<Rectangle> GlyphData { get; }
+        public List<Rectangle> CroppingData { get; }
+        public List<Vector3> Kerning { get; }
+        public List<char> CharacterMap { get; }
         public Vector2 MeasureString(string text)
         {			
 			

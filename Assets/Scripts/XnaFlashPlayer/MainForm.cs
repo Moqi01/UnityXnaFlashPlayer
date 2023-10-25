@@ -18,10 +18,10 @@ namespace XnaFlashPlayer
         public MainForm()
         {
             InitializeComponent();
-            this.Icon = Properties.Resources.Player_Play;
+            //this.Icon = Properties.Resources.Player_Play;
             this.puvodniOblast = Bounds;
-            this.středníKvalitaToolStripMenuItem.PerformClick();
-            this.opakovatToolStripMenuItem.PerformClick();
+            //this.středníKvalitaToolStripMenuItem.PerformClick();
+            //this.opakovatToolStripMenuItem.PerformClick();
             this.přehráváníToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Enabled = false;
         }
@@ -46,7 +46,7 @@ namespace XnaFlashPlayer
                     this.TopMost = true;
                     this.mainMenu.Visible = false;
                     this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-                    this.WindowState = FormWindowState.Maximized;                    
+                    this.WindowState = FormWindowState.Maximized;
                 }
             }
             else if (this.FormBorderStyle == System.Windows.Forms.FormBorderStyle.None)
@@ -59,7 +59,7 @@ namespace XnaFlashPlayer
             }
         }
 
-        private void otevřítToolStripMenuItem_Click(object sender, EventArgs e)
+        public void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openSwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return;
@@ -160,11 +160,11 @@ namespace XnaFlashPlayer
                 try
                 {
                     flashPlayer.ExportAnimation(dlg.SkipFrames, dlg.ExportFrames, dlg.Transparent, folderBrowserDialog.SelectedPath);
-                    MessageBox.Show("Export dokončen!", "Požadované snímky byly exportovány!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Export dokončen!", "Požadované snímky byly exportovány!");//, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Export selhal!", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Export selhal!", ex.Message);//, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {

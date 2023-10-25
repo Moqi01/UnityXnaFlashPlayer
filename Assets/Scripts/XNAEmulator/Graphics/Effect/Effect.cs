@@ -53,6 +53,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
     public class Effect : GraphicsResource
     {
+        public Effect(GraphicsDevice graphicsDevice, byte[] v) : this(graphicsDevice)
+        {
+            Parameters.Add("MatrixTransform", new EffectParameter());
+            Parameters.Add("WorldMatrix", new EffectParameter());
+            Parameters.Add("Viewport", new EffectParameter());
+            //Techniques.Add("HueTechnique", new EffectTechnique());
+            this.graphicsDevice = graphicsDevice;
+
+        }
+        protected Effect(Effect cloneSource)
+        {
+            this.graphicsDevice = cloneSource. graphicsDevice;
+
+
+        }
         public Effect(GraphicsDevice graphicsDevice)
         {
             if (graphicsDevice == null)
@@ -124,7 +139,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 this._currentTechnique = value;
-                if(_currentTechnique.Name == "FontDraw")
+                if(_currentTechnique!=null&&_currentTechnique.Name == "FontDraw")
                 {
                     DrawGame.instance.SetPass(1);
                 }
@@ -358,6 +373,11 @@ namespace Microsoft.Xna.Framework.Graphics
             return ((IEnumerable<EffectParameter>)pParameter).GetEnumerator();
         }
 
+        internal void Add(string v, EffectParameter effectParameter)
+        {
+            pParameter.Add(effectParameter);
+        }
+
         public int Count
         {
             get
@@ -534,7 +554,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetValue(Texture2D value)
         {
-            DrawGame.instance.SetTexture(_name, value.unityTexture);
+            DrawGame.instance.SetTexture(_name, value.unityTexture2D);
         }
     }
 
@@ -589,55 +609,149 @@ namespace Microsoft.Xna.Framework.Graphics
 
     public class VertexDeclaration : GraphicsResource
     {
-        public int _vertexStride;
+        #region Public Properties
 
-        public VertexElement[] _elements;
-
-        public VertexDeclaration(params VertexElement[] elements)
+        public int VertexStride
         {
-            try
-            {
-                if (elements == null)
-                {
-                    goto IL_4A;
-                }
-                if (elements.Length == 0)
-                {
-                    goto IL_4A;
-                }
-                VertexElement[] elements2 = (VertexElement[])elements.Clone();
-                this._elements = elements2;
-                // int vertexStride = VertexElementValidator.GetVertexStride(elements2);
-                // this._vertexStride = vertexStride;
-                // VertexElementValidator.Validate(vertexStride, this._elements);
-            }
-            catch
-            {
-                base.Dispose(true);
-                throw;
-            }
-            goto IL_65;
-            IL_4A:
-            try
-            {
-                // throw new ArgumentNullException("elements", FrameworkResources.NullNotAllowed);
-            }
-            catch
-            {
-                base.Dispose(true);
-                throw;
-            }
-            IL_65:
-            try
-            {
-            }
-            catch
-            {
-                base.Dispose(true);
-                throw;
-            }
+            get;
+            private set;
         }
+
+        #endregion
+
+        #region Internal Variables
+
+        internal VertexElement[] elements;
+
+        #endregion
+
+        #region Public Constructors
+
+        public VertexDeclaration(
+            params VertexElement[] elements
+        ) : this(GetVertexStride(elements), elements)
+        {
+        }
+
+        public VertexDeclaration(
+            int vertexStride,
+            params VertexElement[] elements
+        )
+        {
+            if ((elements == null) || (elements.Length == 0))
+            {
+                throw new ArgumentNullException("elements", "Elements cannot be empty");
+            }
+
+            this.elements = (VertexElement[])elements.Clone();
+            VertexStride = vertexStride;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public VertexElement[] GetVertexElements()
+        {
+            return (VertexElement[])elements.Clone();
+        }
+
+        #endregion
+
+        #region Internal Static Methods
+
+        /// <summary>
+        /// Returns the VertexDeclaration for Type.
+        /// </summary>
+        /// <param name="vertexType">A value type which implements the IVertexType interface.</param>
+        /// <returns>The VertexDeclaration.</returns>
+        /// <remarks>
+        /// Prefer to use VertexDeclarationCache when the declaration lookup
+        /// can be performed with a templated type.
+        /// </remarks>
+        internal static VertexDeclaration FromType(Type vertexType)
+        {
+            if (vertexType == null)
+            {
+                throw new ArgumentNullException("vertexType", "Cannot be null");
+            }
+
+            if (!vertexType.IsValueType)
+            {
+                throw new ArgumentException("vertexType", "Must be value type");
+            }
+
+            IVertexType type = Activator.CreateInstance(vertexType) as IVertexType;
+            if (type == null)
+            {
+                throw new ArgumentException("vertexData does not inherit IVertexType");
+            }
+
+            VertexDeclaration vertexDeclaration = type.VertexDeclaration;
+            if (vertexDeclaration == null)
+            {
+                throw new ArgumentException("vertexType's VertexDeclaration cannot be null");
+            }
+
+            return vertexDeclaration;
+        }
+
+        #endregion
+
+        #region Private Static VertexElement Methods
+
+        private static int GetVertexStride(VertexElement[] elements)
+        {
+            int max = 0;
+
+            for (int i = 0; i < elements.Length; i += 1)
+            {
+                int start = elements[i].Offset + GetTypeSize(elements[i].VertexElementFormat);
+                if (max < start)
+                {
+                    max = start;
+                }
+            }
+
+            return max;
+        }
+
+        private static int GetTypeSize(VertexElementFormat elementFormat)
+        {
+            switch (elementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return 4;
+                case VertexElementFormat.Vector2:
+                    return 8;
+                case VertexElementFormat.Vector3:
+                    return 12;
+                case VertexElementFormat.Vector4:
+                    return 16;
+                case VertexElementFormat.Color:
+                    return 4;
+                case VertexElementFormat.Byte4:
+                    return 4;
+                case VertexElementFormat.Short2:
+                    return 4;
+                case VertexElementFormat.Short4:
+                    return 8;
+                case VertexElementFormat.NormalizedShort2:
+                    return 4;
+                case VertexElementFormat.NormalizedShort4:
+                    return 8;
+                case VertexElementFormat.HalfVector2:
+                    return 4;
+                case VertexElementFormat.HalfVector4:
+                    return 8;
+            }
+            return 0;
+        }
+
+        #endregion
     }
+
+
 
     public struct VertexPositionTexture : IVertexType
     {

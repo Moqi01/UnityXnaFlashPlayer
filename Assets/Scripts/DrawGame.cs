@@ -33,7 +33,7 @@ public class DrawGame : MonoBehaviour
             draws.Add(d);
             d.InitMaterial();
         }
-        material.GetTexturePropertyNames(Name);
+        //material.GetTexturePropertyNames(Name);
         GlDraws.Clear();
     }
 

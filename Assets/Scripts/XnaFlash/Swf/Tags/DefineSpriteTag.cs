@@ -43,10 +43,15 @@ namespace XnaFlash.Swf.Tags
 
         private static void CheckTagValidity(ISwfTag tag)
         {
+            if(tag is PlaceObject3Tag)
+            {
+
+            }
             if (
                 tag is ShowFrameTag ||
                 tag is PlaceObjectTag ||
                 tag is PlaceObject2Tag ||
+                tag is PlaceObject3Tag ||
                 tag is RemoveObjectTag ||
                 tag is RemoveObject2Tag ||
                 tag is FrameLabelTag ||

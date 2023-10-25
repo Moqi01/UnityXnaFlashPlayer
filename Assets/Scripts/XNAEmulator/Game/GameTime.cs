@@ -41,11 +41,14 @@ namespace Microsoft.Xna.Framework
         {
         }
 
-        public GameTime(TimeSpan totalRealTime, TimeSpan elapsedRealTime)
+        public GameTime(TimeSpan totalRealTime, TimeSpan elapsedRealTime,bool isr=false)
         {
             this.totalRealTime = totalRealTime;
             this.elapsedRealTime = elapsedRealTime;
-            UnityEngine.Debug.Log("totalRealTime??");
+            this.totalGameTime = totalRealTime;
+            this.elapsedGameTime = elapsedRealTime;
+            isRunningSlowly = isr;
+            //UnityEngine.Debug.Log("totalRealTime??");
         }
 
         public GameTime(TimeSpan totalRealTime, TimeSpan elapsedRealTime, TimeSpan totalGameTime, TimeSpan elapsedGameTime)

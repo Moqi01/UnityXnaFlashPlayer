@@ -21,8 +21,8 @@ namespace XnaFlash.Swf.Tags
             }
 
             uint numLabels = stream.ReadEncodedUInt();
-            var labels = new Dictionary<string, ushort>((int)numScenes);
-            for (uint i = 0; i < numScenes; i++)
+            var labels = new Dictionary<string, ushort>((int)numLabels);
+            for (uint i = 0; i < numLabels; i++)
             {
                 ushort label = (ushort)stream.ReadEncodedUInt();
                 labels.Add(stream.ReadString(), label);

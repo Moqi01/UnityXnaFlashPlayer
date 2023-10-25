@@ -46,7 +46,8 @@ namespace XnaVG.Utils
         }
         public void PushCombineLeft(VGMatrix matrix)
         {
-            Matrices.Push(matrix * Matrices.Peek());
+            VGMatrix m = matrix * Matrices.Peek();
+            Matrices.Push(m);
         }
         public bool Pop()
         {
@@ -54,6 +55,7 @@ namespace XnaVG.Utils
                 return false;
 
             Matrices.Pop();
+          
             return true;
         }                 
     }

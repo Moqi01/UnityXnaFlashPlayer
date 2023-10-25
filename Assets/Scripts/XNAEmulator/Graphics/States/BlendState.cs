@@ -135,11 +135,70 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 	}
 
-	public class RenderTargetBinding
-    {
+	public struct RenderTargetBinding
+	{
+		/// <summary>Creates an instance of this object.</summary>
+		/// <param name="renderTarget">Identifies a cubemap render target.</param>
+		/// <param name="cubeMapFace">Cubemap face.</param>
+		// Token: 0x06000090 RID: 144 RVA: 0x00012D2C File Offset: 0x0001212C
+		//public RenderTargetBinding(RenderTargetCube renderTarget, CubeMapFace cubeMapFace)
+		//{
+		//	if (renderTarget == null)
+		//	{
+		//		throw new ArgumentNullException("renderTarget");
+		//	}
+		//	this._renderTarget = renderTarget;
+		//	this._cubeMapFace = cubeMapFace;
+		//}
 
-    }
+		/// <summary>Creates an instance of this object.</summary>
+		/// <param name="renderTarget">Identifies a 2D render target.</param>
+		// Token: 0x06000091 RID: 145 RVA: 0x00012CF8 File Offset: 0x000120F8
+		public RenderTargetBinding(RenderTarget2D renderTarget)
+		{
+			if (renderTarget == null)
+			{
+				throw new ArgumentNullException("renderTarget");
+			}
+			this._renderTarget = renderTarget;
+			this._cubeMapFace = CubeMapFace.PositiveX;
+		}
 
+		// Token: 0x06000092 RID: 146 RVA: 0x00001008 File Offset: 0x00000408
+		public static implicit operator RenderTargetBinding(RenderTarget2D renderTarget)
+		{
+			RenderTargetBinding result = new RenderTargetBinding(renderTarget);
+			return result;
+		}
+
+		/// <summary>Gets a 2D texture.</summary>
+		// Token: 0x17000002 RID: 2
+		// (get) Token: 0x06000093 RID: 147 RVA: 0x00001024 File Offset: 0x00000424
+		public Texture RenderTarget
+		{
+			get
+			{
+				return this._renderTarget;
+			}
+		}
+
+		/// <summary>Gets one face of a cubemap.</summary>
+		// Token: 0x17000001 RID: 1
+		// (get) Token: 0x06000094 RID: 148 RVA: 0x0000103C File Offset: 0x0000043C
+		public CubeMapFace CubeMapFace
+		{
+			get
+			{
+				return this._cubeMapFace;
+			}
+		}
+
+		// Token: 0x040000AF RID: 175
+		internal Texture _renderTarget;
+
+		// Token: 0x040000B0 RID: 176
+		internal CubeMapFace _cubeMapFace;
+	}
 	public class VertexBufferBinding
 	{
 

@@ -26,6 +26,7 @@ namespace XnaVG.Rendering.Effects
 
         public void Apply()
         {
+            if(_pass!=null)
             _pass.Apply();
         }
 

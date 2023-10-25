@@ -11,9 +11,16 @@ namespace Microsoft.Xna.Framework.Graphics
         // (get) Token: 0x06000E92 RID: 3730 RVA: 0x00030C88 File Offset: 0x0002EE88
         // (set) Token: 0x06000E93 RID: 3731 RVA: 0x00030C90 File Offset: 0x0002EE90
 
-        public UnityEngine.Texture2D unityTexture;
+        public UnityEngine.Texture unityTexture;
+        public UnityEngine.Texture2D unityTexture2D
+        {
+            get
+            {
+                return (unityTexture as UnityEngine. Texture2D);
+            }
+        }
 
-        public UnityEngine.Texture2D UnityTexture
+        public UnityEngine.Texture UnityTexture
         {
             get
             {
@@ -150,7 +157,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data is Color[])
             {
                 Color[] mydata = (Color[])Convert.ChangeType(data, typeof(Color[]));
-                this.UnityTexture.SetPixels(GetColors(mydata));
+               UnityEngine. Texture2D texture2D = unityTexture as UnityEngine. Texture2D;
+                texture2D.SetPixels(GetColors(mydata));
             }
             if (data is byte[])
             {
@@ -175,7 +183,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data is Color[])
             {
                 Color[] mydata = (Color[])Convert.ChangeType(data, typeof(Color[]));
-                this.UnityTexture.SetPixels(GetColors(mydata));
+                UnityEngine.Texture2D texture2D = unityTexture as UnityEngine.Texture2D;
+
+                texture2D.SetPixels(GetColors(mydata));
             }
             if (data is byte[])
             {

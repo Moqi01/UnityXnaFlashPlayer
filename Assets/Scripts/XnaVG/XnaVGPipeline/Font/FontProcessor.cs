@@ -39,59 +39,59 @@ namespace XnaVGPipeline.Font
 
         private VGGlyphInfo LoadGlyph(ushort code, GlyphTypeface face)
         {
-            var geometry = face.GetGlyphOutline(code, 1, 1);            
-            var path = PathGeometry.CreateFromGeometry(geometry);
-
+            var geometry = face.GetGlyphOutline(code, 1, 1);
+            //var path = PathGeometry.CreateFromGeometry(geometry);
+            UnityEngine.Debug.Log("LoadGlyph");
             var draw = new VGPath();
-            foreach (var fig in path.Figures)
-            {
-                if (!fig.IsFilled)
-                    continue;
+            //foreach (var fig in path.Figures)
+            //{
+            //    if (!fig.IsFilled)
+            //        continue;
+ 
+            //    draw.MoveTo(fig.StartPoint.ToVec2());
 
-                draw.MoveTo(fig.StartPoint.ToVec2());
+            //    foreach (var seg in fig.Segments)
+            //    {
+            //        if (seg is BezierSegment)
+            //        {
+            //            var s = seg as BezierSegment;
+            //            draw.CubicTo(s.Point1.ToVec2(), s.Point2.ToVec2(), s.Point3.ToVec2());
+            //        }
+            //        else if (seg is QuadraticBezierSegment)
+            //        {
+            //            var s = seg as QuadraticBezierSegment;
+            //            draw.QuadraticTo(s.Point1.ToVec2(), s.Point2.ToVec2());
+            //        }
+            //        else if (seg is LineSegment)
+            //        {
+            //            var s = seg as LineSegment;
+            //            draw.LineTo(s.Point.ToVec2());
+            //        }
+            //        else if (seg is PolyBezierSegment)
+            //        {
+            //            var s = seg as PolyBezierSegment;
+            //            for (int i = 0; i < s.Points.Count; i += 3)
+            //                draw.CubicTo(s.Points[i].ToVec2(), s.Points[i + 1].ToVec2(), s.Points[i + 2].ToVec2());
+            //        }
+            //        else if (seg is PolyQuadraticBezierSegment)
+            //        {
+            //            var s = seg as PolyQuadraticBezierSegment;
+            //            for (int i = 0; i < s.Points.Count; i += 2)
+            //                draw.QuadraticTo(s.Points[i].ToVec2(), s.Points[i + 1].ToVec2());
+            //        }
+            //        else if (seg is PolyLineSegment)
+            //        {
+            //            var s = seg as PolyLineSegment;
+            //            foreach (var pt in s.Points)
+            //                draw.LineTo(pt.ToVec2());
+            //        }
+            //        else
+            //            throw new NotSupportedException(seg.GetType().Name + " is not supported!");
+            //    }
 
-                foreach (var seg in fig.Segments)
-                {
-                    if (seg is BezierSegment)
-                    {
-                        var s = seg as BezierSegment;
-                        draw.CubicTo(s.Point1.ToVec2(), s.Point2.ToVec2(), s.Point3.ToVec2());
-                    }
-                    else if (seg is QuadraticBezierSegment)
-                    {
-                        var s = seg as QuadraticBezierSegment;
-                        draw.QuadraticTo(s.Point1.ToVec2(), s.Point2.ToVec2());
-                    }
-                    else if (seg is LineSegment)
-                    {
-                        var s = seg as LineSegment;
-                        draw.LineTo(s.Point.ToVec2());
-                    }
-                    else if (seg is PolyBezierSegment)
-                    {
-                        var s = seg as PolyBezierSegment;
-                        for (int i = 0; i < s.Points.Count; i += 3)
-                            draw.CubicTo(s.Points[i].ToVec2(), s.Points[i + 1].ToVec2(), s.Points[i + 2].ToVec2());
-                    }
-                    else if (seg is PolyQuadraticBezierSegment)
-                    {
-                        var s = seg as PolyQuadraticBezierSegment;
-                        for (int i = 0; i < s.Points.Count; i += 2)
-                            draw.QuadraticTo(s.Points[i].ToVec2(), s.Points[i + 1].ToVec2());
-                    }
-                    else if (seg is PolyLineSegment)
-                    {
-                        var s = seg as PolyLineSegment;
-                        foreach (var pt in s.Points)
-                            draw.LineTo(pt.ToVec2());
-                    }
-                    else
-                        throw new NotSupportedException(seg.GetType().Name + " is not supported!");
-                }
-
-                if (fig.IsClosed)
-                    draw.ClosePath();
-            }
+            //    if (fig.IsClosed)
+            //        draw.ClosePath();
+            //}
 
             return new VGGlyphInfo
             {

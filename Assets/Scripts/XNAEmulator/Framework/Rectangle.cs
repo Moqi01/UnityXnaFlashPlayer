@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Framework
 
         public static Rectangle Union(Rectangle value1, Rectangle value2)
         {
-            UnityEngine.Debug.Log("?");
+            UnityEngine.Debug.Log("Union");
             int num = value1.X + value1.Width;
             int num2 = value2.X + value2.Width;
             int num3 = value1.Y + value1.Height;
@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Framework
 
         public static void Union(ref Rectangle value1, ref Rectangle value2, out Rectangle result)
         {
-            UnityEngine.Debug.Log("?");
+            UnityEngine.Debug.Log("Union");
             int num = value1.X + value1.Width;
             int num2 = value2.X + value2.Width;
             int num3 = value1.Y + value1.Height;
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Framework
 
         public static Rectangle Intersect(Rectangle value1, Rectangle value2)
         {
-            UnityEngine.Debug.Log("?");
+            UnityEngine.Debug.Log("Intersect");
             int num = value1.X + value1.Width;
             int num2 = value2.X + value2.Width;
             int num3 = value1.Y + value1.Height;
@@ -242,7 +242,7 @@ namespace Microsoft.Xna.Framework
 
         public static void Intersect(ref Rectangle value1, ref Rectangle value2, out Rectangle result)
         {
-            UnityEngine.Debug.Log("?");
+            UnityEngine.Debug.Log("Intersect");
             int num = value1.X + value1.Width;
             int num2 = value2.X + value2.Width;
             int num3 = value1.Y + value1.Height;

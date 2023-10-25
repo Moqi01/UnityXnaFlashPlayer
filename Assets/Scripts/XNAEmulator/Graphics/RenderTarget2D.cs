@@ -93,15 +93,21 @@ namespace Microsoft.Xna.Framework.Graphics
             //RenderTargetHelper renderTargetHelper = new RenderTargetHelper(this, width, height, format, depthFormat, multiSampleCount, usage, graphicsDevice._profileCapabilities);
             //this.helper = renderTargetHelper;
             //renderTargetHelper.CreateSurfaces(graphicsDevice);
-            base.CreateTexture(graphicsDevice, width, height, mipMap, 1, (_D3DPOOL)0, Format);
+            //base.CreateTexture(graphicsDevice, width, height, mipMap, 1, (_D3DPOOL)0, Format);
+            UnityTexture = new UnityEngine.RenderTexture(width, height, 24);
             this.renderTargetContentsDirty = true;
         }
 
         internal void GetData(Color[] data)
         {
-            throw new NotImplementedException();
-        }
+            UnityEngine.RenderTexture renderTexture = UnityTexture as UnityEngine.RenderTexture;
+            //for (int i = 0; i < data.Length; i++)
+            //{
 
+            //}
+
+        }
+         
         // Token: 0x0600034E RID: 846 RVA: 0x000186B0 File Offset: 0x00017AB0
         //internal override int SaveDataForRecreation()
         //{

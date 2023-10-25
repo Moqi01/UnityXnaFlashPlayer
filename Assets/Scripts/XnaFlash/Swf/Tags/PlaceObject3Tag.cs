@@ -41,7 +41,7 @@ namespace XnaFlash.Swf.Tags
         {
             mFlags = stream.ReadUShort();
             Depth = stream.ReadUShort();
-            if (HasClassName || (HasImage && HasCharacter)) ClassName = stream.ReadString();
+            if (HasClassName || (HasImage && HasCharacter&&version<7)) ClassName = stream.ReadString();
             if (HasCharacter) CharacterID = stream.ReadUShort();
             if (HasMatrix) Matrix = stream.ReadMatrix();
             if (HasCxForm) CxForm = stream.ReadCxForm(true);
