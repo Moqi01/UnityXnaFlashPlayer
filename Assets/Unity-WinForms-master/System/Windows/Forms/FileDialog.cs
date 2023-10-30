@@ -7,6 +7,7 @@ namespace System.Windows.Forms
     using System.Collections.Generic;
     using System.Drawing;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
 
     public abstract class FileDialog : Form
@@ -182,7 +183,12 @@ namespace System.Windows.Forms
             fileRenderer.filesTree.NodeMouseClick += filesTree_NodeMouseClick;
 
             //AcceptButton = buttonOk;
+            if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.PSP2)
+                InitialDirectory = "ux0:data/SWF";
+            else
             InitialDirectory = UnityEngine.Application.dataPath;
+            if (!Directory.Exists(InitialDirectory))
+                Directory.CreateDirectory(InitialDirectory);
             Shown += FileDialog_Shown;
         }
 

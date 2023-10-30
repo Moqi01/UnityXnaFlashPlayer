@@ -93,6 +93,8 @@ namespace XnaFlashPlayer
         public void Play()
         {
             Rewind();
+            if (instance == null)
+                return;
             instance.Root.Play();
         }
 
