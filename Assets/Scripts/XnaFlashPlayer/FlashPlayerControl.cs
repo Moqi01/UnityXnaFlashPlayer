@@ -90,6 +90,12 @@ namespace XnaFlashPlayer
                 instance.Root.HighQuality = qualityLevel;
         }
 
+        public void Play()
+        {
+            Rewind();
+            instance.Root.Play();
+        }
+
         public void Pause(bool paused)
         {
             if (instance == null)

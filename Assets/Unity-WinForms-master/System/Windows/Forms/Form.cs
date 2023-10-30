@@ -27,7 +27,7 @@
         private static readonly Color defaultFormHeaderTextColor = Color.FromArgb(64, 64, 64);
         private static readonly Padding defaultFormPadding = new Padding(32, 0, 32, 0);
         private static readonly Color defaultFormShadowColor = Color.FromArgb(12, 64, 64, 64);
-        private static Point nextLocation = new Point(156, 156);
+        private static Point nextLocation = new Point(76, 66);
         private static Form lastAcceptForm;
         private static Timer lastAcceptFormTimer;
 

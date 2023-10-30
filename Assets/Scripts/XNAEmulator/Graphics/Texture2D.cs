@@ -55,7 +55,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
         {
             Debug.Log("PlatformSetData");
-            unityTexture2D.SetPixelData<T>(data ,level);
+            //unityTexture2D.SetPixelData<T>(data ,level);
+            //unityTexture2D.LoadRawTextureData(data);
         }
         public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
         {
@@ -110,7 +111,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 m_height = unityTexture.height;
                 return;
             }
-            unityTexture2D.SetPixelData(dataNew, 0);
+            //unityTexture2D.SetPixelData(dataNew, 0);
+            unityTexture2D.LoadRawTextureData(dataNew);
             unityTexture.filterMode = FilterMode.Point;
             unityTexture2D.Apply(updateMipmaps: true);
             //OutputRt(unityTexture.EncodeToPNG(), num.ToString ());
@@ -129,11 +131,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void GetData(Color[] data)
         {
-          byte[]  dataS = this.unityTexture2D.EncodeToPNG();
-            for(int i=0;i< dataS.Length;)
+            UnityEngine. Color[]  dataS = this.unityTexture2D.GetPixels();
+
+            for(int i=0;i< dataS.Length;i++)
             {
-                data[i] = new Color(dataS[i], dataS[i+1], dataS[i +2], dataS[i + 3]);
-                i+=4;
+                data[i] = new Color(dataS[i].r, dataS[i].g, dataS[i].b, dataS[i].a);
+                
             }
         }
 
@@ -257,8 +260,10 @@ namespace Microsoft.Xna.Framework.Graphics
             this._parent = graphicsDevice;
             Format = format;
             MipMap = mipMap;
-            
-            UnityTexture = new UnityEngine.Texture2D(width, height);
+            if(format==SurfaceFormat.Color)
+            UnityTexture = new UnityEngine.Texture2D(width, height,TextureFormat.RGBA32,MipMap);
+            else
+                UnityTexture = new UnityEngine.Texture2D(width, height, TextureFormat.RGBA32, MipMap);
 
         }
         protected GraphicsDevice _parent;

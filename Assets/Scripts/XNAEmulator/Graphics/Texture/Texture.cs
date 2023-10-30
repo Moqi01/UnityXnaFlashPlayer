@@ -159,8 +159,17 @@ namespace Microsoft.Xna.Framework.Graphics
                 Color[] mydata = (Color[])Convert.ChangeType(data, typeof(Color[]));
                UnityEngine. Texture2D texture2D = unityTexture as UnityEngine. Texture2D;
                 texture2D.SetPixels(GetColors(mydata));
+                texture2D.Apply();
+
             }
-            if (data is byte[])
+            else if (data is uint[])
+            {
+                uint[] mydata = (uint[])Convert.ChangeType(data, typeof(uint[]));
+                UnityEngine.Texture2D texture2D = unityTexture as UnityEngine.Texture2D;
+                texture2D.SetPixels(GetABGRColors(mydata));
+                texture2D.Apply();
+            }
+           else if (data is byte[])
             {
                 //byte[] mydata = (byte[])Convert.ChangeType(data, typeof(byte[]));
                 //UnityEngine.Texture2D texture = new UnityEngine.Texture2D(width, height);
@@ -212,6 +221,20 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             return color;
         }
+
+        public UnityEngine.Color[] GetABGRColors(uint[] data)
+        {
+            UnityEngine.Color[] color = new UnityEngine.Color[data.Length];
+            for (int i = data.Length - 1; i >= 0; i--)
+            {
+                color[i].a = (data[i] >> 24) / 255f;
+                color[i].b = ((data[i] & 0x00FF0000) >> 16) / 255f;
+                color[i].g = ((data[i] & 0x0000FF00) >> 8) / 255f;
+                color[i].r = (data[i] & 0x000000FF) / 255f;
+            }
+            return color;
+        }
+
 
         // Token: 0x0400076F RID: 1903
         internal IGLTexture texture;

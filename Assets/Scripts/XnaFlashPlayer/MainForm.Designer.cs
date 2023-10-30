@@ -284,14 +284,15 @@
             // folderBrowserDialog
             // 
             this.folderBrowserDialog.Description = "Zvolte adresář pro export";
-          
+
             // 
             // MainForm
             // 
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.ClientSize = new System.Drawing.Size(684, 462);
-            this.ClientSize = new System.Drawing.Size(4, 2);
+            this.Location = new System.Drawing.Point(-100,-20);
+            this.ClientSize = new System.Drawing.Size(200, 10);
             this.Controls.Add(this.flashPlayer);
             this.Controls.Add(this.mainMenu);
             this.MainMenuStrip = this.mainMenu;

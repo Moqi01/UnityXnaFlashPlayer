@@ -10,10 +10,11 @@ using XnaVG.Rendering.Tesselation;
 
 public class DrawGL : MonoBehaviour
 {
+    public string[] PropertyNames;
     // Start is called before the first frame update
     void Start()
     {
-        
+        PropertyNames = Tmat.GetTexturePropertyNames();
     }
     private void Awake()
     {
@@ -21,7 +22,7 @@ public class DrawGL : MonoBehaviour
     }
     public static int MaxNum = 50000;
     Vector3[] ves = new Vector3[MaxNum];
-    Vector2[] uvs = new Vector2[MaxNum];
+    public Vector2[] uvs = new Vector2[12];
     int[] triangles = new int[MaxNum];
     Color[] colors = new Color[MaxNum];
 
@@ -29,6 +30,59 @@ public class DrawGL : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isDrow)
+        {
+            for (int j = Meshs.Count; j < transform.childCount; j++)
+            {
+                transform.GetChild(j).gameObject.SetActive(false);
+            }
+            //for (int j = transform.childCount-1; j >=0; j--)
+            //{
+            //   Destroy( transform.GetChild(j).gameObject);
+            //}
+            for (int j = 0; j < Meshs.Count; j++)
+            {
+                GameObject gameObject = null;
+                Mesh mesh = Meshs[j];
+                if (j < transform.childCount)
+                {
+
+                    gameObject = transform.GetChild(j).gameObject; gameObject.SetActive(true);
+                    //return;
+                    MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
+                    meshFilter.mesh = mesh;
+                }
+                else
+                {
+                    gameObject = CreateObj();
+
+                    MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
+                    meshFilter.mesh = mesh;
+
+                }
+                MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
+                if (Textures.ContainsKey(j + 1))
+                {
+                    //if(mr.material!=null)
+                    //{
+                    //    mr.material=
+                    //}
+                    Material material = new Material(Tmat);
+                    material.SetTexture(PropertyNames[0], Textures[j + 1]);
+                    mr.material = material;
+
+                    //Tmat.SetTexture(PropertyNames[0], Textures[j + 1]);
+                    //mr.material = Tmat;
+                      if (mesh.vertexCount==12)
+                        mesh.uv= uvs;
+                }
+                else
+                    mr.material = mat;
+                mr.sortingOrder = j;
+            }
+            return;
+        }
+        return;
         if (Vertors.Count <= 0) return;
         if (isGraphicDrow)
         {
@@ -52,12 +106,12 @@ public class DrawGL : MonoBehaviour
                     v *= Scale;
                     v *= UseScale;
                     ves[i] = v;
-                    uvs[i] = n;
-                    //if (j<Colors.Count)
+                    //uvs[i] = n;
+                    if (j < Colors.Count)
+                        colors[i] = Colors[j];
+                    else
+                        colors[i] = Color.white;
                     //colors[i] = Colors[j];
-                    //else
-                    //    colors[i] = Color.white;
-                    colors[i] = Colors[j];
                     triangles[i] = i;
                      //Debug .DrawLine(v, v2, Colors[j]);
                 }
@@ -86,10 +140,10 @@ public class DrawGL : MonoBehaviour
                     {
                        
                         //mesh.bindposes = new Matrix4x4[] { m };
-                        mesh.SetVertices(ves,0,vertices.Length);
-                        //mesh.SetUVs(0, uvs, 0, vertices.Length);
-                        mesh.SetTriangles(triangles, 0, vertices.Length,0);
-                        mesh.SetColors(colors, 0, vertices.Length);
+                        //mesh.SetVertices(ves,0,vertices.Length);
+                        ////mesh.SetUVs(0, uvs, 0, vertices.Length);
+                        //mesh.SetTriangles(triangles, 0, vertices.Length,0);
+                        //mesh.SetColors(colors, 0, vertices.Length);
                         //Graphics.DrawMeshInstanced(mesh, 0, mat, new Matrix4x4[] { Matrix4x4.identity });
 
                         //Graphics.DrawMeshNow(mesh, Matrix4x4.identity);
@@ -115,9 +169,10 @@ public class DrawGL : MonoBehaviour
     public   Material mat;
     public bool isDrow;
     public bool isGraphicDrow;
+    List<Mesh> Meshs = new List<Mesh>();
     void OnPostRender()
     {
-        if (!isDrow) return;
+        
         if (!mat)
         {
             Debug.LogError("Please Assign a material on the inspector");
@@ -130,7 +185,7 @@ public class DrawGL : MonoBehaviour
           
 
         }
-        else
+        else if(isDrow)
         {
             //GL.Flush();
 
@@ -184,13 +239,46 @@ public class DrawGL : MonoBehaviour
        
 
     }
-
+    public GameObject CreateObj()
+    {
+        GameObject gameObject = GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Plane);
+        gameObject.transform.SetParent(transform);
+        gameObject.transform.localPosition = new Vector3(0, 0, 1);
+        //gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        //gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+        return gameObject;
+    }
     internal void SetPrimitiveTypes(Microsoft.Xna.Framework.Graphics.PrimitiveType triangleList)
     {
         primitiveTypes.Add(triangleList);
     }
+    public Material Tmat;
+    internal void SetTextures(Microsoft.Xna.Framework.Graphics.Texture2D texture)
+    {
+        if(!Textures.ContainsKey(Meshs.Count+1))
+        Textures.Add(Meshs.Count+1, texture.UnityTexture);
+    }
 
-    
+    public bool ContainsMesh(Mesh mesh)
+    {
+        return Meshs.Contains(mesh);
+    }
+
+    public void SetMesh(Mesh mesh)
+    {
+        if(Meshs.Contains(mesh))
+        {
+
+        }
+        //if(mesh.vertices .Length==12)
+        //{
+
+        //}
+        Meshs.Add(mesh);
+    }
+
+    public Dictionary<int, UnityEngine.Texture> Textures = new Dictionary<int, UnityEngine.Texture>();
 
     internal void SetMatrices(VGMatrix value,VGMatrix rot)
     {
@@ -290,6 +378,8 @@ public class DrawGL : MonoBehaviour
         RotMatrices.Clear();
         ScValues.Clear();
         primitiveTypes.Clear();
+        Textures.Clear();
+        Meshs.Clear();
         Camera.main.backgroundColor = color;
     }
 }

@@ -257,6 +257,14 @@ namespace XnaVG
                 vector.X * matrix._m[1] + vector.Y * matrix._m[4] + matrix._m[7]);
         }
 
+        public static Vector3 operator *(VGMatrix matrix, Vector3 vector)
+        {
+            return new Vector3(
+                vector.X * matrix._m[0] + vector.Y * matrix._m[3] + matrix._m[6] * vector.Z,
+                vector.X * matrix._m[1] + vector.Y * matrix._m[4] + matrix._m[7] * vector.Z,
+                vector.X * matrix._m[2] + vector.Y * matrix._m[5] + matrix._m[8]*vector.Z);
+        }
+
         public static VGMatrix operator /(VGMatrix matrix, float divider)
         {
             VGMatrix m = new VGMatrix();

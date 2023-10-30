@@ -328,26 +328,26 @@ namespace Microsoft.Xna.Framework.Graphics
             Mesh.triangles = triangles;
         }
 
-        internal void Populate(ClassicUO.Renderer.PositionNormalTextureColor[] vertexData, int numVertices)
-        {
-            for (int i = 0; i < numVertices; i++)
-            {
-                var p = vertexData[i].Position;
-                Vertices[i] = new UnityEngine.Vector3(p.X, p.Y, p.Z);
+        //internal void Populate(ClassicUO.Renderer.PositionNormalTextureColor[] vertexData, int numVertices)
+        //{
+        //    for (int i = 0; i < numVertices; i++)
+        //    {
+        //        var p = vertexData[i].Position;
+        //        Vertices[i] = new UnityEngine.Vector3(p.X, p.Y, p.Z);
 
-                var uv = vertexData[i].TextureCoordinate;
-                UVs[i] = new UnityEngine.Vector2(uv.X, /*1 - */uv.Y);
+        //        var uv = vertexData[i].TextureCoordinate;
+        //        UVs[i] = new UnityEngine.Vector2(uv.X, /*1 - */uv.Y);
 
-                var c = vertexData[i].Normal;
-                // Colors[i] = new Color32( c.R, c.G, c.B, c.A );
-            }
-            //we could clearly less if we remembered how many we used last time
-            Array.Clear(Vertices, numVertices, Vertices.Length - numVertices);
+        //        var c = vertexData[i].Normal;
+        //        // Colors[i] = new Color32( c.R, c.G, c.B, c.A );
+        //    }
+        //    //we could clearly less if we remembered how many we used last time
+        //    Array.Clear(Vertices, numVertices, Vertices.Length - numVertices);
 
-            Mesh.vertices = Vertices;
-            Mesh.uv = UVs;
-            //Mesh.colors32 = Colors;
-        }
+        //    Mesh.vertices = Vertices;
+        //    Mesh.uv = UVs;
+        //    //Mesh.colors32 = Colors;
+        //}
         public void Populate(ClassicUO.Renderer.SpriteVertex[] vertexData, int numVertices)
         {
             for (int i = 0; i < numVertices; i++)
@@ -788,7 +788,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 elementCount = 0;
             }
-            UnityEngine.Debug.Log("SetData!");
+            //UnityEngine.Debug.Log("SetData!");
             //this.SetData<T>(0, data, 0, elementCount, 0);
             vertices = data as XnaVG.Rendering.Tesselation.StencilVertex[];
         }

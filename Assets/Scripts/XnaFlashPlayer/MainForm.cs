@@ -26,6 +26,11 @@ namespace XnaFlashPlayer
             this.exportToolStripMenuItem.Enabled = false;
         }
 
+        internal void Play()
+        {
+            flashPlayer.Play();
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -61,12 +66,21 @@ namespace XnaFlashPlayer
 
         public void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (openSwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            if (openSwf.ShowDialog(Open) != System.Windows.Forms.DialogResult.OK)
                 return;
-
-            exportToolStripMenuItem.Enabled =
-            přehráváníToolStripMenuItem.Enabled = flashPlayer.Open(openSwf.FileName);
         }
+
+        void Open(Form form, DialogResult dialogResult)
+        {
+            if(dialogResult== DialogResult.OK)
+            {
+                exportToolStripMenuItem.Enabled =
+                přehráváníToolStripMenuItem.Enabled = flashPlayer.Open(openSwf.FileName);
+                //openSwf.DialogResult = DialogResult.None;
+                //openSwf.Visible = false;
+            }
+        }
+
         private void zavřítToolStripMenuItem_Click(object sender, EventArgs e)
         {
             flashPlayer.Close();

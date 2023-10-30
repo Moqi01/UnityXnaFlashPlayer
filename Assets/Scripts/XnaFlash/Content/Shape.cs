@@ -95,6 +95,8 @@ namespace XnaFlash.Content
                     state.SetFillPaint(shape._fills[i].Paint);
                     target.DrawPath(shape._fills[i].Path, VGPaintMode.Fill);
                     state.PathToFillPaint.Pop();
+                    VGPaint paint = shape._fills[i].Paint;
+                    shape._fills[i].Path.Fill.CreaceMesh(paint,matrix, state.Projection.Matrix,state.PathToFillPaint.Matrix);
                 }
 
                 for (i = 0, e = shape._strokes.Length; i < e; i++)
