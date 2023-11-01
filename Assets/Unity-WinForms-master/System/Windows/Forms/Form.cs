@@ -59,7 +59,8 @@
             ControlBox = true;
             Font = SystemFonts.uwfArial_14;
             FormBorderStyle = FormBorderStyle.Sizable;
-            MinimumSize = new Size(128, 48);
+            //MinimumSize = new Size(128, 48);
+            MinimumSize = new Size(2, 2);
             StartPosition = FormStartPosition.WindowsDefaultLocation;
 
             visibleReady = true;

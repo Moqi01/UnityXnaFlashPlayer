@@ -58,29 +58,29 @@ public class DrawGame : MonoBehaviour
     public void SetIntValue(string name,int value)
     {
         
-            draws[index].material.SetInt(name, value);
+            //draws[index].material.SetInt(name, value);
     }
     public float xBlendWeight;
     public void SetFloatValue(string name, float value)
     {
 
-         draws[index].material.SetFloat(name, value);
-        if (name == "xBlendWeight")
-        {
-            xBlendWeight = value;
-        }
+        // draws[index].material.SetFloat(name, value);
+        //if (name == "xBlendWeight")
+        //{
+        //    xBlendWeight = value;
+        //}
     }
 
     public void SetTexture(string name, Texture2D value)
     {
 
-            draws[index].SetTexture(name , value);
+            //draws[index].SetTexture(name , value);
     }
 
     public void SetVector2(string name, Vector4 value)
     {
        
-            draws[index].material.SetVector(name, value);
+            //draws[index].material.SetVector(name, value);
 
     }
 
@@ -90,22 +90,22 @@ public class DrawGame : MonoBehaviour
     public void SetM(string name, Matrix4x4 value)
     {
        
-        draws[index].material.SetMatrix(name, value);
-        if(name == "xMatrix")
-        {
-            xMatrix = value;
-        }
-        if (name == "xRotation")
-        {
-            xRotation = value;
-        }
+        //draws[index].material.SetMatrix(name, value);
+        //if(name == "xMatrix")
+        //{
+        //    xMatrix = value;
+        //}
+        //if (name == "xRotation")
+        //{
+        //    xRotation = value;
+        //}
     }
 
     public void SetPass(int value)
     {
-        Id = value;
+        //Id = value;
 
-        draws[index].SetMat(value);
+        //draws[index].SetMat(value);
 
     }
 

@@ -285,6 +285,7 @@ namespace System.Windows.Forms
                 {
                     case Keys.Left: ButtonBack(); break;
                     case Keys.Up: ButtonUp(); break;
+                 
                 }
             }
         }
@@ -373,6 +374,16 @@ namespace System.Windows.Forms
             private readonly FileDialog owner;
             private string fromFolder;
             private FileInfo[] currentFiles;
+
+            public void Down()
+            {
+                filesTree.SelectNext();
+            }
+
+            public void Previous()
+            {
+                filesTree.SelectPrevious();
+            }
 
             public FileRenderer(FileDialog owner)
             {

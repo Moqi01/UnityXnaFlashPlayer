@@ -11,6 +11,7 @@ namespace XnaFlash.Swf.Tags
         public ushort Height { get; protected set; }
         public uint[] Pixels { get; protected set; }
         public bool HasAlpha { get; protected set; }
+        public byte[] Dates { get; protected set; }
 
         public DefineBitsLosslessTag()
         {
@@ -51,10 +52,11 @@ namespace XnaFlash.Swf.Tags
                 if (inflater.Inflate(data) != data.Length)
                     return true;
                 Pixels = BitmapUtils.UnpackPIX24(data, Width, Height, hasAlpha);
+               
             }
             else
                 throw new SwfCorruptedException("Invalid lossless bitmap format found!");
-
+            Dates = data;
             return true;
         }
 

@@ -26,9 +26,39 @@ namespace XnaFlashPlayer
             this.exportToolStripMenuItem.Enabled = false;
         }
 
+        internal void HideMainMenu()
+        {
+            this.mainMenu.Hide();
+        }
+
         internal void Play()
         {
             flashPlayer.Play();
+        }
+
+        internal void Up()
+        {
+            openSwf.fileRenderer.Previous();
+        }
+
+        internal void Down()
+        {
+            openSwf.fileRenderer.Down();
+        }
+
+        internal void R()
+        {
+            openSwf.ButtonBack();
+        }
+
+        internal void L()
+        {
+            openSwf.ButtonUp();
+        }
+
+        public void OpenFile()
+        {
+            openSwf.OpenFile();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -70,14 +100,15 @@ namespace XnaFlashPlayer
                 return;
         }
 
+        public string FileName => openSwf?.FileName;
+
         void Open(Form form, DialogResult dialogResult)
         {
             if(dialogResult== DialogResult.OK)
             {
                 exportToolStripMenuItem.Enabled =
                 přehráváníToolStripMenuItem.Enabled = flashPlayer.Open(openSwf.FileName);
-                //openSwf.DialogResult = DialogResult.None;
-                //openSwf.Visible = false;
+                DrawGL.ins.Text.text = openSwf.FileName;
             }
         }
 
@@ -146,11 +177,11 @@ namespace XnaFlashPlayer
         {
             flashPlayer.Rewind();
         }
-        private void předchozíSnímekToolStripMenuItem_Click(object sender, EventArgs e)
+        public void předchozíSnímekToolStripMenuItem_Click(object sender, EventArgs e)
         {
             flashPlayer.PrevFrame();
         }
-        private void dalšíSnímekToolStripMenuItem_Click(object sender, EventArgs e)
+        public void dalšíSnímekToolStripMenuItem_Click(object sender, EventArgs e)
         {
             flashPlayer.NextFrame();
         }

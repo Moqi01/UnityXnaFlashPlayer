@@ -638,7 +638,7 @@
 
             return SelectedNode;
         }
-        private void SelectNext()
+        public void SelectNext()
         {
             var nextNode = nodeList.FindIndex(x => x == SelectedNode); // TODO: this is slow implementation. Should remember current selectedIndex.
             
@@ -684,7 +684,7 @@
                 }
             }
         }
-        private void SelectPrevious()
+        public void SelectPrevious()
         {
             var prevNode = nodeList.FindIndex(x => x == SelectedNode);
             while (!SelectPrevious(prevNode))

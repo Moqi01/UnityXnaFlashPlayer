@@ -258,6 +258,8 @@
             this.opakovatToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.opakovatToolStripMenuItem.Text = "O";
             this.opakovatToolStripMenuItem.Click += new System.EventHandler(this.opakovatToolStripMenuItem_Click);
+
+            
             // 
             // flashPlayer
             // 
@@ -291,8 +293,11 @@
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.ClientSize = new System.Drawing.Size(684, 462);
-            this.Location = new System.Drawing.Point(-100,-20);
-            this.ClientSize = new System.Drawing.Size(200, 10);
+
+            
+            this.Location = new System.Drawing.Point(-100, -20);
+            this.ClientSize = new System.Drawing.Size(24, 24);
+
             this.Controls.Add(this.flashPlayer);
             this.Controls.Add(this.mainMenu);
             this.MainMenuStrip = this.mainMenu;

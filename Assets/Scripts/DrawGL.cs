@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XnaVG;
-//using UnityEngine.UI;
+using UnityEngine.UI;
 using Microsoft.Xna.Framework.Graphics;
 using PrimitiveType = Microsoft.Xna.Framework.Graphics.PrimitiveType;
 using XnaVG.Rendering.Tesselation;
@@ -11,6 +11,7 @@ using XnaVG.Rendering.Tesselation;
 public class DrawGL : MonoBehaviour
 {
     public string[] PropertyNames;
+    public Text Text;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +33,7 @@ public class DrawGL : MonoBehaviour
     {
         if (!isDrow)
         {
+            //Text.text = Meshs.Count.ToString()+ Application.isPlaying;
             for (int j = Meshs.Count; j < transform.childCount; j++)
             {
                 transform.GetChild(j).gameObject.SetActive(false);
@@ -63,11 +65,26 @@ public class DrawGL : MonoBehaviour
                 MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
                 if (Textures.ContainsKey(j + 1))
                 {
-                    //if(mr.material!=null)
-                    //{
-                    //    mr.material=
-                    //}
-                    Material material = new Material(Tmat);
+                    Material material= mr.material;
+                    if (mr.material != null)
+                    {
+                        if (mr.material .name != Tmat.name)
+                        {
+                            num++;
+                            if(num<100)
+                            material = new Material(Tmat);
+                        }
+                        if (num < 100)
+                            Destroy(mr.material);
+                    }
+                    else
+                    {
+                        num++;
+                        if (num < 100)
+                            material = new Material(Tmat);
+                    }
+                     //MaterialTemp.Add(material);
+                   
                     material.SetTexture(PropertyNames[0], Textures[j + 1]);
                     mr.material = material;
 
@@ -77,7 +94,11 @@ public class DrawGL : MonoBehaviour
                         mesh.uv= uvs;
                 }
                 else
+                {
+                    if (mr.material != null)
+                        Destroy(mr.material);
                     mr.material = mat;
+                }
                 mr.sortingOrder = j;
             }
             return;
@@ -163,6 +184,8 @@ public class DrawGL : MonoBehaviour
             //isShow = true;
         }
     }
+    public int num;
+    List<Material> MaterialTemp = new List<Material>();
     // Draws 2 triangles in the left side of the screen
     // that look like a square
     public bool isShow;

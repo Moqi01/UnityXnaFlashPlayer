@@ -33,7 +33,7 @@ namespace XnaFlashPlayer
 
         public bool Open(string file)
         {
-            //try
+            try
             {
                 using (var fs = new FileStream(file, FileMode.Open))
                     document = new FlashDocument("document", new XnaFlash.Swf.SwfStream(fs), this);
@@ -47,11 +47,11 @@ namespace XnaFlashPlayer
                 lastDraw = startTime = DateTime.Now;
                 return true;
             }
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Soubor se nepodařilo načíst!\n\n" + e.Message);
-            //    return false;
-            //}
+            catch (Exception e)
+            {
+                MessageBox.Show("Soubor se nepodařilo načíst!\n\n" + e.Message);
+                return false;
+            }
         }
         public void Close()
         {
@@ -291,6 +291,9 @@ namespace XnaFlashPlayer
             VectorDevice = VGDevice.Initialize(GraphicsDevice, gameServiceContainer);
             Application.Idle += delegate { Invalidate(); };
         }
+
+        public GameTime UpDateTime;
+
         protected void Draw()
         {
             if (instance != null)

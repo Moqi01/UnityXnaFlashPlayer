@@ -171,15 +171,16 @@ namespace Microsoft.Xna.Framework.Graphics
             }
            else if (data is byte[])
             {
-                //byte[] mydata = (byte[])Convert.ChangeType(data, typeof(byte[]));
-                //UnityEngine.Texture2D texture = new UnityEngine.Texture2D(width, height);
-                //texture.LoadImage(mydata);//流数据转换成Texture2D
+                byte[] mydata = (byte[])Convert.ChangeType(data, typeof(byte[]));
+                UnityEngine.Texture2D texture2D = unityTexture as UnityEngine.Texture2D;
+                texture2D.LoadRawTextureData(mydata);//流数据转换成Texture2D
+                texture2D.Apply();
 
                 //this.UnityTexture = texture;
-                string asset = "texture\\" + name + "(" + index + ")";
-                asset = asset.Replace("\\", "/");
+                //string asset = "texture\\" + name + "(" + index + ")";
+                //asset = asset.Replace("\\", "/");
                 // UnityEngine.Object a = Resources.Load(asset);
-                this.unityTexture = Resources.Load<UnityEngine.Texture2D>(asset);
+                //this.unityTexture = Resources.Load<UnityEngine.Texture2D>(asset);
             }
             else
                 UnityEngine.Debug.Log("SetData<T> T:" + typeof(T).Name);
@@ -226,6 +227,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             UnityEngine.Color[] color = new UnityEngine.Color[data.Length];
             for (int i = data.Length - 1; i >= 0; i--)
+            //for (int i = data.Length - 1; i >= 0; i--)
             {
                 color[i].a = (data[i] >> 24) / 255f;
                 color[i].b = ((data[i] & 0x00FF0000) >> 16) / 255f;

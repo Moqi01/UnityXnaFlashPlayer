@@ -30,6 +30,7 @@ namespace XnaFlash.Content
                 var t = tag as DefineBitsLosslessTag;
                 texture = new Texture2D(services.GraphicsDevice, t.Width, t.Height, false, SurfaceFormat.Color);
                 texture.SetData(t.Pixels);
+                //texture.SetData(t.Dates);
             }
             else if (tag is DefineBitsTag)
             {
