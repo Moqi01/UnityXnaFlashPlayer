@@ -18,7 +18,7 @@ namespace XnaVG.Rendering.Tesselation
         public List<Color> colors = new List<Color>();
         public List<int> triangles = new List<int>();
         public List<UnityEngine.Vector2> uvs = new List<UnityEngine.Vector2>();
-        Color Color;
+        Color Color=new Color();
         public int TriangleCount { get { return _tris; } }
         public bool HasVertices { get { return _vertices != null; } }
 
@@ -49,7 +49,7 @@ namespace XnaVG.Rendering.Tesselation
 
         public void CreaceMesh(VGPaint paint,VGMatrix value, VGMatrix projection, VGMatrix paintTransformation)
         {
-
+            DrawGL.ins.SetMatrices(value, projection);
             if (paint is VGColorPaint)
             {
                 VGColorPaint colorPaint = paint as VGColorPaint;
@@ -59,39 +59,16 @@ namespace XnaVG.Rendering.Tesselation
             Transformation = value;
             Projection = projection;
             PaintTransformation = paintTransformation;
-            //SetMatrices(value, projection);
-            //if (DrawGL.ins.ContainsMesh(mesh))
-            //{
-            //    if (meshs.ContainsKey(Matrix))
-            //    {
-            //        DrawGL.ins.SetMesh(meshs[Matrix]);
-            //    }
-            //    else
-            //    {
-            //        SetMesh();
-            //        meshs.Add(Matrix, mesh);
-            //        DrawGL.ins.SetMesh(mesh);
-            //    }
-            //}
-            //else
-            //{
-            //    if (mesh == null)
-            //    {
-            //        SetMesh();
-            //        meshs.Add(Matrix, mesh);
+          
 
-            //    }
-            //    DrawGL.ins.SetMesh(mesh);
-            //}
-
-            if (meshs.ContainsKey(Transformation))
+            if (mesh!=null)
             {
-                DrawGL.ins.SetMesh(meshs[Transformation]);
+                DrawGL.ins.SetMesh(mesh);
             }
             else
             {
                 SetMesh();
-                meshs.Add(Transformation, mesh);
+               
                 DrawGL.ins.SetMesh(mesh);
             }
 
@@ -119,7 +96,7 @@ namespace XnaVG.Rendering.Tesselation
                 Vector3 NextP = Vector3.zero;
                 Vector3 NextC = Vector3.zero;
                 Vector3 NextB = Vector3.zero;
-                Vector3 rus = new Vector3(p.X, p.Y);
+                Vector3 rus = new Vector3(p.X, p.Y,1);
 
                 if (i + 1 < _vertices.vertices.Length)
                 {
@@ -129,22 +106,22 @@ namespace XnaVG.Rendering.Tesselation
                         NextP = new Vector3(_vertices.vertices[i + 1].Position.X, _vertices.vertices[i + 1].Position.Y, 1);
                         NextB = new Vector3(_vertices.vertices[i - 1].Position.X, _vertices.vertices[i - 1].Position.Y, 1);
                         //rus = CalculateLineBezierPoint(1, NextB, p0);
-                        rus = CalculateCubicBezierPoint(t, NextB, p0, NextP);
+                        rus = CalculateCubicBezierPoint(0.5f, NextB, p0, NextP);
                         //rus = CalculateThreePowerBezierPoint(1, p0,pc, NextC, NextP);
                         t += tStep;
-                        p = new Microsoft.Xna.Framework.Vector3(rus.x, rus.y, rus.z);
+                        //p = new Microsoft.Xna.Framework.Vector3(rus.x, rus.y, rus.z);
                     }
 
                 }
 
                 // rus = CalculateLineBezierPoint(0.9f, p0, pc);
-                //p = new Microsoft.Xna.Framework.Vector3(rus.x, rus.y, rus.z);
+                p = new Microsoft.Xna.Framework.Vector3(rus.x, rus.y, rus.z);
                 //uv = PaintTransformation * Position;
 
-                Microsoft.Xna.Framework.Vector3 p2 = Transformation * p;
-                Microsoft.Xna.Framework.Vector3 p3 = Projection * p2;
-                Vector3 v = new Vector3(p3.X, p3.Y, p3.Z);
-
+                //Microsoft.Xna.Framework.Vector3 p2 = Transformation * p;
+                //Microsoft.Xna.Framework.Vector3 p3 = Projection * p2;
+                //Vector3 v = new Vector3(p2.X, p2.Y, p2.Z);
+                Vector3 v = new Vector3(p.X, p.Y, p.Z);
                 vertices.Add(v);
                 colors.Add(Color);
                 triangles.Add(i);

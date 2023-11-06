@@ -16,173 +16,111 @@ public class DrawGL : MonoBehaviour
     void Start()
     {
         PropertyNames = Tmat.GetTexturePropertyNames();
+        block = new MaterialPropertyBlock();
+        matrices = new Matrix4x4[] { Matrix4x4.identity };
+        //RenderQueue = mat.renderQueue;
     }
     private void Awake()
     {
         ins = this;
     }
     public static int MaxNum = 50000;
-    Vector3[] ves = new Vector3[MaxNum];
+    
     public Vector2[] uvs = new Vector2[12];
-    int[] triangles = new int[MaxNum];
-    Color[] colors = new Color[MaxNum];
+    public List<Vector2> uvs2 = new List<Vector2>();
 
+    private MaterialPropertyBlock block;
+    public Matrix4x4[] matrices;
     public static DrawGL ins;
+    public UnityEngine.Transform P;
     // Update is called once per frame
     void Update()
     {
-        if (!isDrow)
+        if (isDrow)
         {
-            //Text.text = Meshs.Count.ToString()+ Application.isPlaying;
-            for (int j = Meshs.Count; j < transform.childCount; j++)
-            {
-                transform.GetChild(j).gameObject.SetActive(false);
-            }
-            //for (int j = transform.childCount-1; j >=0; j--)
-            //{
-            //   Destroy( transform.GetChild(j).gameObject);
-            //}
-            for (int j = 0; j < Meshs.Count; j++)
-            {
-                GameObject gameObject = null;
-                Mesh mesh = Meshs[j];
-                if (j < transform.childCount)
-                {
-
-                    gameObject = transform.GetChild(j).gameObject; gameObject.SetActive(true);
-                    //return;
-                    MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-                    meshFilter.mesh = mesh;
-                }
-                else
-                {
-                    gameObject = CreateObj();
-
-                    MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-                    meshFilter.mesh = mesh;
-
-                }
-                MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
-                if (Textures.ContainsKey(j + 1))
-                {
-                    Material material= mr.material;
-                    if (mr.material != null)
-                    {
-                        if (mr.material .name != Tmat.name)
-                        {
-                            num++;
-                            if(num<100)
-                            material = new Material(Tmat);
-                        }
-                        if (num < 100)
-                            Destroy(mr.material);
-                    }
-                    else
-                    {
-                        num++;
-                        if (num < 100)
-                            material = new Material(Tmat);
-                    }
-                     //MaterialTemp.Add(material);
-                   
-                    material.SetTexture(PropertyNames[0], Textures[j + 1]);
-                    mr.material = material;
-
-                    //Tmat.SetTexture(PropertyNames[0], Textures[j + 1]);
-                    //mr.material = Tmat;
-                      if (mesh.vertexCount==12)
-                        mesh.uv= uvs;
-                }
-                else
-                {
-                    if (mr.material != null)
-                        Destroy(mr.material);
-                    mr.material = mat;
-                }
-                mr.sortingOrder = j;
-            }
-            return;
+          
+            //return;
         }
         return;
         if (Vertors.Count <= 0) return;
-        if (isGraphicDrow)
-        {
-            for (int j = 0; j < Vertors.Count; j++)
-            {
-                vertices = Vertors[j];
-                if (vertices == null) continue;
-                Matrix4x4 m = Matrix4x4.identity;
-                if (j < Matrices.Count)
-                    m = Matrices[j];
+        //if (isGraphicDrow)
+        //{
+        //    for (int j = 0; j < Vertors.Count; j++)
+        //    {
+        //        vertices = Vertors[j];
+        //        if (vertices == null) continue;
+        //        Matrix4x4 m = Matrix4x4.identity;
+        //        if (j < Matrices.Count)
+        //            m = Matrices[j];
                 
-                for (int i = 0; i < vertices.Length; i++)
-                {
-                    //Vector2 v = (new Vector2(vertices[i].Position.X / vX - VMax, HMax - vertices[i].Position.Y / vY));
-                    Vector3 v = new Vector3(vertices[i].Position.X, vertices[i].Position.Y);
-                    Vector2 n = new Vector2(vertices[i].Control.X, vertices[i].Control.Y);
+        //        for (int i = 0; i < vertices.Length; i++)
+        //        {
+        //            //Vector2 v = (new Vector2(vertices[i].Position.X / vX - VMax, HMax - vertices[i].Position.Y / vY));
+        //            Vector3 v = new Vector3(vertices[i].Position.X, vertices[i].Position.Y);
+        //            Vector2 n = new Vector2(vertices[i].Control.X, vertices[i].Control.Y);
 
-                    v = m.MultiplyPoint3x4(v);
+        //            v = m.MultiplyPoint3x4(v);
                    
 
-                    v *= Scale;
-                    v *= UseScale;
-                    ves[i] = v;
-                    //uvs[i] = n;
-                    if (j < Colors.Count)
-                        colors[i] = Colors[j];
-                    else
-                        colors[i] = Color.white;
-                    //colors[i] = Colors[j];
-                    triangles[i] = i;
-                     //Debug .DrawLine(v, v2, Colors[j]);
-                }
-                Mesh mesh = null;
-                if (!isShow)
-                {
-                    GameObject gameObject = null;
-                    if (j < transform.childCount)
-                    {
-                        gameObject = transform.GetChild(j).gameObject; gameObject.SetActive(true);
-                        mesh = gameObject.GetComponent<MeshFilter>().mesh;
-                        mesh.Clear();
-                    }
-                    else
-                    {
-                        gameObject = GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Plane);
-                        gameObject.transform.SetParent(transform);
-                        gameObject.transform.localPosition = new Vector3(400, 200, 1000);
-                        gameObject.transform.localRotation = Quaternion.Euler(0, 0, 180);
-                        gameObject.transform.localScale = new Vector3(0.14f, 0.14f, 1f);
-                        mesh = new Mesh();
-                        gameObject.GetComponent<MeshFilter>().mesh = mesh;
+        //            v *= Scale;
+        //            v *= UseScale;
+        //            ves[i] = v;
+        //            //uvs[i] = n;
+        //            if (j < Colors.Count)
+        //                colors[i] = Colors[j];
+        //            else
+        //                colors[i] = Color.white;
+        //            //colors[i] = Colors[j];
+        //            triangles[i] = i;
+        //             //Debug .DrawLine(v, v2, Colors[j]);
+        //        }
+        //        Mesh mesh = null;
+        //        if (!isShow)
+        //        {
+        //            GameObject gameObject = null;
+        //            if (j < transform.childCount)
+        //            {
+        //                gameObject = transform.GetChild(j).gameObject; gameObject.SetActive(true);
+        //                mesh = gameObject.GetComponent<MeshFilter>().mesh;
+        //                mesh.Clear();
+        //            }
+        //            else
+        //            {
+        //                gameObject = GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Plane);
+        //                gameObject.transform.SetParent(transform);
+        //                gameObject.transform.localPosition = new Vector3(400, 200, 1000);
+        //                gameObject.transform.localRotation = Quaternion.Euler(0, 0, 180);
+        //                gameObject.transform.localScale = new Vector3(0.14f, 0.14f, 1f);
+        //                mesh = new Mesh();
+        //                gameObject.GetComponent<MeshFilter>().mesh = mesh;
                        
-                    }
-                    if (isDrow)
-                    {
+        //            }
+        //            if (isDrow)
+        //            {
                        
-                        //mesh.bindposes = new Matrix4x4[] { m };
-                        //mesh.SetVertices(ves,0,vertices.Length);
-                        ////mesh.SetUVs(0, uvs, 0, vertices.Length);
-                        //mesh.SetTriangles(triangles, 0, vertices.Length,0);
-                        //mesh.SetColors(colors, 0, vertices.Length);
-                        //Graphics.DrawMeshInstanced(mesh, 0, mat, new Matrix4x4[] { Matrix4x4.identity });
+        //                //mesh.bindposes = new Matrix4x4[] { m };
+        //                //mesh.SetVertices(ves,0,vertices.Length);
+        //                ////mesh.SetUVs(0, uvs, 0, vertices.Length);
+        //                //mesh.SetTriangles(triangles, 0, vertices.Length,0);
+        //                //mesh.SetColors(colors, 0, vertices.Length);
+        //                //Graphics.DrawMeshInstanced(mesh, 0, mat, new Matrix4x4[] { Matrix4x4.identity });
 
-                        //Graphics.DrawMeshNow(mesh, Matrix4x4.identity);
+        //                //Graphics.DrawMeshNow(mesh, Matrix4x4.identity);
 
-                        MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
-                        mr.material = mat;
-                        mr.sortingOrder = j;
+        //                MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
+        //                mr.material = mat;
+        //                mr.sortingOrder = j;
 
-                    }
+        //            }
 
-                }
-            }
-            for (int j = Vertors.Count; j < transform.childCount; j++)
-            {
-                transform.GetChild(j).gameObject.SetActive(false);
-            }
-            //isShow = true;
-        }
+        //        }
+        //    }
+        //    for (int j = Vertors.Count; j < transform.childCount; j++)
+        //    {
+        //        transform.GetChild(j).gameObject.SetActive(false);
+        //    }
+        //    //isShow = true;
+        //}
     }
     public int num;
     List<Material> MaterialTemp = new List<Material>();
@@ -195,7 +133,7 @@ public class DrawGL : MonoBehaviour
     List<Mesh> Meshs = new List<Mesh>();
     void OnPostRender()
     {
-        
+        return;
         if (!mat)
         {
             Debug.LogError("Please Assign a material on the inspector");
@@ -265,11 +203,13 @@ public class DrawGL : MonoBehaviour
     public GameObject CreateObj()
     {
         GameObject gameObject = GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Plane);
-        gameObject.transform.SetParent(transform);
+        gameObject.transform.SetParent(P);
         gameObject.transform.localPosition = new Vector3(0, 0, 1);
+        MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
+        mr.material = mat;
         //gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
         //gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
-        gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+        //gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
         return gameObject;
     }
     internal void SetPrimitiveTypes(Microsoft.Xna.Framework.Graphics.PrimitiveType triangleList)
@@ -351,6 +291,82 @@ public class DrawGL : MonoBehaviour
         GL.Vertex(v);
 
     }
+
+    public void OnDraw()
+    {
+        for (int j = Meshs.Count; j < P.childCount; j++)
+        {
+            P.GetChild(j).gameObject.SetActive(false);
+        }
+        for (int j = 0; j < Meshs.Count; j++)
+        {
+            GameObject gameObject = null;
+            Mesh mesh = Meshs[j];
+            if (j < P.childCount)
+            {
+                gameObject = P.GetChild(j).gameObject; gameObject.SetActive(true);
+                gameObject.GetComponent<MeshFilter>().mesh = mesh;
+
+            }
+            else
+            {
+                gameObject = CreateObj();
+
+                gameObject.GetComponent<MeshFilter>().mesh = mesh;
+
+            }
+            MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
+
+            if (Textures.ContainsKey(j + 1))
+            {
+
+                if (mesh.vertexCount == 12)
+                {
+
+                    mesh.SetUVs(0, uvs2);
+                }
+                mr.material.SetTexture("_MainTex", Textures[j + 1]);
+                mr.material.SetFloat("_IsTex", 1);
+                //block.SetTexture("_MainTex", Textures[j + 1]);
+                //block.SetFloat("_IsTex", 1);
+            }
+            else
+            {
+                //mr.material = mat;
+                //Vector4 c = new Vector4(Colors[j].r, Colors[j].g, Colors[j].b, Colors[j].a);
+
+                mr.material.SetFloat("_IsTex", 0);
+                //mr.material.SetVector("_Color", c);
+                //block.SetFloat("_IsTex", 0);
+                //block.SetVector("_Color", c);
+
+            }
+            Vector4 t = new Vector4(Matrices[j].m03, Matrices[j].m13);
+            Vector4 s = new Vector4(Matrices[j].m00, Matrices[j].m11);
+            Vector4 r = new Vector4(Matrices[j].m01, Matrices[j].m10);
+            //VGMatrix Paint = Projections[j];
+            //Vector4 t = new Vector4(Paint.M13, Paint.M23);
+            //Vector4 s = new Vector4(Paint.M11 * Scale, Paint.M22 * Scale);
+            //Vector4 r = new Vector4(Paint.M21, Paint.M12);
+            ////block.SetVector("_Transformation", t);
+            //block.SetVector("_Scale", s);
+            //block.SetVector("_Rotation", r);
+            //block.SetFloat("_Z", j * 0.05f);
+            //matrices[0] = Matrices[j];
+
+            //mat.renderQueue = RenderQueue + j*10;
+            //Graphics.DrawMeshInstanced(mesh, 0, mat, matrices, 1, block);
+
+            mr.material.SetVector("_Transformation", t);
+            mr.material.SetVector("_Scale", s);
+            mr.material.SetVector("_Rotation", r);
+            //mr.sortingOrder = Depths[j];
+            mr.sortingOrder = j;
+            //mr.transform.localPosition = new Vector3(0, 0, j * sortingOrder);
+        }
+    }
+
+
     public float Scale = 1;
     public float UseScale = 1;
     public XnaVG.Rendering.Tesselation.StencilVertex[] vertices;
@@ -366,8 +382,9 @@ public class DrawGL : MonoBehaviour
     public List<Vector2 > ScValues = new List<Vector2>();
     public List<Microsoft.Xna.Framework.Graphics.PrimitiveType> primitiveTypes = new List<Microsoft.Xna.Framework.Graphics.PrimitiveType>();
     public List<XnaVG.Rendering.Tesselation.StencilVertex[]> Vertors=new List<XnaVG.Rendering.Tesselation.StencilVertex[]>();
-
+    public List<int> Depths = new List<int>();
     public bool OpenStencil;
+    public float sortingOrder=0.05f;
 
     public void SetVectors(XnaVG.Rendering.Tesselation.StencilVertex[] v)
     {
@@ -395,6 +412,7 @@ public class DrawGL : MonoBehaviour
     }
     public void Clear(Color color)
     {
+        OnDraw();
         Matrices.Clear();
         Vertors.Clear();
         Colors.Clear();

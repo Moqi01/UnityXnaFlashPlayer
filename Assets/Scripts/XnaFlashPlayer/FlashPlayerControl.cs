@@ -49,7 +49,7 @@ namespace XnaFlashPlayer
             }
             catch (Exception e)
             {
-                MessageBox.Show("Soubor se nepodařilo načíst!\n\n" + e.Message);
+                MessageBox.Show("Error!\n\n" + e.Message);
                 return false;
             }
         }

@@ -52,7 +52,7 @@ namespace XnaVG.Rendering.Effects
             _addTerm.SetValue(cxForm.AddTerm);
             _mulTerm.SetValue(cxForm.MulTerm);
             _offset.SetValue(Vector2.Zero);
-            DrawGL.ins.SetMatrices(transformation,projection);
+           
         }
 
         public void SetMask(VGImage mask, Vector4 channels)
@@ -96,14 +96,14 @@ namespace XnaVG.Rendering.Effects
                 case VGPaintType.Color:
                     Vector4 color = (paint as VGColorPaint).Color.ToVector4();
                     _color.SetValue(color);
-                    DrawGL.ins.SetColor ( new UnityEngine. Color(color.X,color.Y,color.Z,color.W));
+                    
                     break;
                 case VGPaintType.Pattern:
                 case VGPaintType.PatternPremultiplied:
                     var pattern = (paint as VGPatternPaint).Pattern;
                     _effect.GraphicsDevice.Textures[1] = pattern.Texture;
                     _effect.GraphicsDevice.SamplerStates[1] = pattern.GetSamplerState();
-                    DrawGL.ins.SetColor(UnityEngine.Color.white);
+                   
                     DrawGL.ins.SetTextures(pattern.Texture);
                     if (pattern.LinearColorspace) _passIndex |= 1;
                     break;
@@ -112,7 +112,7 @@ namespace XnaVG.Rendering.Effects
                     var gradient = paint as VGGradientPaint;
                     _effect.GraphicsDevice.Textures[1] = gradient.Gradient;
                     _effect.GraphicsDevice.SamplerStates[1] = gradient.GetSamplerState();
-                    DrawGL.ins.SetColor( UnityEngine.Color.white);
+                    
                     DrawGL.ins.SetTextures(gradient.Gradient);
                     if (gradient.LinearColorspace) _passIndex |= 1;
                     break;
