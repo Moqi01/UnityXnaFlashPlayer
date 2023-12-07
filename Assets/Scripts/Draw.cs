@@ -107,25 +107,91 @@ public class Draw : Graphic
 
     public bool isDrawOver=true;
     public bool Screenshot = false;
+    public List<Vector3> Vectors = new List<Vector3>();
 
     protected override void OnPopulateMesh(UnityEngine.UI.VertexHelper vh)
     {
-        //if (!XnaMugen.isOpenGlDraw)
-        //{
-        //    //base.OnPopulateMesh(vh);
-        //    vh.Clear();
-        //    SetVertexData(VertexData);
-        //    //vh.AddUIVertexQuad(targetVertexList.ToArray ());
-        //    vh.AddUIVertexTriangleStream(targetVertexList);
-        //    //vh.AddUIVertexStream(targetVertexList, new List<int>() {0,1,2,2,3,0});
-        //    isDrawOver = true;
-        //}
-
-        if(Screenshot)
+        vh.Clear();
+        foreach (var item in pos)
         {
-            Microsoft.Xna.Framework.Graphics.Texture2D. OutputRt(PixelsTexture.EncodeToPNG(), "Pixels" + transform.GetSiblingIndex ());
-            Microsoft.Xna.Framework.Graphics.Texture2D. OutputRt(PaletteTexture.EncodeToPNG(), "Palette" + transform.GetSiblingIndex ());
-            Screenshot = false;
+            UIVertex uIVertex = new UIVertex();
+            uIVertex.position = item * Scale;
+            uIVertex.color = Color.blue;
+            //vh.AddVert(item, colors,Vector2.zero);
+            vh.AddVert(uIVertex);
         }
+        base.OnPopulateMesh(vh);
+
     }
+
+    //   protected override void OnPopulateMesh(UnityEngine.UI.VertexHelper vh)
+    //   {
+    //       //if (!XnaMugen.isOpenGlDraw)
+    //       //{
+    //       //    //base.OnPopulateMesh(vh);
+    //       //    vh.Clear();
+    //       //    SetVertexData(VertexData);
+    //       //    //vh.AddUIVertexQuad(targetVertexList.ToArray ());
+    //       //    vh.AddUIVertexTriangleStream(targetVertexList);
+    //       //    //vh.AddUIVertexStream(targetVertexList, new List<int>() {0,1,2,2,3,0});
+    //       //    isDrawOver = true;
+    //       //}
+    //       base.OnPopulateMesh(vh);
+    //       targetVertexList.Clear();
+    //       vh.Clear();
+    //       points.Clear();
+    //       Vector3 befor = Vector3.zero;
+    //       for (int i = 0; i < Vectors.Count; i++)
+    //       {
+    //           if (!points.Contains(Vectors[i]))
+    //           {
+
+    //               points.Add(Vectors[i]);
+    //           }
+    //           if(befor.Equals(Vectors[i]))
+    //               points.Add(Vectors[i]*0.99f);
+
+    //           befor = Vectors[i];
+    //       }
+    ////       if (points.Count >0)
+    ////       {
+    ////points.Insert(4, points[0] * 0.9f);
+    ////       points.Insert(points.Count, points[points.Count - 1]*0.99f);
+    ////       }
+
+    //       for (int i = 0; i < points.Count; i++)
+    //       {
+    //           UIVertex uIVertex = new UIVertex();
+    //           uIVertex.position = points[i] * Scale;
+    //           uIVertex.color = Color.blue;
+
+    //               targetVertexList.Add(uIVertex);
+
+    //       }
+
+
+    //       if (targetVertexList.Count >0)
+    //       {
+
+    //       indes = new Triangulator(points.ToArray()).Triangulate();
+    //       List<int> ins = new List<int>(indes);
+
+
+    //       ins.AddRange(AddIndes);
+    //           vh.AddUIVertexStream(targetVertexList,ins);
+    //       //vh.AddUIVertexTriangleStream(targetVertexList);
+    //       }
+    //       if (Screenshot)
+    //       {
+    //           Microsoft.Xna.Framework.Graphics.Texture2D. OutputRt(PixelsTexture.EncodeToPNG(), "Pixels" + transform.GetSiblingIndex ());
+    //           Microsoft.Xna.Framework.Graphics.Texture2D. OutputRt(PaletteTexture.EncodeToPNG(), "Palette" + transform.GetSiblingIndex ());
+    //           Screenshot = false;
+    //       }
+    //   }
+    public float Scale = 0.1f;
+    public List < Vector3> pos =new List<Vector3>();
+    public Color colors;
+    public List<Vector2> points = new List<Vector2>();
+    public int[] indes;
+    public List< int> AddIndes=new List<int>();
 }

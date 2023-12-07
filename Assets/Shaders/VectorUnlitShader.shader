@@ -30,7 +30,7 @@ Shader "Unlit/VectorUnlitShader"
                 #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
-           // #pragma multi_compile_instancing //这里,第一步
+            #pragma multi_compile_instancing //这里,第一步
             #include "UnityCG.cginc"
             uniform float4 _Transformation;
             uniform float4 _Color;
@@ -46,7 +46,8 @@ Shader "Unlit/VectorUnlitShader"
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
                 float4 color : COLOR;
-               // UNITY_VERTEX_INPUT_INSTANCE_ID //这里,第二步
+               
+			   UNITY_VERTEX_INPUT_INSTANCE_ID //这里,第二步
             };
 
             struct v2f
@@ -55,7 +56,7 @@ Shader "Unlit/VectorUnlitShader"
                 //UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float4 color : COLOR;
-             //   UNITY_VERTEX_INPUT_INSTANCE_ID //这里,第二步
+                UNITY_VERTEX_INPUT_INSTANCE_ID //这里,第二步
             };
 
             float4x4 Translational(float4 translational)
@@ -73,8 +74,8 @@ Shader "Unlit/VectorUnlitShader"
             v2f vert(appdata v)
             {
                 v2f o;
-               // UNITY_SETUP_INSTANCE_ID(v); //这里第三步
-               // UNITY_TRANSFER_INSTANCE_ID(v, o); //第三步 
+                UNITY_SETUP_INSTANCE_ID(v); //这里第三步
+                UNITY_TRANSFER_INSTANCE_ID(v, o); //第三步 
                 v.vertex.z = _Z;
                 v.vertex.xy = v.vertex.xy + _Offset.xy;
                 v.vertex = mul(Translational(_Transformation), v.vertex);
@@ -104,7 +105,7 @@ Shader "Unlit/VectorUnlitShader"
                          discard;
                      }
                  }
-                // UNITY_SETUP_INSTANCE_ID(i); //最后一步
+                 UNITY_SETUP_INSTANCE_ID(i); //最后一步
                  // apply fog
                  //UNITY_APPLY_FOG(i.fogCoord, col);
                  return col;

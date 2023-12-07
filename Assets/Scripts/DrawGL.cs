@@ -322,7 +322,6 @@ public class DrawGL : MonoBehaviour
 
                 if (mesh.vertexCount == 12)
                 {
-
                     mesh.SetUVs(0, uvs2);
                 }
                 mr.material.SetTexture("_MainTex", Textures[j + 1]);
@@ -334,12 +333,12 @@ public class DrawGL : MonoBehaviour
             {
                 //mr.material = mat;
                 //Vector4 c = new Vector4(Colors[j].r, Colors[j].g, Colors[j].b, Colors[j].a);
-
+                //mat.SetBuffer
                 mr.material.SetFloat("_IsTex", 0);
                 //mr.material.SetVector("_Color", c);
                 //block.SetFloat("_IsTex", 0);
                 //block.SetVector("_Color", c);
-
+                //VEs = mesh.vertices;
             }
             Vector4 t = new Vector4(Matrices[j].m03, Matrices[j].m13);
             Vector4 s = new Vector4(Matrices[j].m00, Matrices[j].m11);
@@ -363,13 +362,26 @@ public class DrawGL : MonoBehaviour
             //mr.sortingOrder = Depths[j];
             mr.sortingOrder = j;
             //mr.transform.localPosition = new Vector3(0, 0, j * sortingOrder);
+            if (isShowCapsule)
+            {
+                //for (int i = 0; i < mesh.vertices.Length; i++)
+                //{
+                //    UnityEngine.Transform tr = GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Capsule).transform;
+                //    tr.SetParent(transform);
+                //    tr.position = mesh.vertices[i];
+                //    tr.name = i.ToString();
+                //}
+                isShowCapsule = false;
+            }
+            
         }
     }
-
+    public bool isShowCapsule=true;
 
     public float Scale = 1;
     public float UseScale = 1;
     public XnaVG.Rendering.Tesselation.StencilVertex[] vertices;
+    public Vector3[] VEs;
     public float vX = 12 * Screen.width;
     public float vY = 12 * Screen.height;
     public float HMax = 1;
@@ -422,5 +434,6 @@ public class DrawGL : MonoBehaviour
         Textures.Clear();
         Meshs.Clear();
         Camera.main.backgroundColor = color;
+        DrawGame.instance.index = 0;
     }
 }

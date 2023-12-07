@@ -534,10 +534,7 @@ namespace XnaFlash.Swf
 
             string name = string.Empty;
             var tag = SwfTagFactory.LoadTag(this, id, (uint)length, Version, ref name);
-            if(num==317)
-            {
-
-            }
+            
             //UnityEngine.Debug.Log(num++);
             if (tag == null)
             {
@@ -546,15 +543,20 @@ namespace XnaFlash.Swf
                     mUnknownTags.Add(id);
             }else
             {
-                if(mTagStart!=mBitStream.Position)
-                if ((mTagStart + length) == mBitStream.Position)
+                if (tag is DefineShapeTag || tag is DefineShape2Tag || tag is DefineShape3Tag || tag is DefineShape4Tag)
                 {
-
+                    long end = mTagStart + length;
+                    if (end > mBitStream.Position)
+                    {
+                        UnityEngine.Debug.Log(tag.ToString());
+                        mBitStream.Skip(end - mBitStream.Position);
+                    }
+                    else if (end < mBitStream.Position)
+                    {
+                        throw new Exception("Error " + tag.ToString());
+                    }
                 }
-                else
-                {
-
-                }
+                
             }
             
             return tag;

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -111,6 +112,18 @@ public class DrawGame : MonoBehaviour
 
     public int CurrentIndex;
 
+    internal void SetDraw(List<Vector3> vertices, Color color)
+    {
+        if(index<draws .Count )
+        {
+            draws[index].pos = vertices;
+            draws[index].colors = color;
+            draws[index].gameObject.SetActive(true);
+        }
+            index++;
+       
+    }
+
     //public void DrawUserPrimitives(Microsoft.Xna.Framework.Graphics.PrimitiveType primitiveType, xnaMugen.Video.Vertex[] vertexData, int vertexOffset, int primitiveCount, Microsoft.Xna.Framework.Graphics.VertexDeclaration vertexDeclaration)
     //{
     //    VertexData = vertexData;
@@ -168,7 +181,11 @@ public class DrawGame : MonoBehaviour
        // meshFilter.mesh = mesh;
        
     }
-
+    public  void setVe(List<Vector3> list)
+    {
+        draws[0].Vectors.Clear();
+        draws[0].Vectors = list;
+    }
     //public xnaMugen.Video.Vertex[] VertexData=new xnaMugen.Video.Vertex[6];
     public int Count;
 

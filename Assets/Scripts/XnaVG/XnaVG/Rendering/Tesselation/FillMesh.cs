@@ -61,18 +61,16 @@ namespace XnaVG.Rendering.Tesselation
             PaintTransformation = paintTransformation;
           
 
-            if (mesh!=null)
-            {
-                DrawGL.ins.SetMesh(mesh);
-            }
-            else
+            if (mesh==null)
             {
                 SetMesh();
-               
-                DrawGL.ins.SetMesh(mesh);
-            }
 
-           
+            }
+                DrawGL.ins.SetMesh(mesh);
+
+            DrawGame.instance.SetDraw(vertices,Color);
+
+
 
         }
 
@@ -82,9 +80,14 @@ namespace XnaVG.Rendering.Tesselation
             vertices.Clear();
             colors.Clear();
             triangles.Clear();
+            points.Clear();
+            targetVertexList.Clear();
             uvs.Clear();
+            vh.Clear();
             var t = 0f;
             float tStep = 1f / _vertices.vertices.Length;
+            Vector3 befor = Vector3.zero;
+
             for (int i = 0; i < _vertices.vertices.Length; i++)
             {
 
@@ -126,13 +129,62 @@ namespace XnaVG.Rendering.Tesselation
                 colors.Add(Color);
                 triangles.Add(i);
                 //uvs.Add(new UnityEngine.Vector2((uv.X), (uv.Y)));
+
+
+                //if (!points.Contains(v))
+                //{
+                //    UIVertex uIVertex = new UIVertex();
+                //    uIVertex.position = v;
+                //    uIVertex.color = Color;
+
+                //    targetVertexList.Add(uIVertex);
+                //    points.Add(v);
+                //}
+                //if (befor.Equals(v))
+                //{
+                //    befor = v * 0.99f;
+                //    UIVertex uIVertex = new UIVertex();
+                //    uIVertex.position = befor;
+                //    uIVertex.color = Color;
+
+                //    targetVertexList.Add(uIVertex);
+                //    points.Add(befor);
+                //}
+
+                //befor = v;
             }
-            mesh.SetVertices ( vertices);
-            mesh.SetColors (colors);
-            mesh.SetTriangles( triangles,0);
+
+            //points.Reverse();
+            //indes = new Triangulator(points.ToArray()).Triangulate();
+            //List<int> ins = new List<int>(indes);
+
+            //ins.AddRange(AddIndes);
+            //if (targetVertexList.Count > 0)
+            //{
+
+            //    //vh.AddUIVertexStream(vertices, ins);
+            //    vh.AddUIVertexStream(targetVertexList, ins);
+            //    //vh.AddUIVertexTriangleStream(targetVertexList);
+            //    vh.FillMesh(mesh);
+            //}
+           
+
+            //DrawGame.instance.setVe(vertices);
+
+            mesh.SetVertices(vertices);
+            if (vertices.Count == 12)
+            {
+                mesh.SetUVs(0,DrawGL.ins. uvs2);
+            }
+            mesh.SetColors(colors);
+            mesh.SetTriangles(triangles, 0);
             //mesh.uv = uvs.ToArray();
         }
-
+        UnityEngine.UI.VertexHelper vh = new UnityEngine.UI.VertexHelper();
+        public List<UIVertex> targetVertexList = new List<UIVertex>();
+        public List<UnityEngine. Vector2> points = new List<UnityEngine.Vector2>();
+        public int[] indes;
+        public List<int> AddIndes = new List<int>();
         public VGMatrix Transformation;
         public VGMatrix Projection;
         public VGMatrix PaintTransformation;
