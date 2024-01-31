@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Unity.VectorGraphics;
 using XnaFlash.Movie;
 using XnaFlash.Swf;
 using XnaFlash.Swf.Structures;
@@ -33,6 +34,7 @@ namespace XnaFlash.Content
             {
                 var subShape = _subShapes[s] = new SubShape();
                 var shape = shapes[s];
+                subShape.shapeParser = shape.shapeParser;
 
                 subShape._fills = new SubShapeFill[shape.Fills.Count];
                 subShape._strokes = new SubShapeStroke[shape.Lines.Count];                
@@ -40,6 +42,16 @@ namespace XnaFlash.Content
                 var paints = new List<VGPaint>(shape.Fills.Count + shape.Lines.Count);
                 int i = 0;
                 VGPaint paint;
+
+                if (DrawGL.ins.isNewDraw)
+                {
+                    if (shape.shapeParser.FillStyle != null)
+                        shape.shapeParser.Paint = MakeFill(shape.shapeParser.FillStyle, services.VectorDevice, document);
+                    else
+                    {
+
+                    }
+                }
 
                 foreach (var f in shape.Fills)
                 {
@@ -89,34 +101,86 @@ namespace XnaFlash.Content
             
             foreach (var shape in _subShapes)
             {
-                for (i = 0, e = shape._fills.Length; i < e; i++)
+                if (DrawGL.ins.isNewDraw)
                 {
-                    state.PathToFillPaint.Push(shape._fills[i].FillMatrix);
-                    state.SetFillPaint(shape._fills[i].Paint);
-                    target.DrawPath(shape._fills[i].Path, VGPaintMode.Fill);
-                    state.PathToFillPaint.Pop();
-                    VGPaint paint = shape._fills[i].Paint;
-                    shape._fills[i].Path.Fill.CreaceMesh(paint,matrix, state.Projection.Matrix,state.PathToFillPaint.Matrix);
-                }
-
-                for (i = 0, e = shape._strokes.Length; i < e; i++)
-                {
-                    if (shape._strokes[i].ScaleX && shape._strokes[i].ScaleY)
-                        factor = scaleAvg;
-                    else if (shape._strokes[i].ScaleX)
-                        factor = scaleX;
-                    else if (shape._strokes[i].ScaleY)
-                        factor = scaleY;
+                    if (shape.mesh != null)
+                        DrawGL.ins.SetMesh(shape.mesh);
                     else
-                        factor = 1f;
+                    {
+                        shape.mesh = DrawGL.ins.SetMesh(shape.shapeParser.shapes);
+                    }
 
-                    state.NonScalingStroke = true;
-                    state.PathToStrokePaint.Push(shape._strokes[i].FillMatrix);
-                    state.SetStrokePaint(shape._strokes[i].Paint);
-                    state.StrokeThickness = Math.Max(2f, shape._strokes[i].Thickness * factor);
-                    target.DrawPath(shape._strokes[i].Path, VGPaintMode.Stroke);
-                    state.PathToStrokePaint.Pop();
+                    DrawGL.ins.SetMatrices(state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
+
+                    if (shape.shapeParser.shapes[0].Fill is GradientFill)
+                    {
+                        //GradientFill gradientFill = shape.shapeParser.shapes[0].Fill as GradientFill;
+                        if (shape.shapeParser.Paint != null)
+                        {
+                            var tex = (shape.shapeParser.Paint as VGGradientPaint).Gradient;
+                            //_effect.GraphicsDevice.Textures[1] = pattern.Texture;
+                            //_effect.GraphicsDevice.SamplerStates[1] = pattern.GetSamplerState();
+                            //DrawGL.ins.SetColor(UnityEngine.Color.white);
+                            DrawGL.ins.SetTextures(tex);
+                        }
+
+                    }
+                    else if (shape.shapeParser.shapes[0].Fill is TextureFill)
+                    {
+                        //TextureFill Fill = shape.shapeParser.shapes[0].Fill as TextureFill;
+                        if (shape.shapeParser.Paint != null)
+                        {
+                            var pattern = (shape.shapeParser.Paint as VGPatternPaint).Pattern;
+
+                            DrawGL.ins.SetTextures(pattern.Texture);
+                        }
+
+                    }
+                    else if (shape.shapeParser.shapes[0].Fill is PatternFill)
+                    {
+                        //PatternFill Fill = shape.shapeParser.shapes[0].Fill as PatternFill;
+                        if (shape.shapeParser.Paint != null)
+                        {
+                            var pattern = (shape.shapeParser.Paint as VGPatternPaint).Pattern;
+
+                            DrawGL.ins.SetTextures(pattern.Texture);
+                        }
+                    }
+                    //else if (shape._strokes.Length > 0)
+                    //    target.DrawPath(shape._strokes[0].Path, VGPaintMode.Stroke);
                 }
+                else
+                {
+                    for (i = 0, e = shape._fills.Length; i < e; i++)
+                    {
+                        state.PathToFillPaint.Push(shape._fills[i].FillMatrix);
+                        state.SetFillPaint(shape._fills[i].Paint);
+                        target.DrawPath(shape._fills[i].Path, VGPaintMode.Fill);
+                        state.PathToFillPaint.Pop();
+                        VGPaint paint = shape._fills[i].Paint;
+                        shape._fills[i].Path.Fill.CreaceMesh(paint, matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
+                    }
+
+                    for (i = 0, e = shape._strokes.Length; i < e; i++)
+                    {
+                        if (shape._strokes[i].ScaleX && shape._strokes[i].ScaleY)
+                            factor = scaleAvg;
+                        else if (shape._strokes[i].ScaleX)
+                            factor = scaleX;
+                        else if (shape._strokes[i].ScaleY)
+                            factor = scaleY;
+                        else
+                            factor = 1f;
+
+                        state.NonScalingStroke = true;
+                        state.PathToStrokePaint.Push(shape._strokes[i].FillMatrix);
+                        state.SetStrokePaint(shape._strokes[i].Paint);
+                        state.StrokeThickness = Math.Max(2f, shape._strokes[i].Thickness * factor);
+                        target.DrawPath(shape._strokes[i].Path, VGPaintMode.Stroke);
+                        state.PathToStrokePaint.Pop();
+                    }
+                }
+                  
             }
         }
         public void OnNextFrame() { }
@@ -214,6 +278,9 @@ namespace XnaFlash.Content
             public VGPaint[] _paints;
             public SubShapeFill[] _fills;
             public SubShapeStroke[] _strokes;
+            public Unity.Flash.ShapeParser shapeParser;
+            public UnityEngine.Mesh mesh;
+
         }
 
         private struct SubShapeFill

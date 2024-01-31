@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Microsoft.Xna.Framework.Graphics;
 using PrimitiveType = Microsoft.Xna.Framework.Graphics.PrimitiveType;
 using XnaVG.Rendering.Tesselation;
+using Unity.VectorGraphics;
 
 public class DrawGL : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class DrawGL : MonoBehaviour
     
     public Vector2[] uvs = new Vector2[12];
     public List<Vector2> uvs2 = new List<Vector2>();
+    public bool isNewDraw;
 
     private MaterialPropertyBlock block;
     public Matrix4x4[] matrices;
@@ -122,7 +124,38 @@ public class DrawGL : MonoBehaviour
         //    //isShow = true;
         //}
     }
+
+    internal void SetMatrices(VGMatrix value, VGMatrix Projection, VGMatrix PaintTransformation)
+    {
+        UnityEngine.Matrix4x4 v = UnityEngine.Matrix4x4.identity;
+        v.m00 = value.M11;
+        v.m10 = value.M12;
+        //v.m13 = value.M13;
+
+        v.m01 = value.M21;
+        v.m11 = value.M22;
+        //v.m23 = value.M23;
+
+        v.m03 = value.M31;
+        v.m13 = value.M32;
+        //v.m33 = value.M33;
+        Matrices.Add(v);
+        PaintTransformations.Add(PaintTransformation);
+        Projections.Add(Projection);
+        //UnityEngine.Matrix4x4 r = UnityEngine.Matrix4x4.identity;
+        //r.m00 = value.M11;
+        //r.m01 = value.M12;
+
+        //r.m10 = value.M21;
+        //r.m11 = value.M22;
+        //Scale = Projection.ScaleY*2000;
+        //RotMatrices.Add(r);
+        ScValues.Add(new Vector2(value.ScaleX, value.ScaleY));
+    }
+
     public int num;
+    List<VGMatrix> PaintTransformations = new List<VGMatrix>();
+    List<VGMatrix> Projections = new List<VGMatrix>();
     List<Material> MaterialTemp = new List<Material>();
     // Draws 2 triangles in the left side of the screen
     // that look like a square
@@ -219,8 +252,14 @@ public class DrawGL : MonoBehaviour
     public Material Tmat;
     internal void SetTextures(Microsoft.Xna.Framework.Graphics.Texture2D texture)
     {
-        if(!Textures.ContainsKey(Meshs.Count+1))
-        Textures.Add(Meshs.Count+1, texture.UnityTexture);
+        if (isNewDraw)
+            Textures.Add(Meshs.Count+1, texture.UnityTexture);
+        else
+        {
+            if (!Textures.ContainsKey(Meshs.Count + 1))
+                Textures.Add(Meshs.Count + 1, texture.UnityTexture);
+        }
+     
     }
 
     public bool ContainsMesh(Mesh mesh)
@@ -239,6 +278,51 @@ public class DrawGL : MonoBehaviour
 
         //}
         Meshs.Add(mesh);
+    }
+
+    public Mesh SetMesh(List<Shape> shapes)
+    {
+        var node = new SceneNode();
+        node.Children = null;
+        node.Shapes = shapes;
+        node.Transform = Matrix2D.identity;
+
+        node.Clipper = null;
+
+        // Create Scene
+        var scene = new Scene();
+        scene.Root = node;
+
+        // Create Tessellation Options
+        var options = new VectorUtils.TessellationOptions();
+        options.MaxCordDeviation = float.MaxValue;
+        options.MaxTanAngleDeviation = 0.1f;
+        options.SamplingStepSize = 0.01f;
+        options.StepDistance = float.MaxValue;
+
+        // Tessellate
+        try
+        {
+            var geometry = VectorUtils.TessellateScene(scene, options);
+            //var atlas = VectorUtils.GenerateAtlasAndFillUVs(geometry, 32);
+            // Debug Meshs
+#if true
+            var mesh = new Mesh();
+            mesh.Clear();
+            VectorUtils.FillMesh(mesh, geometry, 1f);
+            mesh.UploadMeshData(true);
+            //mesh.name = PlaceObject.CharacterID.ToString();
+            Meshs.Add(mesh);
+            return mesh;
+            //UnityEditor.AssetDatabase.CreateAsset(mesh, "Assets/Vectors/" + "ttt.asset");
+#endif
+        }
+        catch (System.Exception exc)
+        {
+
+            Debug.LogException(exc);
+            return null;
+        }
     }
 
     public Dictionary<int, UnityEngine.Texture> Textures = new Dictionary<int, UnityEngine.Texture>();
@@ -435,5 +519,7 @@ public class DrawGL : MonoBehaviour
         Meshs.Clear();
         Camera.main.backgroundColor = color;
         DrawGame.instance.index = 0;
+        PaintTransformations.Clear();
+        Projections.Clear();
     }
 }

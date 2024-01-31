@@ -1,0 +1,14 @@
+{
+    "name": "Unity.VectorGraphics.Editor",
+    "references": [
+        "Unity.VectorGraphics",
+        "Unity.InternalAPIEngineBridge.003",
+        "Unity.InternalAPIEditorBridge.003"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

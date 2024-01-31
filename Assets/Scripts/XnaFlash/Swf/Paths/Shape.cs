@@ -30,60 +30,106 @@ namespace XnaFlash.Swf.Paths
 
             foreach (var r in records)
             {
-                switch (r.Type)
+                if (subShape == null)
                 {
-                    case ShapeRecord.ShapeRecordType.StraightEdge:
-                        tx = x + r.DrawDeltaX;
-                        ty = y + r.DrawDeltaY;
+                    subShape = new SubShape(this);
+                }
+                if (DrawGL.ins.isNewDraw)
+                {
+                    switch (r.Type)
+                    {
+                        case ShapeRecord.ShapeRecordType.StraightEdge:
+                            subShape.shapeParser.Parse(r.DrawDeltaX, r.DrawDeltaY);
 
-                        if (!refPt.HasValue) refPt = new Point(x, y);
-                        if (ltFill != null) ltFill.Line(x, y, tx, ty, ltReverse);
-                        if (rtFill != null) rtFill.Line(x, y, tx, ty, rtReverse);
-                        if (stroke != null) stroke.Line(x, y, tx, ty, rtReverse);
+                            break;
+                        case ShapeRecord.ShapeRecordType.CurvedEdge:
+                            subShape.shapeParser.Parse(r.DrawControlX, r.DrawControlY, r.DrawDeltaX, r.DrawDeltaY);
 
-                        x = tx;
-                        y = ty;
-                        break;
-                    case ShapeRecord.ShapeRecordType.CurvedEdge:
-                        cx = x + r.DrawControlX;
-                        cy = y + r.DrawControlY;
-                        tx = cx + r.DrawDeltaX;
-                        ty = cy + r.DrawDeltaY;
+                            break;
+                        case ShapeRecord.ShapeRecordType.StyleChange:
+                            subShape.shapeParser.Parse(r.NewFillStyle0, r.NewFillStyle1, r.MoveDeltaX, r.MoveDeltaY, r.NewMoveTo
+                              , r.NewStyles, r.FillStyle0, r.FillStyle1, r.State);
+                            break;
+                        case ShapeRecord.ShapeRecordType.EndOfShape:
 
-                        if (!refPt.HasValue) refPt = new Point(x, y);
-                        if (ltFill != null) ltFill.Curve(x, y, tx, ty, cx, cy, ltReverse);
-                        if (rtFill != null) rtFill.Curve(x, y, tx, ty, cx, cy, rtReverse);
-                        if (stroke != null) stroke.Curve(x, y, tx, ty, cx, cy, rtReverse);
-
-                        x = tx;
-                        y = ty;
-                        break;
-                    case ShapeRecord.ShapeRecordType.StyleChange:
-                        if (r.NewMoveTo)
-                        {
-                            x = r.MoveDeltaX;
-                            y = r.MoveDeltaY;
-                        }
-                        if (r.NewFillStyle0)
-                            ltFill = GetByFillStyle(r.FillStyle0, subShape);
-                        if (r.NewFillStyle1)
-                            rtFill = GetByFillStyle(r.FillStyle1, subShape);
-                        if (r.NewLineStyle)
-                            stroke = GetByLineStyle(r.LineStyle, subShape);
-                        if (r.NewStyles)
-                        {
-                            foreach (var s in subShape.Fills.Values) s.Flush();
-                            foreach (var s in subShape.Lines.Values) s.Flush();
                             subShapes.Add(subShape);
                             subShape = new SubShape(this);
-                        }
-                        break;
+
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                else
+                {
+                    switch (r.Type)
+                    {
+                        case ShapeRecord.ShapeRecordType.StraightEdge:
+                            tx = x + r.DrawDeltaX;
+                            ty = y + r.DrawDeltaY;
+
+                            if (!refPt.HasValue) refPt = new Point(x, y);
+                            if (ltFill != null) ltFill.Line(x, y, tx, ty, ltReverse);
+                            if (rtFill != null) rtFill.Line(x, y, tx, ty, rtReverse);
+                            if (stroke != null) stroke.Line(x, y, tx, ty, rtReverse);
+
+                            x = tx;
+                            y = ty;
+                            break;
+                        case ShapeRecord.ShapeRecordType.CurvedEdge:
+                            cx = x + r.DrawControlX;
+                            cy = y + r.DrawControlY;
+                            tx = cx + r.DrawDeltaX;
+                            ty = cy + r.DrawDeltaY;
+
+                            if (!refPt.HasValue) refPt = new Point(x, y);
+                            if (ltFill != null) ltFill.Curve(x, y, tx, ty, cx, cy, ltReverse);
+                            if (rtFill != null) rtFill.Curve(x, y, tx, ty, cx, cy, rtReverse);
+                            if (stroke != null) stroke.Curve(x, y, tx, ty, cx, cy, rtReverse);
+
+                            x = tx;
+                            y = ty;
+                            break;
+                        case ShapeRecord.ShapeRecordType.StyleChange:
+                            if (r.NewMoveTo)
+                            {
+                                x = r.MoveDeltaX;
+                                y = r.MoveDeltaY;
+                            }
+                            if (r.NewFillStyle0)
+                                ltFill = GetByFillStyle(r.FillStyle0, subShape);
+                            if (r.NewFillStyle1)
+                                rtFill = GetByFillStyle(r.FillStyle1, subShape);
+                            if (r.NewLineStyle)
+                                stroke = GetByLineStyle(r.LineStyle, subShape);
+                            if (r.NewStyles)
+                            {
+                                foreach (var s in subShape.Fills.Values) s.Flush();
+                                foreach (var s in subShape.Lines.Values) s.Flush();
+                                subShapes.Add(subShape);
+                                subShape = new SubShape(this);
+                            }
+                            break;
+                    }
+                }
+                   
             }
 
-            foreach (var s in subShape.Fills.Values) s.Flush();
-            foreach (var s in subShape.Lines.Values) s.Flush();
-            subShapes.Add(subShape);
+            if (subShape != null)
+            {
+                if (!DrawGL.ins.isNewDraw)
+                {
+                    foreach (var s in subShape.Fills.Values) s.Flush();
+                    foreach (var s in subShape.Lines.Values) s.Flush();
+                }
+                subShapes.Add(subShape);
+            }
+
+            foreach (var s in subShapes)
+            {
+                s.shapeParser.ParseClose();
+                s.shapeParser.Tessellate();
+            }
 
             ReferencePoint = refPt ?? new Point(0, 0);
             SubShapes = subShapes.ToArray();
@@ -109,12 +155,16 @@ namespace XnaFlash.Swf.Paths
 
         public class SubShape
         {
+            public Unity.Flash.ShapeParser shapeParser;
+
             public Shape Shape { get; protected set; }
             public FillStyles Fills { get; private set; }
             public LineStyles Lines { get; private set; }
 
-            internal SubShape(Shape shape)
+            internal SubShape(Shape shape, Unity.Flash.ShapeParser shapeParser = null)
             {
+                this.shapeParser = shapeParser == null ? new Unity.Flash.ShapeParser() : shapeParser;
+
                 Shape = shape;
                 Fills = new FillStyles();
                 Lines = new LineStyles();

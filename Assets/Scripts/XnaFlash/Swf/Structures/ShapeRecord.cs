@@ -26,11 +26,12 @@ namespace XnaFlash.Swf.Structures
         // CurvedEdge
         public int DrawControlX { get; private set; }
         public int DrawControlY { get; private set; }
+        public ShapeState State;
 
         public ShapeRecord(SwfStream swf, bool hasAlpha, bool isExtended, bool extendedStyles, ShapeState state)
         {
             int f0 = 0, f1 = 0, l = 0;
-
+            State = state;
             mFlags = swf.ReadBitUInt(6);
             
             Type = ConvertType(mFlags);

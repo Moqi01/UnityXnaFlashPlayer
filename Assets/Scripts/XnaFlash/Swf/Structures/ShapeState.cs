@@ -19,5 +19,15 @@ namespace XnaFlash.Swf.Structures
             if (index == 0) return null;
             return LineStyles.Styles[index - 1];
         }
+
+        public FillStyle[] GetFillStyles()
+        {
+            return FillStyles.Styles;
+        }
+
+        public LineStyle[] GetLineStyles()
+        {
+            return LineStyles.Styles;
+        }
     }
 }

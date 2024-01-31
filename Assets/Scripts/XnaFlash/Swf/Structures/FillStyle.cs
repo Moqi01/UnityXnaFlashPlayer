@@ -14,6 +14,7 @@ namespace XnaFlash.Swf.Structures
         public GradientInfo Gradient { get; private set; }
         public ushort BitmapID { get; private set; }
 
+        public bool HasAlpha;
         public FillStyle()
         {
             Index = 1;
@@ -26,7 +27,7 @@ namespace XnaFlash.Swf.Structures
         {
             Index = index;
             FillType = (FillStyleType)swf.ReadByte();
-
+            HasAlpha = hasAlpha;
             switch (FillType)
             {
                 case FillStyleType.Solid:

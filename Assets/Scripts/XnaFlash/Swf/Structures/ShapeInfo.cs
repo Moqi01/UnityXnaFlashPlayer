@@ -4,6 +4,8 @@ namespace XnaFlash.Swf.Structures
 {
     public static class ShapeInfo
     {
+        public static FillStyleArray fillStyleArrays;
+
         public static IEnumerable<ShapeRecord> ReadShape(SwfStream swf, bool hasAlpha, bool isExtended, bool hasStyle, bool extendedStyles)
         {
             ShapeState state = new ShapeState();
@@ -11,15 +13,17 @@ namespace XnaFlash.Swf.Structures
             swf.Align();
             if (hasStyle)
             {
-                state.FillStyles = new FillStyleArray(swf, hasAlpha);
+                fillStyleArrays = new FillStyleArray(swf, hasAlpha);
+                state.FillStyles = fillStyleArrays;
                 state.LineStyles = new LineStyleArray(swf, hasAlpha, isExtended);
             }
             else
             {
-                state.FillStyles = new FillStyleArray();
+                fillStyleArrays = new FillStyleArray();
+                state.FillStyles = fillStyleArrays;
                 state.LineStyles = new LineStyleArray();
             }
-
+            
             state.FillBits = (int)swf.ReadBitUInt(4);
             state.LineBits = (int)swf.ReadBitUInt(4);
 

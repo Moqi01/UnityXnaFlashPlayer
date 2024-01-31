@@ -1,0 +1,10 @@
+{
+    "name": "Unity.VectorGraphics",
+    "references": [
+        "Unity.InternalAPIEngineBridge.003"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
