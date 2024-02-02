@@ -26,8 +26,8 @@ namespace XnaFlash.Swf.Paths
             PathBuilder ltFill = null, rtFill = null;
             PathBuilder stroke = null;
             List<SubShape> subShapes = new List<SubShape>();
-            SubShape subShape = new SubShape(this);
-
+            //SubShape subShape = new SubShape(this);
+            SubShape subShape = null;
             foreach (var r in records)
             {
                 if (subShape == null)

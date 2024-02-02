@@ -174,6 +174,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -320,6 +322,7 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
+  isNewDraw: 1
   matrices: []
   P: {fileID: 1866729514}
   num: 0
@@ -459,6 +462,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -530,6 +535,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -601,6 +608,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -791,6 +800,8 @@ MonoBehaviour:
   - {x: 1957, y: 2529, z: 1}
   - {x: 1957, y: 2529, z: 1}
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points:
   - {x: 871, y: 1500}
   - {x: 5614, y: 1500}
@@ -872,6 +883,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -943,6 +956,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1014,6 +1029,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1280,6 +1297,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1351,6 +1370,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1422,6 +1443,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1474,7 +1497,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c9bcf6abcf969428278eb0638a4664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChartGradient: {fileID: 0}
 --- !u!114 &1866729516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1487,6 +1509,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   n: {fileID: 1335836125}
+  Pos: {x: 0, y: 0, z: 0}
+  Value: 5000
+  AddValue: 400
 --- !u!114 &1866729517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1495,59 +1520,60 @@ MonoBehaviour:
   m_GameObject: {fileID: 1866729513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fa6984937305ff48bd06b82cf7b58a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 21ee9afcfebcccd4ebee68e7b6e3d3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Resources:
     Fonts:
     - {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    Textures: []
     Images:
-      ArrowDown: {fileID: 2800000, guid: d1aded14ad2c37048b3aaecdad236231, type: 3}
-      ArrowLeft: {fileID: 2800000, guid: b08b0871ce6260a4d8bbdf4fc0efb43b, type: 3}
-      ArrowRight: {fileID: 2800000, guid: 88f32da78c66b6743a1757042be67c11, type: 3}
-      ArrowUp: {fileID: 2800000, guid: 103dc7973c5aa084782435dc0dd2bf92, type: 3}
-      Circle: {fileID: 2800000, guid: 7d813cc3b9113cc47bf64867c0da4884, type: 3}
-      Checked: {fileID: 2800000, guid: 95952f40174385b449a8930a3d62b105, type: 3}
-      Close: {fileID: 2800000, guid: d1b6a1f375f995147beb59de320c0837, type: 3}
+      ArrowDown: {fileID: 2800000, guid: f4025be39301a1747abbf9490a41b1b5, type: 3}
+      ArrowLeft: {fileID: 2800000, guid: afd23374c605b4d468b5c04572bcd75b, type: 3}
+      ArrowRight: {fileID: 2800000, guid: f98c46e7beed4424b8e51cb6ca514e9d, type: 3}
+      ArrowUp: {fileID: 2800000, guid: 96033fe794ebb0c42b75a38d3b4c5b3b, type: 3}
+      Circle: {fileID: 2800000, guid: 90bf17d38f3045245bcc57146b5d8a6c, type: 3}
+      Checked: {fileID: 2800000, guid: 29631c09c3d33db49b12a7cc7b674005, type: 3}
+      Close: {fileID: 2800000, guid: 90bf17d38f3045245bcc57146b5d8a6c, type: 3}
       Cursors:
-        Default: {fileID: 2800000, guid: 31d3469c5e971d041bdf3cf40ceec2fd, type: 3}
-        Hand: {fileID: 2800000, guid: 31d3469c5e971d041bdf3cf40ceec2fd, type: 3}
-        Help: {fileID: 2800000, guid: 405551afdac1b394386fbe8ca3e1d5b2, type: 3}
-        HSplit: {fileID: 2800000, guid: 9196bad0ff5a2fa41821eabfbeb70cfd, type: 3}
-        IBeam: {fileID: 2800000, guid: f1dc4569333ead44094399a39dbc802c, type: 3}
-        SizeAll: {fileID: 2800000, guid: 4781c195505c2114196c608c5b60e83a, type: 3}
-        SizeNESW: {fileID: 2800000, guid: 8763a2703c30ad74ea57854abc8c59f3, type: 3}
-        SizeNS: {fileID: 2800000, guid: 656ebd6920bb18445be70360a882a933, type: 3}
-        SizeNWSE: {fileID: 2800000, guid: d6e5810b434711546a8b631ba714563a, type: 3}
-        SizeWE: {fileID: 2800000, guid: ec3c402fcef433f40b8e48c6d9349121, type: 3}
-        VSplit: {fileID: 2800000, guid: 93c9e8b3b1006ed4dac1d7f18423afc5, type: 3}
-      CurvedArrowDown: {fileID: 2800000, guid: d9b010e54a30c044fb517c87c82ea4c2, type: 3}
-      CurvedArrowLeft: {fileID: 2800000, guid: ee8675f6cbcc77b419409cbfbfc5025a, type: 3}
-      CurvedArrowRight: {fileID: 2800000, guid: b819324efc9946d468a4954ab52388be,
+        Default: {fileID: 2800000, guid: 1bbc4b566c6c09745b3114561f8c5d96, type: 3}
+        Hand: {fileID: 2800000, guid: 1bbc4b566c6c09745b3114561f8c5d96, type: 3}
+        Help: {fileID: 2800000, guid: 536422e58a6ce134b9b52d373f2f77bc, type: 3}
+        HSplit: {fileID: 2800000, guid: 51636d76783c7c54b9c0eb4868e5ee91, type: 3}
+        IBeam: {fileID: 2800000, guid: 51636d76783c7c54b9c0eb4868e5ee91, type: 3}
+        SizeAll: {fileID: 2800000, guid: d97e8740044ad534aa7e1055a65cc5bd, type: 3}
+        SizeNESW: {fileID: 2800000, guid: a515f9f8b366c4a4a9ee2a182e23364f, type: 3}
+        SizeNS: {fileID: 2800000, guid: 934d201baadf923489287721dfab05e3, type: 3}
+        SizeNWSE: {fileID: 2800000, guid: ac4bc9fc76e811c4fa806e52081ef477, type: 3}
+        SizeWE: {fileID: 2800000, guid: 93a8bec5d7347a0439033699ea644e50, type: 3}
+        VSplit: {fileID: 2800000, guid: a27aad99c0269994da989cfb8afb2fcb, type: 3}
+      CurvedArrowDown: {fileID: 2800000, guid: aac7f485b57451548b95383d1bd57be8, type: 3}
+      CurvedArrowLeft: {fileID: 2800000, guid: 11819ed89da95da4f86c7975a84b408b, type: 3}
+      CurvedArrowRight: {fileID: 2800000, guid: b9c33982dca052c4688ffb821727beb8,
         type: 3}
-      CurvedArrowUp: {fileID: 2800000, guid: 91f671996e8caf5409826d16559daf9c, type: 3}
-      DateTimePicker: {fileID: 2800000, guid: 7639a3f52818cc04483a5004aeb61001, type: 3}
-      DropDownRightArrow: {fileID: 2800000, guid: ef8796d505524ce47a9abec425b86e41,
+      CurvedArrowUp: {fileID: 2800000, guid: 43103725995a1764b9b03cea27278641, type: 3}
+      DateTimePicker: {fileID: 2800000, guid: bbba2d70aa241db4abe7c2e59db0f578, type: 3}
+      DropDownRightArrow: {fileID: 2800000, guid: b43f2b67e02ab784eb8c2e8e6a8805d3,
         type: 3}
-      FileDialogBack: {fileID: 2800000, guid: 94c14b53c236a8042b707b4df1654e33, type: 3}
-      FileDialogFile: {fileID: 2800000, guid: 168003d6539c9df449611f8b21eb11e1, type: 3}
-      FileDialogFolder: {fileID: 2800000, guid: ed1f9b912aefdf94ca6b8b20c6c544a5,
+      FileDialogBack: {fileID: 2800000, guid: 4fcf70cb8c056d14a8161b02bf0cb130, type: 3}
+      FileDialogFile: {fileID: 2800000, guid: 7ff10c9e6d674f645a43097d9e0ded9c, type: 3}
+      FileDialogFolder: {fileID: 2800000, guid: 19fb76e6008219f4aaa9356f7a074677,
         type: 3}
-      FileDialogRefresh: {fileID: 2800000, guid: 7d4972f1139f3cb4a95ff367e28d1709,
+      FileDialogRefresh: {fileID: 2800000, guid: 05253d352793d4746a9d8414694549a6,
         type: 3}
-      FileDialogUp: {fileID: 2800000, guid: ace594e6730acdf44b5127d4ecaeaae2, type: 3}
-      FormResize: {fileID: 2800000, guid: 41e92ce0281ee6b41bf11904307a69cb, type: 3}
-      NumericDown: {fileID: 2800000, guid: 3e110e024706bb34e90221abce44f44f, type: 3}
-      NumericUp: {fileID: 2800000, guid: a5cf30be3362ceb4099753c1e7efd927, type: 3}
-      RadioButton_Checked: {fileID: 2800000, guid: adb06e6e0420c7743a7f69934a9ca376,
+      FileDialogUp: {fileID: 2800000, guid: 19fbe34f6ca0765418735df63a6501b7, type: 3}
+      FormResize: {fileID: 2800000, guid: e720fe10e8a5f0f4f8d38db9c5dcc2b5, type: 3}
+      NumericDown: {fileID: 2800000, guid: 56ac7b025357d1f43b774e10b657a02c, type: 3}
+      NumericUp: {fileID: 2800000, guid: ff1b33570ee8a184c994d73dbb754f08, type: 3}
+      RadioButton_Checked: {fileID: 2800000, guid: 05cc88b353c5b294ea6285926f6a6597,
         type: 3}
-      RadioButton_Hovered: {fileID: 2800000, guid: 5ce8a6898d394e14ba74b4940fcc847f,
+      RadioButton_Hovered: {fileID: 2800000, guid: 822e3031be4b868429ae14179f71f8fa,
         type: 3}
-      RadioButton_Unchecked: {fileID: 2800000, guid: 3f7506e97bbbf7d499f7e147026835e6,
+      RadioButton_Unchecked: {fileID: 2800000, guid: e00f2c4ef0cd96f439278086bd72ae8f,
         type: 3}
-      TreeNodeCollapsed: {fileID: 2800000, guid: 6a6db0b2150c56146bc962c9e56ca2b9,
+      TreeNodeCollapsed: {fileID: 2800000, guid: 4d72bc152cb9a6d44a434ecf618add71,
         type: 3}
-      TreeNodeExpanded: {fileID: 2800000, guid: eb3707850e002f24aadf84cfa3450c26,
+      TreeNodeExpanded: {fileID: 2800000, guid: 1966b421ae5e133418aab45ea73a55af,
         type: 3}
   ShiftDownDelayTime: 0.8
   ShiftDownTime: 0.05
@@ -1612,6 +1638,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1683,6 +1711,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1754,6 +1784,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 
@@ -1825,6 +1857,8 @@ MonoBehaviour:
   Screenshot: 0
   Vectors: []
   Scale: 0.1
+  pos: []
+  colors: {r: 0, g: 0, b: 0, a: 0}
   points: []
   indes: 
   AddIndes: 

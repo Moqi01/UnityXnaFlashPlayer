@@ -17,6 +17,7 @@ namespace XnaFlash
         private Dictionary<string, ushort> _scenes = new Dictionary<string, ushort>();
         private List<ushort> _initOrder = new List<ushort>();
 
+        public static Vector2 WH;
         public VGColor BackgroundColor { get; private set; }
         public string Name { get; private set; }
         public byte Version { get; private set; }
@@ -42,6 +43,7 @@ namespace XnaFlash
             Version = stream.Version;
             Width = stream.Rectangle.Width;
             Height = stream.Rectangle.Height;
+            WH = new Vector2(Width, Height);
             FrameDelay = 1000.0 / (double)stream.FrameRate;
         }
 

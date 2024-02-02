@@ -11,7 +11,7 @@ using uFont = UnityEngine.Font;
 public class AppResources
 {
     public List<uFont> Fonts;
-
+    public List<Image> Textures;
     public ReservedResources Images;
 
     /// <summary>
@@ -83,6 +83,35 @@ public class AppResources
 
         [Tooltip("Tree")]
         public Image TreeNodeExpanded;
+        public void LoadResource()
+        {
+            ArrowDown = Resources.Load<Image>("arrow_down");
+            ArrowLeft = Resources.Load<Image>("arrow_down");
+            ArrowRight = Resources.Load<Image>("arrow_down");
+            ArrowUp = Resources.Load<Image>("arrow_down");
+            Circle = Resources.Load<Image>("arrow_down");
+            Checked = Resources.Load<Image>("arrow_down");
+            Close = Resources.Load<Image>("arrow_down");
+            CurvedArrowDown = Resources.Load<Image>("arrow_down");
+            CurvedArrowLeft = Resources.Load<Image>("arrow_down");
+            CurvedArrowRight = Resources.Load<Image>("arrow_down");
+            CurvedArrowUp = Resources.Load<Image>("arrow_down");
+            DateTimePicker = Resources.Load<Image>("arrow_down");
+            DropDownRightArrow = Resources.Load<Image>("arrow_down");
+            FileDialogBack = Resources.Load<Image>("arrow_down");
+            FileDialogFile = Resources.Load<Image>("arrow_down");
+            FileDialogFolder = Resources.Load<Image>("arrow_down");
+            FileDialogRefresh = Resources.Load<Image>("arrow_down");
+            FileDialogUp = Resources.Load<Image>("arrow_down");
+            FormResize = Resources.Load<Image>("arrow_down");
+            NumericDown = Resources.Load<Image>("arrow_down");
+            NumericUp = Resources.Load<Image>("arrow_down");
+            RadioButton_Checked = Resources.Load<Image>("arrow_down");
+            RadioButton_Hovered = Resources.Load<Image>("arrow_down");
+            RadioButton_Unchecked = Resources.Load<Image>("arrow_down");
+            TreeNodeCollapsed = Resources.Load<Image>("arrow_down");
+            TreeNodeExpanded = Resources.Load<Image>("arrow_down");
+        }
     }
 
     [Serializable]
