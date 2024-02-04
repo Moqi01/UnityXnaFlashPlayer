@@ -86,31 +86,32 @@ public class AppResources
         public void LoadResource()
         {
             ArrowDown = Resources.Load<Image>("arrow_down");
-            ArrowLeft = Resources.Load<Image>("arrow_down");
-            ArrowRight = Resources.Load<Image>("arrow_down");
-            ArrowUp = Resources.Load<Image>("arrow_down");
-            Circle = Resources.Load<Image>("arrow_down");
-            Checked = Resources.Load<Image>("arrow_down");
-            Close = Resources.Load<Image>("arrow_down");
-            CurvedArrowDown = Resources.Load<Image>("arrow_down");
-            CurvedArrowLeft = Resources.Load<Image>("arrow_down");
-            CurvedArrowRight = Resources.Load<Image>("arrow_down");
-            CurvedArrowUp = Resources.Load<Image>("arrow_down");
-            DateTimePicker = Resources.Load<Image>("arrow_down");
-            DropDownRightArrow = Resources.Load<Image>("arrow_down");
-            FileDialogBack = Resources.Load<Image>("arrow_down");
-            FileDialogFile = Resources.Load<Image>("arrow_down");
-            FileDialogFolder = Resources.Load<Image>("arrow_down");
-            FileDialogRefresh = Resources.Load<Image>("arrow_down");
-            FileDialogUp = Resources.Load<Image>("arrow_down");
-            FormResize = Resources.Load<Image>("arrow_down");
-            NumericDown = Resources.Load<Image>("arrow_down");
-            NumericUp = Resources.Load<Image>("arrow_down");
-            RadioButton_Checked = Resources.Load<Image>("arrow_down");
-            RadioButton_Hovered = Resources.Load<Image>("arrow_down");
-            RadioButton_Unchecked = Resources.Load<Image>("arrow_down");
-            TreeNodeCollapsed = Resources.Load<Image>("arrow_down");
-            TreeNodeExpanded = Resources.Load<Image>("arrow_down");
+            ArrowLeft = Resources.Load<Image>("arrow_left");
+            ArrowRight = Resources.Load<Image>("arrow_right");
+            ArrowUp = Resources.Load<Image>("arrow_up");
+            Checked = Resources.Load<Image>("checked");
+            Circle = Resources.Load<Image>("circle");
+            Close = Resources.Load<Image>("close");
+            CurvedArrowDown = Resources.Load<Image>("curved_arrow_down");
+            CurvedArrowLeft = Resources.Load<Image>("curved_arrow_left");
+            CurvedArrowRight = Resources.Load<Image>("curved_arrow_right");
+            CurvedArrowUp = Resources.Load<Image>("curved_arrow_up");
+            DateTimePicker = Resources.Load<Image>("datetimepicker");
+            DropDownRightArrow = Resources.Load<Image>("dropdown_rightarrow");
+            FileDialogBack = Resources.Load<Image>("filedialog_back");
+            FileDialogFile = Resources.Load<Image>("filedialog_file");
+            FileDialogFolder = Resources.Load<Image>("filedialog_folder");
+            FileDialogRefresh = Resources.Load<Image>("filedialog_refresh");
+            FileDialogUp = Resources.Load<Image>("filedialog_up");
+            FormResize = Resources.Load<Image>("form_resize");
+            NumericDown = Resources.Load<Image>("numeric_down");
+            NumericUp = Resources.Load<Image>("numeric_up");
+            RadioButton_Checked = Resources.Load<Image>("radiobutton_checked");
+            RadioButton_Hovered = Resources.Load<Image>("radiobutton_hovered");
+            RadioButton_Unchecked = Resources.Load<Image>("radiobutton_unchecked");
+            TreeNodeCollapsed = Resources.Load<Image>("treenode_collapsed");
+            TreeNodeExpanded = Resources.Load<Image>("treenode_expanded");
+            Cursors.LoadResource();
         }
     }
 
@@ -130,5 +131,19 @@ public class AppResources
         public Image SizeNWSE;
         public Image SizeWE;
         public Image VSplit;
+        public void LoadResource()
+        {
+            Default = Resources.Load<Image>("cursors/hand");
+            Help = Resources.Load<Image>("cursors/help");
+            HSplit = Resources.Load<Image>("cursors/hsplit");
+            IBeam = Resources.Load<Image>("cursors/ibeam");
+            SizeAll = Resources.Load<Image>("cursors/sizeall");
+            SizeNESW = Resources.Load<Image>("cursors/sizenesw");
+            SizeNS = Resources.Load<Image>("cursors/sizens");
+            SizeNWSE = Resources.Load<Image>("cursors/sizenwse");
+            SizeWE = Resources.Load<Image>("cursors/sizewe");
+            VSplit = Resources.Load<Image>("cursors/vsplit");
+
+        }
     }
 }

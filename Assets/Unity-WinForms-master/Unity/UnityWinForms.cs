@@ -68,7 +68,7 @@
             ApiHolder.Timing = new UnityTiming();
 
             gResources = Resources;
-
+            gResources.Images.LoadResource();
             Screen.width = (int) (UE.Screen.width / Application.ScaleX);
             Screen.height = (int) (UE.Screen.height / Application.ScaleY);
 

@@ -322,7 +322,7 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
-  isNewDraw: 1
+  isNewDraw: 0
   matrices: []
   P: {fileID: 1866729514}
   num: 0
