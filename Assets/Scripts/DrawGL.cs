@@ -26,7 +26,8 @@ public class DrawGL : MonoBehaviour
         ins = this;
     }
     public static int MaxNum = 50000;
-    
+    public List< Vector2> uvs7 = new List<Vector2>();
+
     public Vector2[] uvs = new Vector2[12];
     public List<Vector2> uvs2 = new List<Vector2>();
     public bool isNewDraw;
@@ -253,11 +254,11 @@ public class DrawGL : MonoBehaviour
     internal void SetTextures(Microsoft.Xna.Framework.Graphics.Texture2D texture)
     {
         if (isNewDraw)
-            Textures.Add(Meshs.Count+1, texture.UnityTexture);
+            Textures.Add(Meshs.Count, texture.UnityTexture);
         else
         {
-            if (!Textures.ContainsKey(Meshs.Count + 1))
-                Textures.Add(Meshs.Count + 1, texture.UnityTexture);
+            //if (!Textures.ContainsKey(Meshs.Count ))
+                Textures.Add(Meshs.Count , texture.UnityTexture);
         }
      
     }
@@ -284,7 +285,24 @@ public class DrawGL : MonoBehaviour
     {
         var node = new SceneNode();
         node.Children = null;
-        node.Shapes = shapes;
+        List<Shape> NewShapes = new List<Shape>();
+        //node.Transform =Matrix2D.identity;
+        foreach (var shape in shapes)
+        {
+            if (shape.Fill is PatternFill)
+            {
+                var fill = new SolidFill();
+                fill.Color = Color.white;
+                fill.Mode = Unity.VectorGraphics.FillMode.NonZero;
+                fill.Opacity = 1;
+                Shape shape1 = new Shape();
+                shape1.Fill = fill;
+                shape1.Contours = shape.Contours;
+
+                NewShapes.Add(shape1);
+            }
+        }
+        node.Shapes = NewShapes.Count > 0 ? NewShapes : shapes;
         node.Transform = Matrix2D.identity;
 
         node.Clipper = null;
@@ -310,9 +328,14 @@ public class DrawGL : MonoBehaviour
             var mesh = new Mesh();
             mesh.Clear();
             VectorUtils.FillMesh(mesh, geometry, 1f);
+            if (NewShapes.Count > 0 && mesh.vertexCount == 7)
+            {
+                mesh.SetUVs(0, uvs7);
+            }
             mesh.UploadMeshData(true);
-            //mesh.name = PlaceObject.CharacterID.ToString();
             Meshs.Add(mesh);
+           
+            //mesh.name = PlaceObject.CharacterID.ToString();
             return mesh;
             //UnityEditor.AssetDatabase.CreateAsset(mesh, "Assets/Vectors/" + "ttt.asset");
 #endif

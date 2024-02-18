@@ -114,13 +114,13 @@ public class DrawGame : MonoBehaviour
 
     internal void SetDraw(List<Vector3> vertices, Color color)
     {
-        if(index<draws .Count )
-        {
-            draws[index].pos = vertices;
-            draws[index].colors = color;
-            draws[index].gameObject.SetActive(true);
-        }
-            index++;
+        //if(index<draws .Count )
+        //{
+        //    draws[index].pos = vertices;
+        //    draws[index].colors = color;
+        //    draws[index].gameObject.SetActive(true);
+        //}
+        //    index++;
        
     }
 

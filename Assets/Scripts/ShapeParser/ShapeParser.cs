@@ -71,9 +71,9 @@ namespace Unity.Flash
 
 
 
-		IFill DefaultFill(FillStyleType fillStyle)
+		IFill DefaultFill(FillStyle fillStyle)
 		{
-            switch (fillStyle)
+            switch (fillStyle.FillType)
             {
                 case FillStyleType.Solid:
 					return new SolidFill()
@@ -87,12 +87,8 @@ namespace Unity.Flash
                 case FillStyleType.Radial:
    
                 case FillStyleType.Focal:
-					return new GradientFill()
-					{
-
-						Mode = FillMode.NonZero,
-						Opacity = 1
-					};
+					
+						
 				case FillStyleType.RepeatingBitmap:
         
                 case FillStyleType.ClippedBitmap:
@@ -100,7 +96,13 @@ namespace Unity.Flash
                 case FillStyleType.RepeatingNonsmoothedBitmap:
        
                 case FillStyleType.ClippedNonsmoothedBitmap:
+					FillStyle = fillStyle;
 
+					return new PatternFill()
+					{
+						Mode = FillMode.NonZero,
+						Opacity = 1
+					};
 				default:
 					return new SolidFill()
 					{
@@ -116,8 +118,7 @@ namespace Unity.Flash
 
 		public void ParseFillStyles(IList<FillStyle> fillStyles)
 		{
-			if(FillStyle==null&& fillStyles.Count >0)
-			FillStyle = fillStyles[0];
+			
 			foreach (var fillStyle in fillStyles)
 			{
 
@@ -127,12 +128,11 @@ namespace Unity.Flash
 				{
 					if (fillStyle.HasAlpha)
 					{
-						m_Styles.Add(m_Styles.Count, new Style(DefaultFill(fillStyle.FillType)));
-
+						m_Styles.Add(m_Styles.Count, new Style(DefaultFill(fillStyle)));
 					}
 					else
 					{
-						m_Styles.Add(m_Styles.Count, new Style(DefaultFill(fillStyle.FillType)));
+						m_Styles.Add(m_Styles.Count, new Style(DefaultFill(fillStyle)));
 					}
 				}
 
