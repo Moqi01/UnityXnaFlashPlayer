@@ -1,4 +1,4 @@
-﻿#define ACTIONS_DISABLED
+﻿//#define ACTIONS_DISABLED
 
 using System;
 using System.Collections.Generic;

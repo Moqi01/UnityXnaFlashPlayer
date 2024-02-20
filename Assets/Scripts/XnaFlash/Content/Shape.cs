@@ -111,6 +111,8 @@ namespace XnaFlash.Content
                     }
 
                     DrawGL.ins.SetMatrices(state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
+                    if(shape.shapeParser.shapes.Count>0)
+                    {
 
                     if (shape.shapeParser.shapes[0].Fill is GradientFill)
                     {
@@ -141,10 +143,47 @@ namespace XnaFlash.Content
                         //PatternFill Fill = shape.shapeParser.shapes[0].Fill as PatternFill;
                         if (shape.shapeParser.Paint != null)
                         {
-                            var pattern = (shape.shapeParser.Paint as VGPatternPaint).Pattern;
+                            Microsoft.Xna.Framework.Graphics.Texture2D texture = null;
+                            var pattern = (shape.shapeParser.Paint as VGPatternPaint);
+                            if(pattern!=null)
+                            {
+                                texture=pattern.Pattern.Texture;
+                            }else
+                            {
+                                VGRadialPaint RadialPaint = (shape.shapeParser.Paint as VGRadialPaint);
+                                if(RadialPaint!=null)
+                                {
+                                    texture = RadialPaint.Gradient;
 
-                            DrawGL.ins.SetTextures(pattern.Texture);
+                                }
+                                else
+                                {
+                                    VGLinearPaint LinearPaint = (shape.shapeParser.Paint as VGLinearPaint);
+                                    if (LinearPaint != null)
+                                    {
+                                        texture = LinearPaint.Gradient;
+
+                                    }
+                                    else
+                                    {
+                                        //VGPaint Paint = (shape.shapeParser.Paint as VGPaint);
+                                        //if (Paint != null)
+                                        //{
+                                        //    texture = Paint.Gradient;
+
+                                        //}
+                                        //else
+                                        //{
+
+                                        //}
+                                    }
+                                }
+                            }
+
+
+                            DrawGL.ins.SetTextures(texture);
                         }
+                    }
                     }
                     //else if (shape._strokes.Length > 0)
                     //    target.DrawPath(shape._strokes[0].Path, VGPaintMode.Stroke);

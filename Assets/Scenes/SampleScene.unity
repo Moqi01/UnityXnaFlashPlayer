@@ -297,12 +297,12 @@ MonoBehaviour:
   - _MetallicGlossMap
   Text: {fileID: 1335836125}
   uvs7:
-  - {x: 1, y: 1}
+  - {x: -1, y: 1}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 1}
   - {x: 0, y: 0}
-  - {x: 1, y: 0}
+  - {x: -1, y: 0}
   - {x: 0, y: 0}
   uvs:
   - {x: 0, y: 0}
@@ -403,7 +403,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 4906, y: 2884, z: 1012}
+  m_LocalPosition: {x: 4906, y: 2700, z: 1012}
   m_LocalScale: {x: 1.788, y: 1.788, z: 1.788}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1505,6 +1505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c9bcf6abcf969428278eb0638a4664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChartGradient: {fileID: 0}
 --- !u!114 &1866729516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1528,7 +1529,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1866729513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21ee9afcfebcccd4ebee68e7b6e3d3f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fa6984937305ff48bd06b82cf7b58a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Resources:
@@ -1536,53 +1537,44 @@ MonoBehaviour:
     - {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     Textures: []
     Images:
-      ArrowDown: {fileID: 2800000, guid: f4025be39301a1747abbf9490a41b1b5, type: 3}
-      ArrowLeft: {fileID: 2800000, guid: afd23374c605b4d468b5c04572bcd75b, type: 3}
-      ArrowRight: {fileID: 2800000, guid: f98c46e7beed4424b8e51cb6ca514e9d, type: 3}
-      ArrowUp: {fileID: 2800000, guid: 96033fe794ebb0c42b75a38d3b4c5b3b, type: 3}
-      Circle: {fileID: 2800000, guid: 90bf17d38f3045245bcc57146b5d8a6c, type: 3}
-      Checked: {fileID: 2800000, guid: 29631c09c3d33db49b12a7cc7b674005, type: 3}
-      Close: {fileID: 2800000, guid: 90bf17d38f3045245bcc57146b5d8a6c, type: 3}
+      ArrowDown: {fileID: 0}
+      ArrowLeft: {fileID: 0}
+      ArrowRight: {fileID: 0}
+      ArrowUp: {fileID: 0}
+      Circle: {fileID: 0}
+      Checked: {fileID: 0}
+      Close: {fileID: 0}
       Cursors:
-        Default: {fileID: 2800000, guid: 1bbc4b566c6c09745b3114561f8c5d96, type: 3}
-        Hand: {fileID: 2800000, guid: 1bbc4b566c6c09745b3114561f8c5d96, type: 3}
-        Help: {fileID: 2800000, guid: 536422e58a6ce134b9b52d373f2f77bc, type: 3}
-        HSplit: {fileID: 2800000, guid: 51636d76783c7c54b9c0eb4868e5ee91, type: 3}
-        IBeam: {fileID: 2800000, guid: 51636d76783c7c54b9c0eb4868e5ee91, type: 3}
-        SizeAll: {fileID: 2800000, guid: d97e8740044ad534aa7e1055a65cc5bd, type: 3}
-        SizeNESW: {fileID: 2800000, guid: a515f9f8b366c4a4a9ee2a182e23364f, type: 3}
-        SizeNS: {fileID: 2800000, guid: 934d201baadf923489287721dfab05e3, type: 3}
-        SizeNWSE: {fileID: 2800000, guid: ac4bc9fc76e811c4fa806e52081ef477, type: 3}
-        SizeWE: {fileID: 2800000, guid: 93a8bec5d7347a0439033699ea644e50, type: 3}
-        VSplit: {fileID: 2800000, guid: a27aad99c0269994da989cfb8afb2fcb, type: 3}
-      CurvedArrowDown: {fileID: 2800000, guid: aac7f485b57451548b95383d1bd57be8, type: 3}
-      CurvedArrowLeft: {fileID: 2800000, guid: 11819ed89da95da4f86c7975a84b408b, type: 3}
-      CurvedArrowRight: {fileID: 2800000, guid: b9c33982dca052c4688ffb821727beb8,
-        type: 3}
-      CurvedArrowUp: {fileID: 2800000, guid: 43103725995a1764b9b03cea27278641, type: 3}
-      DateTimePicker: {fileID: 2800000, guid: bbba2d70aa241db4abe7c2e59db0f578, type: 3}
-      DropDownRightArrow: {fileID: 2800000, guid: b43f2b67e02ab784eb8c2e8e6a8805d3,
-        type: 3}
-      FileDialogBack: {fileID: 2800000, guid: 4fcf70cb8c056d14a8161b02bf0cb130, type: 3}
-      FileDialogFile: {fileID: 2800000, guid: 7ff10c9e6d674f645a43097d9e0ded9c, type: 3}
-      FileDialogFolder: {fileID: 2800000, guid: 19fb76e6008219f4aaa9356f7a074677,
-        type: 3}
-      FileDialogRefresh: {fileID: 2800000, guid: 05253d352793d4746a9d8414694549a6,
-        type: 3}
-      FileDialogUp: {fileID: 2800000, guid: 19fbe34f6ca0765418735df63a6501b7, type: 3}
-      FormResize: {fileID: 2800000, guid: e720fe10e8a5f0f4f8d38db9c5dcc2b5, type: 3}
-      NumericDown: {fileID: 2800000, guid: 56ac7b025357d1f43b774e10b657a02c, type: 3}
-      NumericUp: {fileID: 2800000, guid: ff1b33570ee8a184c994d73dbb754f08, type: 3}
-      RadioButton_Checked: {fileID: 2800000, guid: 05cc88b353c5b294ea6285926f6a6597,
-        type: 3}
-      RadioButton_Hovered: {fileID: 2800000, guid: 822e3031be4b868429ae14179f71f8fa,
-        type: 3}
-      RadioButton_Unchecked: {fileID: 2800000, guid: e00f2c4ef0cd96f439278086bd72ae8f,
-        type: 3}
-      TreeNodeCollapsed: {fileID: 2800000, guid: 4d72bc152cb9a6d44a434ecf618add71,
-        type: 3}
-      TreeNodeExpanded: {fileID: 2800000, guid: 1966b421ae5e133418aab45ea73a55af,
-        type: 3}
+        Default: {fileID: 0}
+        Hand: {fileID: 0}
+        Help: {fileID: 0}
+        HSplit: {fileID: 0}
+        IBeam: {fileID: 0}
+        SizeAll: {fileID: 0}
+        SizeNESW: {fileID: 0}
+        SizeNS: {fileID: 0}
+        SizeNWSE: {fileID: 0}
+        SizeWE: {fileID: 0}
+        VSplit: {fileID: 0}
+      CurvedArrowDown: {fileID: 0}
+      CurvedArrowLeft: {fileID: 0}
+      CurvedArrowRight: {fileID: 0}
+      CurvedArrowUp: {fileID: 0}
+      DateTimePicker: {fileID: 0}
+      DropDownRightArrow: {fileID: 0}
+      FileDialogBack: {fileID: 0}
+      FileDialogFile: {fileID: 0}
+      FileDialogFolder: {fileID: 0}
+      FileDialogRefresh: {fileID: 0}
+      FileDialogUp: {fileID: 0}
+      FormResize: {fileID: 0}
+      NumericDown: {fileID: 0}
+      NumericUp: {fileID: 0}
+      RadioButton_Checked: {fileID: 0}
+      RadioButton_Hovered: {fileID: 0}
+      RadioButton_Unchecked: {fileID: 0}
+      TreeNodeCollapsed: {fileID: 0}
+      TreeNodeExpanded: {fileID: 0}
   ShiftDownDelayTime: 0.8
   ShiftDownTime: 0.05
 --- !u!1 &1912754888

@@ -332,7 +332,7 @@ public class DrawGL : MonoBehaviour
             {
                 mesh.SetUVs(0, uvs7);
             }
-            mesh.UploadMeshData(true);
+            //mesh.UploadMeshData(true);
             Meshs.Add(mesh);
            
             //mesh.name = PlaceObject.CharacterID.ToString();
@@ -430,6 +430,9 @@ public class DrawGL : MonoBehaviour
                 if (mesh.vertexCount == 12)
                 {
                     mesh.SetUVs(0, uvs2);
+                }else if(mesh .vertexCount==7)
+                {
+                    mesh.SetUVs(0, uvs7);
                 }
                 mr.material.SetTexture("_MainTex", Textures[j + 1]);
                 mr.material.SetFloat("_IsTex", 1);
