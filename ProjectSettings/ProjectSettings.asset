@@ -486,7 +486,7 @@ PlayerSettings:
   ps4attribEyeToEyeDistanceSettingVR: 0
   ps4IncludedModules: []
   monoEnv: 
-  psp2Splashimage: {fileID: 0}
+  psp2Splashimage: {fileID: 2800000, guid: d42eb3c078c0e464ea76cc8c5177b2e3, type: 3}
   psp2NPTrophyPackPath: 
   psp2NPSupportGBMorGJP: 0
   psp2NPAgeRating: 12
@@ -497,8 +497,8 @@ PlayerSettings:
   psp2NPCommsSig: 
   psp2ParamSfxPath: 
   psp2ManualPath: 
-  psp2LiveAreaGatePath: 
-  psp2LiveAreaBackroundPath: 
+  psp2LiveAreaGatePath: sce_sys/livearea/contents/default_gate.png
+  psp2LiveAreaBackroundPath: sce_sys/livearea/contents/bg0.png
   psp2LiveAreaPath: 
   psp2LiveAreaTrialPath: 
   psp2PatchChangeInfoPath: 
@@ -522,7 +522,7 @@ PlayerSettings:
   psp2ContentID: IV0000-SWFX00000_00-0123456789ABCDEF
   psp2Category: 0
   psp2MasterVersion: 01.00
-  psp2AppVersion: 01.01
+  psp2AppVersion: 01.02
   psp2TVBootMode: 0
   psp2EnterButtonAssignment: 2
   psp2TVDisableEmu: 0

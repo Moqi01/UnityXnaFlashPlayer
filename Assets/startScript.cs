@@ -38,34 +38,40 @@ public class startScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)|| Input.GetKeyDown(KeyCode.JoystickButton3))
         {
             form.Play();
+            SetCameraPos();
+
         }
-
-       else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.JoystickButton11))
+        if (n.text == "")
         {
-            form.L();
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.JoystickButton11))
+            {
+                form.L();
+            }
+
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.JoystickButton9))
+            {
+                form.R();
+            }
+
+            else if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.JoystickButton8))
+            {
+                form.Up();
+            }
+
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.JoystickButton10))
+            {
+                form.Down();
+            }
+
+            else if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.JoystickButton1))
+            {
+                
+                    form.OpenFile();
+                SetCameraPos();
+
+            }
         }
-
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.JoystickButton9))
-        {
-            form.R();
-        }
-
-        else if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.JoystickButton8))
-        {
-           form.Up(); 
-        }
-
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.JoystickButton10))
-        {
-           form.Down(); 
-        }
-
-        else if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.JoystickButton1))
-        {
-            form.OpenFile();
-
            
-        }
 
         else if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.JoystickButton4))
         {

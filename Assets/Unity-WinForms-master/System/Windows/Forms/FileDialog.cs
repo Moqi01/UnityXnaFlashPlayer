@@ -310,7 +310,8 @@ namespace System.Windows.Forms
         protected internal void OpenFile()
         {
             filename = fileRenderer.currentPath + "/" + textBoxFilename.Text;
-            
+            //Close();
+
 #if IO_SUPPORTED
 
             // Check if file is not a directory.

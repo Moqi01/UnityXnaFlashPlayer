@@ -303,6 +303,7 @@ public class DrawGL : MonoBehaviour
             }
         }
         node.Shapes = NewShapes.Count > 0 ? NewShapes : shapes;
+        //node.Shapes =  shapes;
         node.Transform = Matrix2D.identity;
 
         node.Clipper = null;
@@ -326,7 +327,7 @@ public class DrawGL : MonoBehaviour
             // Debug Meshs
 #if true
             var mesh = new Mesh();
-            mesh.Clear();
+            //mesh.Clear();
             VectorUtils.FillMesh(mesh, geometry, 1f);
             if (NewShapes.Count > 0 && mesh.vertexCount == 7)
             {

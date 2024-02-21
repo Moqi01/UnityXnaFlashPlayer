@@ -69,6 +69,9 @@
     <Compile Include="Assets\Scripts\DrawQueue.cs" />
     <Compile Include="Assets\Scripts\DrawSpriteCall.cs" />
     <Compile Include="Assets\Scripts\DrawStringCall.cs" />
+    <Compile Include="Assets\Scripts\ShapeParser\ContourAdapter.cs" />
+    <Compile Include="Assets\Scripts\ShapeParser\ShapeParser.cs" />
+    <Compile Include="Assets\Scripts\ShapeParser\Style.cs" />
     <Compile Include="Assets\Scripts\Triangulator.cs" />
     <Compile Include="Assets\Scripts\XNAEmulator\Audio\SoundEffect.cs" />
     <Compile Include="Assets\Scripts\XNAEmulator\Comora\Camera.cs" />
@@ -1197,6 +1200,24 @@
     <Reference Include="Boo.Lang">
       <HintPath>D:/unity/unity2018219/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Unity.VectorGraphics.csproj">
+      <Project>{21BBC546-61F8-3BE3-F183-92BEC3E6A965}</Project>
+      <Name>Unity.VectorGraphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.InternalAPIEditorBridge.003.csproj">
+      <Project>{506EA4ED-70F1-F765-938B-D29A807AB720}</Project>
+      <Name>Unity.InternalAPIEditorBridge.003</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.VectorGraphics.Editor.csproj">
+      <Project>{9C152DB1-EBA1-6380-322F-7E9C1EB5C9C7}</Project>
+      <Name>Unity.VectorGraphics.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.InternalAPIEngineBridge.003.csproj">
+      <Project>{9B40BF31-B6B3-BA49-E376-33505F6B71DF}</Project>
+      <Name>Unity.InternalAPIEngineBridge.003</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

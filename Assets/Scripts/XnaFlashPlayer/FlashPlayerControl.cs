@@ -33,7 +33,9 @@ namespace XnaFlashPlayer
 
         public bool Open(string file)
         {
-            //try
+#if !UNITY_EDITOR
+            try
+#endif
             {
                 using (var fs = new FileStream(file, FileMode.Open))
                     document = new FlashDocument("document", new XnaFlash.Swf.SwfStream(fs), this);
@@ -47,11 +49,15 @@ namespace XnaFlashPlayer
                 lastDraw = startTime = DateTime.Now;
                 return true;
             }
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Error!\n\n" + e.Message);
-            //    return false;
-            //}
+#if !UNITY_EDITOR
+
+            catch (Exception e)
+            {
+                MessageBox.Show("Error!\n\n" + e.Message);
+                return false;
+            }
+#endif
+
         }
         public void Close()
         {
@@ -306,7 +312,7 @@ namespace XnaFlashPlayer
                 GraphicsDevice.Clear(XNAColor.CornflowerBlue);
         }
 
-        #region ISystemServices
+#region ISystemServices
 
         public IVGDevice VectorDevice
         {
@@ -316,6 +322,6 @@ namespace XnaFlashPlayer
         public void Log(string message, params object[] objects) { }
         public VGFont LoadFont(string name) { return null; }
 
-        #endregion
+#endregion
     }
 }

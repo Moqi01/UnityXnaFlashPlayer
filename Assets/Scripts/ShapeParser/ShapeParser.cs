@@ -76,20 +76,20 @@ namespace Unity.Flash
             switch (fillStyle.FillType)
             {
                 case FillStyleType.Solid:
-					return new SolidFill()
-					{
-						Color = Color.white,
-						Mode = FillMode.NonZero,
-						Opacity = 1
-					};
+					
                 case FillStyleType.Linear:
      
                 case FillStyleType.Radial:
    
                 case FillStyleType.Focal:
-					
-						
-				case FillStyleType.RepeatingBitmap:
+                    return new SolidFill()
+                    {
+                        Color = Color.white,
+                        Mode = FillMode.NonZero,
+                        Opacity = 1
+                    };
+
+                case FillStyleType.RepeatingBitmap:
         
                 case FillStyleType.ClippedBitmap:
         
