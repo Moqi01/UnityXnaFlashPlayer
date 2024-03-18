@@ -39,11 +39,7 @@ public class DrawGL : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isDrow)
-        {
-          
-            //return;
-        }
+       
         return;
         if (Vertors.Count <= 0) return;
         //if (isGraphicDrow)
@@ -270,42 +266,30 @@ public class DrawGL : MonoBehaviour
 
     public void SetMesh(Mesh mesh)
     {
-        if(Meshs.Contains(mesh))
-        {
-
-        }
-        //if(mesh.vertices .Length==12)
-        //{
-
-        //}
         Meshs.Add(mesh);
     }
 
-    public Mesh SetMesh(List<Shape> shapes)
+    public Mesh SetMesh(List<Shape> shapes, Microsoft.Xna.Framework.Graphics.Texture2D texture)
     {
         var node = new SceneNode();
         node.Children = null;
-        List<Shape> NewShapes = new List<Shape>();
-        //node.Transform =Matrix2D.identity;
+        //List<Shape> NewShapes = new List<Shape>();
+        
+        node.Transform =Matrix2D.identity;
+        bool isTextureFill = false;
+        if (texture!=null)
         foreach (var shape in shapes)
         {
-            if (shape.Fill is PatternFill)
+            if (shape.Fill is TextureFill)
             {
-                var fill = new SolidFill();
-                fill.Color = Color.white;
-                fill.Mode = Unity.VectorGraphics.FillMode.NonZero;
-                fill.Opacity = 1;
-                Shape shape1 = new Shape();
-                shape1.Fill = fill;
-                shape1.Contours = shape.Contours;
-
-                NewShapes.Add(shape1);
+                var fill = shape.Fill as TextureFill;
+                fill.Texture = texture.unityTexture2D;
+                    isTextureFill = true;
             }
         }
-        node.Shapes = NewShapes.Count > 0 ? NewShapes : shapes;
-        //node.Shapes =  shapes;
+       
+        node.Shapes = shapes;
         node.Transform = Matrix2D.identity;
-
         node.Clipper = null;
 
         // Create Scene
@@ -323,16 +307,14 @@ public class DrawGL : MonoBehaviour
         try
         {
             var geometry = VectorUtils.TessellateScene(scene, options);
-            //var atlas = VectorUtils.GenerateAtlasAndFillUVs(geometry, 32);
+            if(isTextureFill)
+                 VectorUtils.GenerateAtlasAndFillUVs(geometry, 32);
             // Debug Meshs
 #if true
             var mesh = new Mesh();
             //mesh.Clear();
             VectorUtils.FillMesh(mesh, geometry, 1f);
-            if (NewShapes.Count > 0 && mesh.vertexCount == 7)
-            {
-                mesh.SetUVs(0, uvs7);
-            }
+
             //mesh.UploadMeshData(true);
             Meshs.Add(mesh);
            
@@ -425,17 +407,9 @@ public class DrawGL : MonoBehaviour
             }
             MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
 
-            if (Textures.ContainsKey(j + 1))
+            if (Textures.ContainsKey(j ))
             {
-
-                if (mesh.vertexCount == 12)
-                {
-                    mesh.SetUVs(0, uvs2);
-                }else if(mesh .vertexCount==7)
-                {
-                    mesh.SetUVs(0, uvs7);
-                }
-                mr.material.SetTexture("_MainTex", Textures[j + 1]);
+                mr.material.SetTexture("_MainTex", Textures[j]);
                 mr.material.SetFloat("_IsTex", 1);
                 //block.SetTexture("_MainTex", Textures[j + 1]);
                 //block.SetFloat("_IsTex", 1);

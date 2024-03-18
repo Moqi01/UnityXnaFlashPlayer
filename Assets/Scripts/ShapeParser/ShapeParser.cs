@@ -84,7 +84,8 @@ namespace Unity.Flash
                 case FillStyleType.Focal:
                     return new SolidFill()
                     {
-                        Color = Color.white,
+                        //Color = Color.white,
+                        Color =new Color(0,0,0,0),
                         Mode = FillMode.NonZero,
                         Opacity = 1
                     };
@@ -96,9 +97,8 @@ namespace Unity.Flash
                 case FillStyleType.RepeatingNonsmoothedBitmap:
        
                 case FillStyleType.ClippedNonsmoothedBitmap:
-					FillStyle = fillStyle;
 
-					return new PatternFill()
+					return new TextureFill()
 					{
 						Mode = FillMode.NonZero,
 						Opacity = 1
@@ -121,8 +121,9 @@ namespace Unity.Flash
 			
 			foreach (var fillStyle in fillStyles)
 			{
+                FillStyle = fillStyle;
 
-				if (fillStyle.FillType == FillStyleType.Solid)
+                if (fillStyle.FillType == FillStyleType.Solid)
 					m_Styles.Add(m_Styles.Count, Parse(fillStyle));
 				else
 				{

@@ -61,9 +61,9 @@ namespace XnaFlash
         public override void Update(GameTime gameTime)
         {
             if (!Visible || !Enabled) return;
-            float t = UnityEngine.Time.deltaTime*400;
+
+            _time += UnityEngine.Time.deltaTime * 400;
             //_time += gameTime.ElapsedGameTime.TotalMilliseconds;
-            _time += t;
             if (_time > Root.Document.FrameDelay)
             {
                 if (MouseCallback != null)

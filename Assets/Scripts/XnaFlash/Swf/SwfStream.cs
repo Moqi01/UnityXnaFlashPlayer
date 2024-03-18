@@ -522,6 +522,7 @@ namespace XnaFlash.Swf
            
             int length = id & 0x3F;
 
+
             if (length > 0x3E)
             {
                 length = ReadInt();

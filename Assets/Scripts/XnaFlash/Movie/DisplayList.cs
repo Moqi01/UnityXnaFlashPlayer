@@ -74,53 +74,58 @@ namespace XnaFlash.Movie
         {
             DisplayObject obj;
 
-            var n = _displayList.First;          
-            foreach (var r in frame.RemovedObjects)
+            if(frame!=null)
             {
-                for (; n != null && n.Value.Depth < r; n = n.Next) ;
-                if (n == null) break;
-                if (n.Value.Depth == r)
+                var n = _displayList.First;
+                foreach (var r in frame.RemovedObjects)
                 {
-                    if (n.Next == null)
+                    for (; n != null && n.Value.Depth < r; n = n.Next) ;
+                    if (n == null) break;
+                    if (n.Value.Depth == r)
                     {
-                        n.Value.Removed();
-                        _displayList.RemoveLast();
-                        n = null;
+                        if (n.Next == null)
+                        {
+                            n.Value.Removed();
+                            _displayList.RemoveLast();
+                            n = null;
+                        }
+                        else
+                        {
+                            n = n.Next;
+                            n.Previous.Value.Removed();
+                            _displayList.Remove(n.Previous);
+                        }
+                        continue;
+                    }
+                }
+
+                n = _displayList.First;
+
+                foreach (var m in frame.ModifiedObjects)
+                {
+                    for (; n != null && n.Value.Depth < m.Depth; n = n.Next) ;
+                    if (n == null)
+                    {
+                        obj = DisplayObject.CreateAndPlace(m, clip);
+                        if (obj != null) _displayList.AddLast(obj);
+                    }
+                    else if (n.Value.Depth == m.Depth)
+                    {
+                        if (!n.Value.SetPlacement(m, clip))
+                        {
+                            n = n.Next;
+                            _displayList.Remove(n);
+                        }
                     }
                     else
                     {
-                        n = n.Next;
-                        n.Previous.Value.Removed();
-                        _displayList.Remove(n.Previous);
-                    }
-                    continue;
-                }
-            }
-
-            n = _displayList.First;
-            foreach (var m in frame.ModifiedObjects)
-            {
-                for (; n != null && n.Value.Depth < m.Depth; n = n.Next) ;
-                if (n == null)
-                {
-                    obj = DisplayObject.CreateAndPlace(m, clip);
-                    if (obj != null) _displayList.AddLast(obj);
-                }
-                else if (n.Value.Depth == m.Depth)
-                {
-                    if (!n.Value.SetPlacement(m, clip))
-                    {
-                        n = n.Next;
-                        _displayList.Remove(n);
+                        obj = DisplayObject.CreateAndPlace(m, clip);
+                        if (obj != null)
+                            _displayList.AddBefore(n, obj);
                     }
                 }
-                else
-                {
-                    obj = DisplayObject.CreateAndPlace(m, clip);
-                    if (obj != null)
-                        _displayList.AddBefore(n, obj);
-                }
             }
+           
         }
         public void ProcessButtonParts(IEnumerable<ButtonPart> parts, Button button)
         {

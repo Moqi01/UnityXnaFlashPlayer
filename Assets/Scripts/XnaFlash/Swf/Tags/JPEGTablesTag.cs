@@ -19,7 +19,10 @@ namespace XnaFlash.Swf.Tags
 
         public void Load(SwfStream stream, uint length, byte version)
         {
-            JpegData = BitmapUtils.RepairJpegMarkers(stream.ReadByteArray(length));
+            if(length==0)
+                JpegData = new byte[0];
+            else
+               JpegData = BitmapUtils.RepairJpegMarkers(stream.ReadByteArray(length));
         }
 
         #endregion
