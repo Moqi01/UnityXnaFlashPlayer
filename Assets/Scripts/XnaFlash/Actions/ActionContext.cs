@@ -32,10 +32,19 @@ namespace XnaFlash.Actions
                 RootClip = RootClip,
                 Scope = new LinkedList<ActionObject>(Scope),
                 Stack = new Stack<ActionVar>((parameterCount + 1) << 1),
-                This = This
+                This = This,
+                i= i
             };
+            i++;
+            //if(i>=73)
+            //{
+                
+            //}
+            //if(i<100)
             Scope.AddLast(new ActionObject());
+           // This.Context.Scope.AddLast(new ActionObject());
             return c;
         }
+        public int i;
     }
 }

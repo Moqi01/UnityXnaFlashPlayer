@@ -47,6 +47,7 @@ namespace XnaFlashPlayer
                 instance.Enabled = !paused;                              
                 instance.Root.NextFrame();                                
                 lastDraw = startTime = DateTime.Now;
+                UnityEngine.Debug.Log("Version: " + document.Version);
                 return true;
             }
 #if !UNITY_EDITOR

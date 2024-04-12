@@ -10,6 +10,7 @@ using XnaFlash.Swf.Structures.Gradients;
 using XnaFlash.Swf.Tags;
 using XnaVG;
 using XnaVG.Paints;
+using static XnaFlash.Swf.Structures.FillStyle;
 
 namespace XnaFlash.Content
 {
@@ -45,14 +46,14 @@ namespace XnaFlash.Content
 
                 if (DrawGL.ins.isNewDraw)
                 {
-                    if (shape.shapeParser.FillStyle != null)
-                        shape.shapeParser.Paint = MakeFill(shape.shapeParser.FillStyle, services.VectorDevice, document);
-                    else
-                    {
 
+                    for ( ; i < shape.shapeParser.FillStyles.Count; i++)
+                    {
+                        if(shape.shapeParser.FillStyles[i].FillType!= FillStyleType.Solid)
+                               shape.shapeParser.Paint.Add( MakeFill(shape.shapeParser.FillStyles[i], services.VectorDevice, document));
                     }
                 }
-
+                i = 0;
                 foreach (var f in shape.Fills)
                 {
                     paints.Add(paint = MakeFill(f.Key, services.VectorDevice, document));
@@ -103,128 +104,158 @@ namespace XnaFlash.Content
             {
                 if (DrawGL.ins.isNewDraw)
                 {
-
                     Texture2D texture = null;
-                    DrawGL.ins.SetMatrices(state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
-                    if (shape.shapeParser.shapes.Count > 0)
+                    bool isSolidFill=false;
+                    //DrawGL.ins.SetMatrices(state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
+                    for (int index = 0; index < shape.shapeParser.FillStyles.Count; index++)
                     {
-                        if (shape.shapeParser.shapes[0].Fill is TextureFill)
+                        if (shape.shapeParser.shapes[index].Fill is SolidFill)
                         {
-                            //TextureFill Fill = shape.shapeParser.shapes[0].Fill as TextureFill;
-                            if (shape.shapeParser.Paint != null)
-                            {
-
-                                var pattern = (shape.shapeParser.Paint as VGPatternPaint);
-                                if (pattern != null)
-                                {
-                                    texture = pattern.Pattern.Texture;
-                                }
-                                else
-                                {
-                                    VGRadialPaint RadialPaint = (shape.shapeParser.Paint as VGRadialPaint);
-                                    if (RadialPaint != null)
-                                    {
-                                        texture = RadialPaint.Gradient;
-
-                                    }
-                                    else
-                                    {
-                                        VGLinearPaint LinearPaint = (shape.shapeParser.Paint as VGLinearPaint);
-                                        if (LinearPaint != null)
-                                        {
-                                            texture = LinearPaint.Gradient;
-
-                                        }
-                                        else
-                                        {
-                                            //VGPaint Paint = (shape.shapeParser.Paint as VGPaint);
-                                            //if (Paint != null)
-                                            //{
-                                            //    texture = Paint.Gradient;
-
-                                            //}
-                                            //else
-                                            //{
-
-                                            //}
-                                        }
-                                    }
-                                }
-
-
-                                DrawGL.ins.SetTextures(texture);
-                            }
-
+                            isSolidFill = true;
+                            break;
                         }
-                        else if (shape.shapeParser.shapes[0].Fill is GradientFill)
+                        else
                         {
-                            //GradientFill gradientFill = shape.shapeParser.shapes[0].Fill as GradientFill;
-                            if (shape.shapeParser.Paint != null)
+                            if (shape.shapeParser.shapes[index].Fill is TextureFill)
                             {
-                                var tex = (shape.shapeParser.Paint as VGGradientPaint).Gradient;
-                                //_effect.GraphicsDevice.Textures[1] = pattern.Texture;
-                                //_effect.GraphicsDevice.SamplerStates[1] = pattern.GetSamplerState();
-                                //DrawGL.ins.SetColor(UnityEngine.Color.white);
-                                DrawGL.ins.SetTextures(tex);
+                                VGPaint paint = shape.shapeParser.Paint[index];
+                                if (paint is VGPatternPaint)
+                                {
+                                    texture = (paint as VGPatternPaint).Pattern.Texture;
+                                }
                             }
-
-                        }
-                        else if (shape.shapeParser.shapes[0].Fill is PatternFill)
-                        {
-                            //PatternFill Fill = shape.shapeParser.shapes[0].Fill as PatternFill;
-                            if (shape.shapeParser.Paint != null)
+                            else if (shape.shapeParser.shapes[index].Fill is GradientFill)
                             {
-
-                                var pattern = (shape.shapeParser.Paint as VGPatternPaint);
-                                if (pattern != null)
-                                {
-                                    texture = pattern.Pattern.Texture;
-                                }
-                                else
-                                {
-                                    VGRadialPaint RadialPaint = (shape.shapeParser.Paint as VGRadialPaint);
-                                    if (RadialPaint != null)
-                                    {
-                                        texture = RadialPaint.Gradient;
-
-                                    }
-                                    else
-                                    {
-                                        VGLinearPaint LinearPaint = (shape.shapeParser.Paint as VGLinearPaint);
-                                        if (LinearPaint != null)
-                                        {
-                                            texture = LinearPaint.Gradient;
-
-                                        }
-                                        else
-                                        {
-                                            //VGPaint Paint = (shape.shapeParser.Paint as VGPaint);
-                                            //if (Paint != null)
-                                            //{
-                                            //    texture = Paint.Gradient;
-
-                                            //}
-                                            //else
-                                            //{
-
-                                            //}
-                                        }
-                                    }
-                                }
-
-
-                                DrawGL.ins.SetTextures(texture);
+                                VGPaint paint = shape.shapeParser.Paint[index];
+                                texture = (paint as VGGradientPaint).Gradient;
                             }
+                            if (shape.shapeParser.mesh.Count <=index)
+                            {
+                                shape.shapeParser.mesh .Add( DrawGL.ins.SetMesh(shape.shapeParser.shapes[index], texture));
+                            }
+                            DrawGL.ins.SetDrawShape(shape.shapeParser.mesh[index], state.PathToSurface.Matrix, state.Projection.Matrix, texture);
                         }
                     }
+                    /* if (shape.shapeParser.shapes.Count > 0)
+                     {
+                         if (shape.shapeParser.shapes[0].Fill is TextureFill)
+                         {
+                             //TextureFill Fill = shape.shapeParser.shapes[0].Fill as TextureFill;
+                             if (shape.shapeParser.Paint != null)
+                             {
+
+                                 var pattern = (shape.shapeParser.Paint as VGPatternPaint);
+                                 if (pattern != null)
+                                 {
+                                     texture = pattern.Pattern.Texture;
+                                 }
+                                 else
+                                 {
+                                     VGRadialPaint RadialPaint = (shape.shapeParser.Paint as VGRadialPaint);
+                                     if (RadialPaint != null)
+                                     {
+                                         texture = RadialPaint.Gradient;
+
+                                     }
+                                     else
+                                     {
+                                         VGLinearPaint LinearPaint = (shape.shapeParser.Paint as VGLinearPaint);
+                                         if (LinearPaint != null)
+                                         {
+                                             texture = LinearPaint.Gradient;
+
+                                         }
+                                         else
+                                         {
+                                             //VGPaint Paint = (shape.shapeParser.Paint as VGPaint);
+                                             //if (Paint != null)
+                                             //{
+                                             //    texture = Paint.Gradient;
+
+                                             //}
+                                             //else
+                                             //{
+
+                                             //}
+                                         }
+                                     }
+                                 }
+
+
+                                 DrawGL.ins.SetTextures(texture);
+                             }
+
+                         }
+                         else if (shape.shapeParser.shapes[0].Fill is GradientFill)
+                         {
+                             //GradientFill gradientFill = shape.shapeParser.shapes[0].Fill as GradientFill;
+                             if (shape.shapeParser.Paint != null)
+                             {
+                                 texture = (shape.shapeParser.Paint as VGGradientPaint).Gradient;
+                                 //_effect.GraphicsDevice.Textures[1] = pattern.Texture;
+                                 //_effect.GraphicsDevice.SamplerStates[1] = pattern.GetSamplerState();
+                                 //DrawGL.ins.SetColor(UnityEngine.Color.white);
+                                 //DrawGL.ins.SetTextures(tex);
+                             }
+
+                         }
+                         else if (shape.shapeParser.shapes[0].Fill is PatternFill)
+                         {
+                             //PatternFill Fill = shape.shapeParser.shapes[0].Fill as PatternFill;
+                             if (shape.shapeParser.Paint != null)
+                             {
+
+                                 var pattern = (shape.shapeParser.Paint as VGPatternPaint);
+                                 if (pattern != null)
+                                 {
+                                     texture = pattern.Pattern.Texture;
+                                 }
+                                 else
+                                 {
+                                     VGRadialPaint RadialPaint = (shape.shapeParser.Paint as VGRadialPaint);
+                                     if (RadialPaint != null)
+                                     {
+                                         texture = RadialPaint.Gradient;
+
+                                     }
+                                     else
+                                     {
+                                         VGLinearPaint LinearPaint = (shape.shapeParser.Paint as VGLinearPaint);
+                                         if (LinearPaint != null)
+                                         {
+                                             texture = LinearPaint.Gradient;
+
+                                         }
+                                         else
+                                         {
+                                             //VGPaint Paint = (shape.shapeParser.Paint as VGPaint);
+                                             //if (Paint != null)
+                                             //{
+                                             //    texture = Paint.Gradient;
+
+                                             //}
+                                             //else
+                                             //{
+
+                                             //}
+                                         }
+                                     }
+                                 }
+
+
+                                 DrawGL.ins.SetTextures(texture);
+                             }
+                         }
+                     }*/
                     //else if (shape._strokes.Length > 0)
                     //    target.DrawPath(shape._strokes[0].Path, VGPaintMode.Stroke);
-
-                    if (shape.mesh != null)
-                        DrawGL.ins.SetMesh(shape.mesh);
-                    else
+                    if (isSolidFill)
                     {
-                        shape.mesh = DrawGL.ins.SetMesh(shape.shapeParser.shapes,texture);
+                        if (shape.mesh == null)
+                        {
+                            shape.mesh = DrawGL.ins.SetMesh(shape.shapeParser.shapes, texture);
+                        }
+                        DrawGL.ins.SetDrawShape(shape.mesh, state.PathToSurface.Matrix, state.Projection.Matrix, texture);
                     }
                 }
                 else

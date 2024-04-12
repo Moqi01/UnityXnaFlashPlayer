@@ -196,7 +196,7 @@
         public IntPtr Handle;
         protected virtual void OnCreateControl()
         {
-            UnityEngine.Debug.Log("OnCreateControl");
+            //UnityEngine.Debug.Log("OnCreateControl");
         }
 
         public virtual Image BackgroundImage { get; set; }

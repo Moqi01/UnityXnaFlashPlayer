@@ -89,7 +89,7 @@ namespace XnaFlash.Swf
                 c.R = data[i + 1];
                 c.G = data[i + 2];
                 c.B = data[i + 3];
-                res[j] = c.PackedValue;
+                res[res.Length-j-1] = c.PackedValue;
             }
             return res;
         }
@@ -122,12 +122,12 @@ namespace XnaFlash.Swf
             int j = 0;
             if (hasAlpha)
             {
-                for (int i = 0; i < table; i++, j += 3)
+                for (int i = 0; i <= table; i++, j += 4)
                     colors[i] = new VGColor(data[j], data[j + 1], data[j + 2], data[j + 3]).PackedValue;
             }
             else
             {
-                for (int i = 0; i < table; i++, j += 3)
+                for (int i = 0; i <= table; i++, j += 3)
                     colors[i] = new VGColor(data[j], data[j + 1], data[j + 2]).PackedValue;
             }
             
@@ -138,7 +138,10 @@ namespace XnaFlash.Swf
             {
                 pos = j;
                 for (int x = 0; x < width; x++, pix++, pos++)
-                    res[pix] = colors[data[pos]];
+                {
+                    int index = data[pos];
+                    res[pix] = colors[index];
+                }
             }
             return res;
         }

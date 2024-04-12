@@ -83,6 +83,11 @@ namespace XnaVG
             return _value;
         }
 
+        public UnityEngine.Color ToColor()
+        {
+            return new UnityEngine.Color( _value.X,_value.Y,_value.Z,_value.W);
+        }
+
         public static bool operator !=(VGColor a, VGColor b)
         {
             return !(a == b);

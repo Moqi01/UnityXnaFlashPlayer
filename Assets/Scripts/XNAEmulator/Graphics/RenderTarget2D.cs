@@ -80,21 +80,22 @@ namespace Microsoft.Xna.Framework.Graphics
         // Token: 0x0600034D RID: 845 RVA: 0x00012ED0 File Offset: 0x000122D0
         public void CreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, [MarshalAs(UnmanagedType.U1)] bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
-            UnityEngine.Debug.Log("?");
+            //UnityEngine.Debug.Log("?");
             if (graphicsDevice == null)
             {
-                UnityEngine.Debug.LogError("!");
+                UnityEngine.Debug.LogError("CreateRenderTarget error!");
             }
             Format= preferredFormat;
-            DepthFormat depthFormat;
-            int multiSampleCount;
+            //DepthFormat depthFormat;
+            //int multiSampleCount;
             //graphicsDevice.Adapter.QueryFormat(false, graphicsDevice._deviceType, graphicsDevice._graphicsProfile, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, out format, out depthFormat, out multiSampleCount);
             //Texture2D.ValidateCreationParameters(graphicsDevice._profileCapabilities, width, height, format, mipMap);
             //RenderTargetHelper renderTargetHelper = new RenderTargetHelper(this, width, height, format, depthFormat, multiSampleCount, usage, graphicsDevice._profileCapabilities);
             //this.helper = renderTargetHelper;
             //renderTargetHelper.CreateSurfaces(graphicsDevice);
             //base.CreateTexture(graphicsDevice, width, height, mipMap, 1, (_D3DPOOL)0, Format);
-            UnityTexture = new UnityEngine.RenderTexture(width, height, 24);
+           // if(UnityTexture==null)
+                 //UnityTexture = new UnityEngine.RenderTexture(width, height, 24);
             this.renderTargetContentsDirty = true;
         }
 

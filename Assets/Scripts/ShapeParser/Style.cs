@@ -7,7 +7,8 @@ namespace Unity.Flash
 	public class Style
 	{
 		IFill m_Fill;
-		List<ContourAdapter> m_Contours;
+        public XnaFlash.Swf.Structures.FillStyle FillStyle;
+        List<ContourAdapter> m_Contours;
 		ContourAdapter m_CurrentContour;
 		public bool GetCan()
         {
@@ -16,12 +17,14 @@ namespace Unity.Flash
 			return true;
         }
 
-		public Style(IFill fill)
+		public Style(IFill fill, XnaFlash.Swf.Structures.FillStyle fillStyle)
 		{
 			m_Fill = fill;
 			m_Contours = new List<ContourAdapter>();
 			m_CurrentContour = null;
-		}
+            FillStyle = fillStyle;
+
+        }
 
 		public void New()
 		{
@@ -63,14 +66,18 @@ namespace Unity.Flash
 				var find = true;
 				m_Contours.RemoveAt(0);
 
-				while(find && m_Contours.Count > 0)
+                while (find && m_Contours.Count > 0)
 				{
 					find = false;
 					for(int c = 0; !find && c < m_Contours.Count; c++)
 					{
-						find = mainContour.End == m_Contours[c].Begin;
+                        //find = mainContour.End == m_Contours[c].Begin;
+                        Vector2 begin = m_Contours[c].Begin;
+                        Vector2 end = mainContour.End;
 
-						if(!find)
+                        find = (end.x ==begin .x)&& (end.y == begin.y);
+
+                        if (!find)
 							continue;
 
 						mainContour.Segments.AddRange(m_Contours[c].Segments);

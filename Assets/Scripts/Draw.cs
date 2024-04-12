@@ -20,7 +20,7 @@ public class Draw : Graphic
         FontMaterial = new Material(Shader.Find("Unlit/FontUnlitShader"));
         CurrentMaterial=new Material(Shader.Find("Unlit/NewUnlitShader"));
         isDrawOver = true;
-        this.material = NormalMaterial;
+        //this.material = NormalMaterial;
         //this.material = CurrentMaterial;
         index = transform.GetSiblingIndex();
     }
@@ -112,11 +112,13 @@ public class Draw : Graphic
     protected override void OnPopulateMesh(UnityEngine.UI.VertexHelper vh)
     {
         vh.Clear();
+        int uv = 0;
         foreach (var item in pos)
         {
             UIVertex uIVertex = new UIVertex();
             uIVertex.position = item * Scale;
-            uIVertex.color = Color.blue;
+            uIVertex.color = colors;
+            //uIVertex. = uv++;
             //vh.AddVert(item, colors,Vector2.zero);
             vh.AddVert(uIVertex);
         }

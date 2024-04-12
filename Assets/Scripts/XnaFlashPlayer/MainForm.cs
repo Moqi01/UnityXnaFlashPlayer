@@ -31,6 +31,12 @@ namespace XnaFlashPlayer
             this.mainMenu.Hide();
         }
 
+        internal void ShowMainMenu()
+        {
+            this.mainMenu.Show();
+            mainMenu.Visible = true;
+        }
+
         internal void Play()
         {
             flashPlayer.Play();
@@ -108,7 +114,7 @@ namespace XnaFlashPlayer
             {
                 exportToolStripMenuItem.Enabled =
                 přehráváníToolStripMenuItem.Enabled = flashPlayer.Open(openSwf.FileName);
-                DrawGL.ins.Text.text = openSwf.FileName;
+                DrawGL.ins.SetFileText( openSwf.FileName);
             }
         }
 

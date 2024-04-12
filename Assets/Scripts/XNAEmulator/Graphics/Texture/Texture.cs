@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void SetTexture<T>(T[] data, int width, int height, string name = "", int index = 0)
+        internal void SetTexture<T>(T[] data, int width, int height, string name = "", int index = 0,bool isFlip=false )
         {
             m_width = width;
             m_height = height;
@@ -173,9 +173,22 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 byte[] mydata = (byte[])Convert.ChangeType(data, typeof(byte[]));
                 UnityEngine.Texture2D texture2D = unityTexture as UnityEngine.Texture2D;
+                //try
+                //{
                 texture2D.LoadRawTextureData(mydata);//流数据转换成Texture2D
                 texture2D.Apply();
+                //}catch (Exception E)
+                //{
+                //    texture2D.LoadImage(mydata);//流数据转换成Texture2D
+                //    texture2D.Apply();
 
+                //}
+                if (isFlip)
+                {
+                    UnityEngine.Texture2D texture = VerticalFlipTexture(texture2D);
+                    UnityEngine.GameObject.Destroy(texture2D);
+                    unityTexture = texture;
+                }
                 //this.UnityTexture = texture;
                 //string asset = "texture\\" + name + "(" + index + ")";
                 //asset = asset.Replace("\\", "/");
@@ -184,6 +197,22 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
                 UnityEngine.Debug.Log("SetData<T> T:" + typeof(T).Name);
+        }
+
+        // 垂直翻转
+        public UnityEngine.Texture2D VerticalFlipTexture(UnityEngine.Texture2D texture)
+        {
+            //得到图片的宽高
+            int width = texture.width;
+            int height = texture.height;
+
+            UnityEngine.Texture2D flipTexture = new UnityEngine.Texture2D(width, height);
+            for (int i = 0; i < height; i++)
+            {
+                flipTexture.SetPixels(0, i, width, 1, texture.GetPixels(0, height - i - 1, width, 1));
+            }
+            flipTexture.Apply();
+            return flipTexture;
         }
 
         internal void SetTexture<T>(T[] data, int width, int height, Rectangle? rect)
@@ -215,10 +244,10 @@ namespace Microsoft.Xna.Framework.Graphics
             UnityEngine.Color[] color = new UnityEngine.Color[data.Length];
             for (int i = 0; i < data.Length; i++)
             {
-                color[i].a = data[i].A;
-                color[i].b = data[i].B;
-                color[i].g = data[i].G;
-                color[i].r = data[i].R;
+                color[i].a = data[i].A/255f;
+                color[i].b = data[i].B/255f;
+                color[i].g = data[i].G/25f;
+                color[i].r = data[i].R/255f;
             }
             return color;
         }
@@ -227,7 +256,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             UnityEngine.Color[] color = new UnityEngine.Color[data.Length];
             for (int i = data.Length - 1; i >= 0; i--)
-            //for (int i = data.Length - 1; i >= 0; i--)
             {
                 color[i].a = (data[i] >> 24) / 255f;
                 color[i].b = ((data[i] & 0x00FF0000) >> 16) / 255f;

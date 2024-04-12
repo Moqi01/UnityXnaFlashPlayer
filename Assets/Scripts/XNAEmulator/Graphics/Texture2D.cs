@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Graphics
             m_width = width;
             m_height = height;
             this._parent = graphicsDevice;
-            Debug.Log("New Texture2D");
+            //Debug.Log("New Texture2D");
         }
 
         public Texture2D(GraphicsDevice graphicsDevice, int width, int height, [MarshalAs(UnmanagedType.U1)] bool mipMap, SurfaceFormat format)
@@ -164,6 +164,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
            
             this.unityTexture2D.SetPixels(GetColors(data));
+            this.unityTexture2D.Apply();
         }
 
         protected virtual void Dispose([MarshalAs(UnmanagedType.U1)] bool A_1)
@@ -192,7 +193,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public void SetData<T>(T[] data,string name="",int index=0) where T : struct
+        public void SetData<T>(T[] data,string name="",int index=0, bool isFlip = false) where T : struct
         {
             //Color[] mydata;
             // Rectangle? rect = null;
@@ -206,7 +207,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //    elementCount = 0;
             //}
             //this.SetData<T>(0, rect, data, 0, elementCount);
-            SetTexture<T>(data, m_width, m_height, name,  index );
+            SetTexture<T>(data, m_width, m_height, name,  index, isFlip);
         }
 
         public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
@@ -261,10 +262,10 @@ namespace Microsoft.Xna.Framework.Graphics
             Format = format;
             MipMap = mipMap;
             if(format==SurfaceFormat.Color)
-            UnityTexture = new UnityEngine.Texture2D(width, height,TextureFormat.RGBA32,MipMap);
+                UnityTexture = new UnityEngine.Texture2D(width, height,TextureFormat.ARGB32,MipMap);
             else
                 UnityTexture = new UnityEngine.Texture2D(width, height, TextureFormat.RGBA32, MipMap);
-
+            UnityTexture.wrapMode = TextureWrapMode.Clamp;
         }
         protected GraphicsDevice _parent;
        

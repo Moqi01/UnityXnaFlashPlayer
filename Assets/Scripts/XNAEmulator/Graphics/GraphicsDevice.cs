@@ -59,21 +59,21 @@ namespace Microsoft.Xna.Framework.Graphics
             if (renderTarget != null)
             {
                 renderTarget.GraphicsDevice = this;
-                RenderTargetBinding renderTargetBinding = new RenderTargetBinding(renderTarget);
-                this.SetRenderTargets(new RenderTargetBinding[] { renderTargetBinding }, 1);
+                //RenderTargetBinding renderTargetBinding = new RenderTargetBinding(renderTarget);
+                //this.SetRenderTargets(new RenderTargetBinding[] { renderTargetBinding }, 1);
 
-                UnityEngine.Graphics.SetRenderTarget(renderTarget.UnityTexture as RenderTexture);
-                GL.Clear(true, true, UnityEngine.Color.green);
-                //GL.PushMatrix();
-                GL.LoadPixelMatrix(0, renderTarget.UnityTexture.width, renderTarget.UnityTexture.height, 0);
+                //UnityEngine.Graphics.SetRenderTarget(renderTarget.UnityTexture as RenderTexture);
+                //GL.Clear(true, true, UnityEngine.Color.green);
+                ////GL.PushMatrix();
+                //GL.LoadPixelMatrix(0, renderTarget.UnityTexture.width, renderTarget.UnityTexture.height, 0);
             }
             else
             {
                 //this.SetRenderTargets(null, 0);
                 //GL.PopMatrix();
-                UnityEngine.Graphics.SetRenderTarget(null);
+                //UnityEngine.Graphics.SetRenderTarget(null);
                 //  GL.PushMatrix();
-                GL.LoadPixelMatrix(0, Screen.width, Screen.height, 0);
+                //GL.LoadPixelMatrix(0, Screen.width, Screen.height, 0);
             }
         }
         private RenderTargetBinding[] currentRenderTargetBindings;

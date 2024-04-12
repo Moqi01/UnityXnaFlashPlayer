@@ -4,7 +4,9 @@ Shader "Unlit/VectorUnlitShader"
     {
         _MainTex("Texture", 2D) = "white" {}
         _Transformation("Transformation",Vector) = (0,0,0,0)
-        _Projection("Projection",Vector) = (0,0,0,0)
+        _ProjectionT("ProjectionT",Vector) = (0,0,0,0)
+        _ProjectionR("ProjectionR",Vector) = (0,0,0,0)
+        _ProjectionS("ProjectionS",Vector) = (0,0,0,0)
         _Color("Color",Color) = (1,1,1,1)
         _Scale("Scale",Vector) = (1,1,1,1)
         _Rotation("Rotation",Vector) = (0,0,0,0)
@@ -16,15 +18,19 @@ Shader "Unlit/VectorUnlitShader"
     }
         SubShader
         {
-            Tags { "RenderType" = "Opaque" "Queue" = "Transparent"  }
+            Tags { "RenderType" = "Opaque" }
             //Tags { "Queue" = "AlphaTest" "IgnoreProjector" = "True"  }
             //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
             LOD 100
-            Cull off
+
             Pass
             {
                 //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
-                Blend SrcAlpha OneMinusSrcAlpha
+                //Blend SrcAlpha OneMinusSrcAlpha
+				Blend One OneMinusSrcAlpha, One OneMinusSrcAlpha
+			    ZClip Off
+			    ZWrite Off
+			    Cull Off
                 CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
@@ -32,10 +38,14 @@ Shader "Unlit/VectorUnlitShader"
             #pragma multi_compile_fog
             #pragma multi_compile_instancing //这里,第一步
             #include "UnityCG.cginc"
-            uniform float4 _Transformation;
             uniform float4 _Color;
-            uniform float4 _Scale;
+            uniform float4 _ProjectionT;
+            uniform float4 _ProjectionR;
+            uniform float4 _ProjectionS;
+
+            uniform float4 _Transformation;
             uniform float4 _Rotation;
+            uniform float4 _Scale;
             uniform float4 _AddTerm;
             uniform float4 _MulTerm;
             uniform float4 _Offset;
@@ -59,12 +69,12 @@ Shader "Unlit/VectorUnlitShader"
                 UNITY_VERTEX_INPUT_INSTANCE_ID //这里,第二步
             };
 
-            float4x4 Translational(float4 translational)
+            float4x4 Translational(float4 translational,float4 rotation,float4 scale)
             {
-                return float4x4(_Scale.x, _Rotation.x, 0.0, translational.x,
-                    _Rotation.y, _Scale.y, 0.0, translational.y,
-                    0.0, 0.0, _Scale.z, translational.z,
-                    0.0, 0.0, 0.0, 1.0
+                return float4x4(scale.x,    rotation.x, 0.0,     translational.x,
+                                rotation.y, scale.y,    0.0,     translational.y,
+                                0.0,        0.0,        scale.z, translational.z,
+                                0.0,        0.0,        0.0,     0.0
                     );
             }
 
@@ -78,7 +88,8 @@ Shader "Unlit/VectorUnlitShader"
                 UNITY_TRANSFER_INSTANCE_ID(v, o); //第三步 
                 v.vertex.z = _Z;
                 v.vertex.xy = v.vertex.xy + _Offset.xy;
-                v.vertex = mul(Translational(_Transformation), v.vertex);
+                v.vertex = mul(Translational(_Transformation,_Rotation,_Scale), v.vertex);
+				//v.vertex = mul(Translational(_ProjectionT,_ProjectionR,_ProjectionS), v.vertex);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.color = v.color;
                 /* if(_IsTex>0)

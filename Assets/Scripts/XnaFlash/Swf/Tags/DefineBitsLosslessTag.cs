@@ -12,6 +12,7 @@ namespace XnaFlash.Swf.Tags
         public uint[] Pixels { get; protected set; }
         public bool HasAlpha { get; protected set; }
         public byte[] Dates { get; protected set; }
+        public bool isFlip;
 
         public DefineBitsLosslessTag()
         {
@@ -30,12 +31,15 @@ namespace XnaFlash.Swf.Tags
             byte[] data;
             var inflater = new Inflater();
             inflater.SetInput(compressed);
-
+           // byte[] _uncompressedData = Flazzy.Compression.ZLIB.Decompress(compressed);
             if (format == 3)
             {
                 int rem = Width % 4;
-                data = new byte[((rem == 0) ? Width : (Width + 4 - rem)) * Height * 4];
-                if (inflater.Inflate(data) != data.Length)
+               
+                //data = new byte[((rem == 0) ? Width : (Width + 4 - rem)) * Height * 4];
+                data = new byte[((table+1)*3)+ Height*Width];
+                int len = inflater.Inflate(data,0,data .Length);
+                if (len != data.Length)
                     throw new SwfCorruptedException("Bitmap data are not valid ZLIB stream!");
                 Pixels = BitmapUtils.UnpackIndexed(data, Width, Height, table, hasAlpha);
             }
@@ -44,19 +48,23 @@ namespace XnaFlash.Swf.Tags
                 data = new byte[(Width + Width & 0x01) * Height * 2];
                 if (inflater.Inflate(data) != data.Length)
                     throw new SwfCorruptedException("Bitmap data are not valid ZLIB stream!");
-                Pixels = BitmapUtils.UnpackPIX15(data, Width, Height);
+                //Pixels = BitmapUtils.UnpackPIX15(data, Width, Height);
             }
             else if (format == 5)
             {
                 data = new byte[Width * Height * 4];
                 if (inflater.Inflate(data) != data.Length)
                     return true;
-                Pixels = BitmapUtils.UnpackPIX24(data, Width, Height, hasAlpha);
-               
+                //System.Array.Reverse(data, 0, data.Length);
+                isFlip = true;
+                
+               // Pixels = BitmapUtils.UnpackPIX24(data, Width, Height, hasAlpha);
+
             }
             else
                 throw new SwfCorruptedException("Invalid lossless bitmap format found!");
             Dates = data;
+
             return true;
         }
 

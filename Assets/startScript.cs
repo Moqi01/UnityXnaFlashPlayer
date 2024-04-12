@@ -19,12 +19,12 @@ public class startScript : MonoBehaviour
         System.GC.Collect();
         Resources.UnloadUnusedAssets();
         form = new MainForm();
+        form.ShowMainMenu();
         form.Show();
         form.ToolStripMenuItem_Click(null, null);
-        form.HideMainMenu();
+        //form.HideMainMenu();
         Pos = Camera.main.transform.position;
         //UnityEngine.PSVita.Diagnostics.enableHUD = true;
-        n.text = form.FileName;
     }
 
     // Update is called once per frame
@@ -65,10 +65,8 @@ public class startScript : MonoBehaviour
 
             else if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.JoystickButton1))
             {
-                
-                    form.OpenFile();
+                form.OpenFile();
                 SetCameraPos();
-
             }
         }
            
@@ -88,7 +86,7 @@ public class startScript : MonoBehaviour
 
     public void SetCameraPos()
     {
-        Microsoft.Xna.Framework.Vector2 vector2 = XnaFlash.FlashDocument.WH;
-        Camera.main .transform.position = new Vector3(Pos.x + vector2.X / Value * AddValue, Pos.y + vector2.Y / Value * AddValue, Pos.z);
+        //Microsoft.Xna.Framework.Vector2 vector2 = XnaFlash.FlashDocument.WH;
+        //Camera.main .transform.position = new Vector3(Pos.x + vector2.X / Value * AddValue, Pos.y + vector2.Y / Value * AddValue, Pos.z);
     }
 }

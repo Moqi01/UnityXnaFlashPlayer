@@ -5,6 +5,7 @@ using Unity.VectorGraphics;
 using XnaFlash.Swf.Structures;
 using static XnaFlash.Swf.Structures.FillStyle;
 using XnaVG;
+using XnaFlash.Swf.Structures.Gradients;
 //using Microsoft.Xna.Framework;
 //using SwfLib;
 //using SwfLib.Tags.ShapeTags;
@@ -23,23 +24,27 @@ namespace Unity.Flash
 		Rect m_Bounds;
 		List<Style> m_AllStyles;
 		Dictionary<int, Style> m_Styles;
-		public FillStyle FillStyle;
-		public VGPaint Paint;
+        public List<Mesh> mesh;
 
-		public ShapeParser()
+
+        public ShapeParser()
         {
 			Init();
 
 		}
 
 		//Style fillStyle0 => m_Styles[m_Style0];
-		Style fillStyle0 { get {
-				if(!m_Styles.ContainsKey(m_Style0))
+		Style fillStyle0
+        {
+            get
+            {
+                if (!m_Styles.ContainsKey(m_Style0))
                 {
-					return null;
+                    return null;
                 }
-				return m_Styles[m_Style0];
-			} }
+                return m_Styles[m_Style0];
+            }
+        }
 		Style fillStyle1
 		{
 			get
@@ -63,7 +68,7 @@ namespace Unity.Flash
             m_Styles = new Dictionary<int, Style>();
             m_Styles.Add(0, null);
             m_AllStyles = new List<Style>();
-
+            mesh = new List<Mesh>();
             ParseFillStyles(ShapeInfo.fillStyleArrays.Styles);
             //ParseShapeRecords(ShapeRecords);
             //Tessellate();
@@ -76,19 +81,64 @@ namespace Unity.Flash
             switch (fillStyle.FillType)
             {
                 case FillStyleType.Solid:
-					
-                case FillStyleType.Linear:
-     
-                case FillStyleType.Radial:
-   
-                case FillStyleType.Focal:
                     return new SolidFill()
                     {
-                        //Color = Color.white,
-                        Color =new Color(0,0,0,0),
-                        Mode = FillMode.NonZero,
-                        Opacity = 1
+                       Color = fillStyle.Color.ToColor(),
+                       Mode = FillMode.NonZero,
+                       Opacity = fillStyle.Color.A / 255f
                     };
+
+                case FillStyleType.Linear:
+                    return new GradientFill()
+                    {
+                        Type = GradientFillType.Linear,
+                        Stops = new GradientStop[2]
+                                            {
+                            new GradientStop() { Color =fillStyle.Gradient.GradientStops[0].Color.ToColor(), StopPercentage =fillStyle.Gradient.GradientStops[0].Ratio/255f},
+                            new GradientStop() { Color =fillStyle.Gradient.GradientStops[1].Color.ToColor(), StopPercentage =fillStyle.Gradient.GradientStops[1].Ratio/255f},
+
+                                            },
+                        Mode = FillMode.NonZero,
+                        Opacity = 1,
+                        Addressing = AddressMode.Clamp
+
+            };
+
+                case FillStyleType.Radial:
+                    
+                case FillStyleType.Focal:
+                    GradientFill gradientFill = new GradientFill();
+                    
+                    gradientFill.Type = GradientFillType.Radial;
+                    gradientFill.Stops = new GradientStop[fillStyle.Gradient.GradientStops.Length];
+                    int index = 0;
+                    foreach (var item in fillStyle.Gradient.GradientStops)
+                    {
+                        gradientFill.Stops[index] =
+                            new GradientStop()
+                            {
+                                Color = fillStyle.Gradient.GradientStops[index].Color.ToColor(),
+                                StopPercentage = fillStyle.Gradient.GradientStops[index].Ratio / 255f
+                            };
+                        index++;
+                    }
+
+                    gradientFill.Mode = FillMode.NonZero;
+                    gradientFill.Opacity = 1;
+                    switch (fillStyle.Gradient.PadMode)
+                    {
+                        case GradientInfo.Padding.Pad:
+                            gradientFill.Addressing = AddressMode.Clamp;
+                            break;
+                        case GradientInfo.Padding.Reflect:
+                            gradientFill.Addressing = AddressMode.Mirror;
+                            break;
+                        case GradientInfo.Padding.Repeat:
+                            gradientFill.Addressing = AddressMode.Wrap;
+                            break;
+                    }
+
+                    return gradientFill;
 
                 case FillStyleType.RepeatingBitmap:
         
@@ -101,7 +151,7 @@ namespace Unity.Flash
 					return new TextureFill()
 					{
 						Mode = FillMode.NonZero,
-						Opacity = 1
+					
 					};
 				default:
 					return new SolidFill()
@@ -121,22 +171,7 @@ namespace Unity.Flash
 			
 			foreach (var fillStyle in fillStyles)
 			{
-                FillStyle = fillStyle;
-
-                if (fillStyle.FillType == FillStyleType.Solid)
-					m_Styles.Add(m_Styles.Count, Parse(fillStyle));
-				else
-				{
-					if (fillStyle.HasAlpha)
-					{
-						m_Styles.Add(m_Styles.Count, new Style(DefaultFill(fillStyle)));
-					}
-					else
-					{
-						m_Styles.Add(m_Styles.Count, new Style(DefaultFill(fillStyle)));
-					}
-				}
-
+                m_Styles.Add(m_Styles.Count, new Style(DefaultFill(fillStyle), fillStyle));
 			}
 			
 		}
@@ -149,20 +184,12 @@ namespace Unity.Flash
 		Style Parse(FillStyle fillStyle)
 		{
 			var fill = new SolidFill();
-			fill.Color =new Color( fillStyle.Color.R/255f, fillStyle.Color.G / 255f, fillStyle.Color.B / 255f, fillStyle.Color.A / 255f);
+            fill.Color = fillStyle.Color.ToColor();
 			fill.Mode = FillMode.NonZero;
 			fill.Opacity = fill.Color.a;
-			return new Style(fill);
+			return new Style(fill, fillStyle);
 		}
 
-		Style Parse()
-		{
-			var fill = new SolidFill();
-			fill.Color = Color.white;
-			fill.Mode = FillMode.NonZero;
-			fill.Opacity = 1;
-			return new Style(fill);
-		}
 
 		//void Parse(StraightEdgeShapeRecord tag)
 		public void Parse(int DeltaX,int DeltaY)
@@ -293,23 +320,27 @@ namespace Unity.Flash
 		static int num;
 		public void Tessellate()
 		{
-			num++;
-			if(num==17)
-            {
-
-            }
+			
 			// Create Shape List
 			shapes = new List<Shape>(m_AllStyles.Count);
-			for (int c = 0; c <  m_AllStyles.Count; c++)
+            FillStyles= new List<FillStyle>(m_AllStyles.Count-1);
+            Paint = new List<VGPaint>();
+            for (int c = 0; c <  m_AllStyles.Count; c++)
 				if (m_AllStyles[c] != null)
                 {
 					if(m_AllStyles[c].GetCan())
-					shapes.Add(m_AllStyles[c].ToShape());
+                    {
+					    shapes.Add(m_AllStyles[c].ToShape());
+                        FillStyles.Add(m_AllStyles[c].FillStyle);
+                    }
                 }
 			
 			// Create Scene Node
 			
 		}
 		public List<Shape> shapes;
-	}
+		public IList<FillStyle> FillStyles;
+        public List<VGPaint> Paint;
+
+    }
 }

@@ -235,7 +235,7 @@
             this.předchozíSnímekToolStripMenuItem.Name = "předchozíSnímekToolStripMenuItem";
             this.předchozíSnímekToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Left)));
             this.předchozíSnímekToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.předchozíSnímekToolStripMenuItem.Text = "P";
+            this.předchozíSnímekToolStripMenuItem.Text = "L";
             this.předchozíSnímekToolStripMenuItem.Click += new System.EventHandler(this.předchozíSnímekToolStripMenuItem_Click);
             // 
             // dalšíSnímekToolStripMenuItem
@@ -294,11 +294,11 @@
             //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.ClientSize = new System.Drawing.Size(684, 462);
 
-            
-            this.Location = new System.Drawing.Point(-100, -20);
-            this.ClientSize = new System.Drawing.Size(24, 24);
-
             this.Controls.Add(this.flashPlayer);
+
+            this.ClientSize = new System.Drawing.Size(40, 40);
+            this.Location = new System.Drawing.Point(100, 1000);
+
             this.Controls.Add(this.mainMenu);
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";

@@ -59,10 +59,10 @@ namespace XnaFlash.Movie
                 _frame = 0;
                 GoTo(frame);
             }
-
-            if (_sprite.Frames[_frame - 1].Actions != null)
+            SpriteFrame spriteFrame= _sprite.Frames[_frame - 1];
+            if ( spriteFrame.Actions != null)
             {
-                foreach (var a in _sprite.Frames[_frame - 1].Actions)
+                foreach (var a in spriteFrame.Actions)
                     a.RunSafe(Context.MakeLocalScope(4, 1));
             }
         }

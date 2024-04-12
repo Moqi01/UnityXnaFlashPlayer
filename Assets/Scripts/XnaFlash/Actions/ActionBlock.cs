@@ -105,6 +105,7 @@ namespace XnaFlash.Actions
                 
             for (int i = 0, count = _actions.Length; i < count; i++)
             {
+                
                 switch (_actions[i])
                 {
                     #region Return
@@ -121,7 +122,10 @@ namespace XnaFlash.Actions
 
                     case ActionCode.GoToFrame:
                         if (target is MovieClip)
-                            (target as MovieClip).GoTo((_payloads[i] as FrameAction).Frame);
+                        {
+                            if(context.i<30)
+                               (target as MovieClip).GoTo((_payloads[i] as FrameAction).Frame);
+                        }
                         break;
                     case ActionCode.NextFrame:
                         if (target is MovieClip)

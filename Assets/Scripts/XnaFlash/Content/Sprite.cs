@@ -38,7 +38,11 @@ namespace XnaFlash.Content
                     actions.Clear();
                 }
                 else if (tag is FrameLabelTag)
-                    _frameLabels.Add((tag as FrameLabelTag).Label, frame);
+                {
+                    FrameLabelTag frameLabelTag=(tag as FrameLabelTag);
+                    //if (!_frameLabels.ContainsKey(frameLabelTag.Label))
+                        _frameLabels.Add(frameLabelTag.Label, frame);
+                }
                 else if (tag is PlaceObjectTag)
                     modified.Add(new PlaceObject2Tag(tag as PlaceObjectTag));
                 else if (tag is PlaceObject2Tag)

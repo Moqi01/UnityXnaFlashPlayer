@@ -49,7 +49,7 @@ namespace XnaVG.Rendering.Tesselation
 
         public void CreaceMesh(VGPaint paint,VGMatrix value, VGMatrix projection, VGMatrix paintTransformation)
         {
-            DrawGL.ins.SetMatrices(value, projection);
+            //DrawGL.ins.SetMatrices(value, projection);
             if (paint is VGColorPaint)
             {
                 VGColorPaint colorPaint = paint as VGColorPaint;

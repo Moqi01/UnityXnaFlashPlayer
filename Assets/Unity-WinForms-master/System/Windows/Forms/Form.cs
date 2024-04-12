@@ -223,6 +223,7 @@
         protected override Size DefaultSize
         {
             get { return new Size(300, 300); }
+            //get { return new Size(0, 0); }
         }
 
         public void Close()
