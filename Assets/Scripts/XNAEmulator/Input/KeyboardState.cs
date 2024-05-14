@@ -189,6 +189,11 @@ namespace Microsoft.Xna.Framework.Input
         {
             return base.GetHashCode();
         }
+
+        public bool LeftButtonOnClick()
+        {
+            return LeftButton == ButtonState.Pressed;
+        }
     }
 
     public static class Mouse
@@ -218,18 +223,23 @@ namespace Microsoft.Xna.Framework.Input
         // Token: 0x060010E7 RID: 4327 RVA: 0x00036F5C File Offset: 0x0003515C
         public static MouseState GetState()
         {
-            int num=0;
-            int num2=0;
-            ButtonState leftButton=ButtonState.Pressed;
-            ButtonState middleButton=ButtonState.Pressed;
-            ButtonState rightButton = ButtonState.Pressed;
-            ButtonState xButton = ButtonState.Pressed;
-            ButtonState xButton2 = ButtonState.Pressed;
+            //int num=0;
+            //int num2=0;
+            //ButtonState leftButton=ButtonState.Pressed;
+            //ButtonState middleButton=ButtonState.Pressed;
+            //ButtonState rightButton = ButtonState.Pressed;
+            //ButtonState xButton = ButtonState.Pressed;
+            //ButtonState xButton2 = ButtonState.Pressed;
             //FNAPlatform.GetMouseState(Mouse.WindowHandle, out num, out num2, out leftButton, out middleButton, out rightButton, out xButton, out xButton2);
-            num = (int)((double)num * (double)Mouse.INTERNAL_BackBufferWidth / (double)Mouse.INTERNAL_WindowWidth);
-            num2 = (int)((double)num2 * (double)Mouse.INTERNAL_BackBufferHeight / (double)Mouse.INTERNAL_WindowHeight);
-            return new MouseState(num, num2, Mouse.INTERNAL_MouseWheel, leftButton, middleButton, rightButton, xButton, xButton2);
+            //num = (int)((double)num * (double)Mouse.INTERNAL_BackBufferWidth / (double)Mouse.INTERNAL_WindowWidth);
+            //num2 = (int)((double)num2 * (double)Mouse.INTERNAL_BackBufferHeight / (double)Mouse.INTERNAL_WindowHeight);
+            //return new MouseState(num, num2, Mouse.INTERNAL_MouseWheel, leftButton, middleButton, rightButton, xButton, xButton2);
+            
+            FNAPlatform.GetMouseState(Mouse.WindowHandle,ref CurrentMouseState);
+            return CurrentMouseState;
         }
+
+        public static MouseState CurrentMouseState= new MouseState();
 
         // Token: 0x060010E8 RID: 4328 RVA: 0x00036FC0 File Offset: 0x000351C0
         public static void SetPosition(int x, int y)
@@ -257,5 +267,30 @@ namespace Microsoft.Xna.Framework.Input
 
         // Token: 0x040009CD RID: 2509
         internal static int INTERNAL_MouseWheel = 0;
+    }
+
+    internal class FNAPlatform
+    {
+        internal static void GetMouseState(IntPtr windowHandle, out int num, out int num2, out ButtonState leftButton, out ButtonState middleButton, out ButtonState rightButton, out ButtonState xButton, out ButtonState xButton2)
+        {
+            num = (int)UnityEngine.Input.mousePosition.x;
+            num2 = (int)UnityEngine.Input.mousePosition.y;
+            leftButton = UnityEngine.Input.GetMouseButtonDown(0)? ButtonState.Pressed: ButtonState.Released;
+            middleButton = UnityEngine.Input.GetMouseButtonDown(2)? ButtonState.Pressed: ButtonState.Released;
+            rightButton = UnityEngine.Input.GetMouseButtonDown(1)? ButtonState.Pressed: ButtonState.Released;
+            xButton =  ButtonState.Released;
+            xButton2 = ButtonState.Released;
+        }
+
+        internal static void GetMouseState(IntPtr windowHandle, ref MouseState currentMouseState)
+        {
+            currentMouseState.X = (int)UnityEngine.Input.mousePosition.x;
+            currentMouseState.Y = (int)UnityEngine.Input.mousePosition.y;
+            currentMouseState.LeftButton = UnityEngine.Input.GetMouseButtonDown(0) ? ButtonState.Pressed : ButtonState.Released;
+            currentMouseState.MiddleButton = UnityEngine.Input.GetMouseButtonDown(2) ? ButtonState.Pressed : ButtonState.Released;
+            currentMouseState.RightButton = UnityEngine.Input.GetMouseButtonDown(1) ? ButtonState.Pressed : ButtonState.Released;
+            //currentMouseState.XButton1 = ButtonState.Released;
+            //currentMouseState.XButton2 = ButtonState.Released;
+        }
     }
 }

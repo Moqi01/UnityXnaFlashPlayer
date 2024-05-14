@@ -18,8 +18,8 @@ namespace XnaFlash.Swf
         private static void Initialize()
         {
             sDictionary = new Dictionary<ushort, KeyValuePair<string, Type>>();
-
-            foreach (var cls in typeof(SwfTagFactory).Assembly.GetTypes())
+            Type[] types = typeof(SwfTagFactory).Assembly.GetTypes();
+            foreach (var cls in types)
             {
                 if (!cls.IsClass) continue;
                 if (!cls.GetInterfaces().Contains(typeof(ISwfTag))) continue;

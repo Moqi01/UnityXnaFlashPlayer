@@ -37,7 +37,7 @@ namespace XnaFlash.Swf.Tags
                 int rem = Width % 4;
                
                 //data = new byte[((rem == 0) ? Width : (Width + 4 - rem)) * Height * 4];
-                data = new byte[((table+1)*3)+ Height*Width];
+                data = new byte[((table+1)* (hasAlpha?4:3)) + Height*Width];
                 int len = inflater.Inflate(data,0,data .Length);
                 if (len != data.Length)
                     throw new SwfCorruptedException("Bitmap data are not valid ZLIB stream!");

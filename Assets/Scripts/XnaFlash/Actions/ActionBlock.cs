@@ -124,7 +124,11 @@ namespace XnaFlash.Actions
                         if (target is MovieClip)
                         {
                             if(context.i<30)
+                            {
                                (target as MovieClip).GoTo((_payloads[i] as FrameAction).Frame);
+                            }
+                            else
+                                UnityEngine.Debug.LogWarning("Skip Frame!");
                         }
                         break;
                     case ActionCode.NextFrame:

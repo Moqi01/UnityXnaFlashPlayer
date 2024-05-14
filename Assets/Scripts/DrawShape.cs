@@ -25,13 +25,19 @@ public class DrawShape : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		
-	}
+		//if(!IsShow&& gameObject.activeSelf)
+  //          SetShow(false);
+  //      IsShow = false;
+    }
 
     public void SetShow(bool isShow=true)
     {
-        gameObject.SetActive(isShow);
+        if(!isShow)
+            gameObject.SetActive(false);
+        else
+            gameObject.SetActive(true);
 
+        IsShow = isShow;
     }
 
     public void SetDraw(Mesh mesh,VGMatrix matrices,VGMatrix projection,Texture2D texture=null)
@@ -63,9 +69,8 @@ public class DrawShape : MonoBehaviour {
         //material.SetVector("_ProjectionS", ps);
         //material.SetVector("_ProjectionR", pr);
 
-
         SetShow(true);
-
-
     }
+
+    public bool IsShow;
 }

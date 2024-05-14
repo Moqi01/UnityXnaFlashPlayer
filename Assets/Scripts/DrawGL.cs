@@ -229,12 +229,12 @@ public class DrawGL : MonoBehaviour
         
         Camera.main.backgroundColor = color;
         DrawGame.instance.index = 0;
-      
-        Index = 0;
-        foreach (var item in drawShapes)
+
+        for (int i = Index; i < drawShapes.Count; i++)
         {
-            item.SetShow(false);
+            drawShapes[i].SetShow(false);
         }
+        Index = 0;
     }
     public int Index;
     public void SetDrawShape(Mesh mesh, VGMatrix matrices, VGMatrix projection, Microsoft.Xna.Framework.Graphics.Texture2D texture = null)

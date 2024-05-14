@@ -33,18 +33,14 @@ namespace Microsoft.Xna.Framework.Graphics
         public int Width
         {
             get {
-                //if (unityTexture != null)
-                    //return unityTexture.width;
                     return m_width; }
-            set { }
+            set { m_width = value; }
         }
         public int Height
         {
             get {
-                //if (unityTexture != null)
-                    //return unityTexture.height;
                 return m_height; }
-            set { }
+            set { m_height = value; }
         }
 
         public int m_width;

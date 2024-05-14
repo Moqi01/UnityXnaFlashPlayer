@@ -45,7 +45,8 @@ namespace XnaFlashPlayer
                 instance.Root.HighQuality = quality;
                 instance.Root.DontLoop = !looping;
                 instance.Enabled = !paused;                              
-                instance.Root.NextFrame();                                
+                instance.Root.NextFrame();
+                instance.MouseCallback += MouseCallbackEvent;
                 lastDraw = startTime = DateTime.Now;
                 UnityEngine.Debug.Log("Version: " + document.Version);
                 return true;
@@ -95,6 +96,13 @@ namespace XnaFlashPlayer
             quality = qualityLevel;
             if (instance != null)
                 instance.Root.HighQuality = qualityLevel;
+        }
+
+        public Vector2 MouseCallbackEvent(Flash flash)
+        {
+            Vector2 pos =new Vector2(UnityEngine.Input.mousePosition.x, UnityEngine.Input.mousePosition.y);
+            //UnityEngine. Debug.Log(pos);
+            return pos;
         }
 
         public void Play()

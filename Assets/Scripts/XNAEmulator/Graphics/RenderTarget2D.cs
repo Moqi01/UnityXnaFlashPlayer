@@ -85,7 +85,9 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 UnityEngine.Debug.LogError("CreateRenderTarget error!");
             }
-            Format= preferredFormat;
+            Width = width;
+            Height = height;
+            Format = preferredFormat;
             //DepthFormat depthFormat;
             //int multiSampleCount;
             //graphicsDevice.Adapter.QueryFormat(false, graphicsDevice._deviceType, graphicsDevice._graphicsProfile, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, out format, out depthFormat, out multiSampleCount);

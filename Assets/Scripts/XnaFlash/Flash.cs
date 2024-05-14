@@ -68,7 +68,8 @@ namespace XnaFlash
             {
                 if (MouseCallback != null)
                 {
-                    var res = Root.SetMouse(MouseCallback(this) * SizeInTwips, Mouse.GetState().LeftButton == ButtonState.Pressed);
+                    //var res = Root.SetMouse(MouseCallback(this) * SizeInTwips, Mouse.GetState().LeftButton == ButtonState.Pressed);
+                    var res = Root.SetMouse(MouseCallback(this) , Mouse.GetState().LeftButtonOnClick());
                     if (CursorCallback != null && res.HasValue)
                         CursorCallback(this, res.Value);
                 }

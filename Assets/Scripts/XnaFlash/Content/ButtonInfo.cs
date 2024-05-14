@@ -50,7 +50,7 @@ namespace XnaFlash.Content
         {
             if (_hitBounds.IsEmpty) return false;
 
-            mousePos = ~matrix * mousePos;
+            //mousePos = ~matrix * mousePos;
             mousePos.X = (mousePos.X - _hitBounds.Left) / _hitBounds.Width;
             mousePos.Y = (mousePos.Y - _hitBounds.Top) / _hitBounds.Height;
             
@@ -61,6 +61,7 @@ namespace XnaFlash.Content
             int yPx = (int)(mousePos.Y * (HitTestSize - 1));
 
             return (_hitTestBitmap[xPx >> 3, yPx] & (0x80 >> (xPx & 0x07))) != 0;
+            //return true;
         }
         public void SetCxForm(VGCxForm cxform)
         {
@@ -112,7 +113,7 @@ namespace XnaFlash.Content
                         state.PathToSurface.Pop();
                     }
                 }
-
+                return;
                 Func<Color, byte> isCovered = (c) => (byte)((c.A != 0) ? 1 : 0);
                 Color[] data = new Color[surface.Width * surface.Height];
                 surface.Target.GetData(data);

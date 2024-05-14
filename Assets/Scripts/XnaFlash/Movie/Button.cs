@@ -36,6 +36,7 @@ namespace XnaFlash.Movie
             CurrentState = State.Over;
             SetButtonState(State.Up);
             LoadActions();
+            root.ActiveButton = this;
         }
 
         public void OnMouseDown()
@@ -102,6 +103,17 @@ namespace XnaFlash.Movie
             SetButtonState(State.Over);
             return true;
         }
+
+        public void OnClick()
+        {
+            if (!_button.CheckHit(Root.MousePosition, Root.ButtonStack.Matrix))
+            {
+                SetButtonState(State.Up);
+            }
+            else
+            SetButtonState(State.Down);
+        }
+
         private void RunEvent(State fromState, State toState, bool mouseInside)
         {
             if (fromState == State.Up)

@@ -512,6 +512,8 @@ namespace XnaFlash.Swf
             while(i < data.Length);
             mBitStream = new BitStream(new MemoryStream(data));
         }
+
+        List<int> TagSkipId = new List<int>();
         internal ISwfTag ReadTag()
         {
             ushort v  = ReadUShort();
@@ -539,6 +541,11 @@ namespace XnaFlash.Swf
             //UnityEngine.Debug.Log(num++);
             if (tag == null)
             {
+                if(!TagSkipId.Contains(id))
+                {
+                    UnityEngine.Debug.LogWarning(string.Format("tag {0} Skip", id));
+                    TagSkipId.Add(id);
+                }
                 mBitStream.Skip(length);
                 if (!mUnknownTags.Contains(id))
                     mUnknownTags.Add(id);

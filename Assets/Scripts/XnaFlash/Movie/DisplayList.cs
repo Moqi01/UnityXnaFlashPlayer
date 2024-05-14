@@ -191,6 +191,7 @@ namespace XnaFlash.Movie
                     return true;
             return false;
         }
+
         public void Draw(IVGRenderContext<DisplayState> target)
         {
             foreach (var n in _displayList)

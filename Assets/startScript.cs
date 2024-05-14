@@ -12,7 +12,8 @@ public class startScript : MonoBehaviour
     public float Value = 5000;
     public float AddValue = 100;
     public static Vector2 vector2;
-
+    public float OrthographicSize = 0;
+    public Camera MainCamera;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +26,7 @@ public class startScript : MonoBehaviour
         //form.HideMainMenu();
         Pos = Camera.main.transform.position;
         //UnityEngine.PSVita.Diagnostics.enableHUD = true;
+        OrthographicSize  = MainCamera.orthographicSize;
     }
 
     // Update is called once per frame
@@ -86,6 +88,7 @@ public class startScript : MonoBehaviour
 
     public void SetCameraPos()
     {
+        MainCamera.orthographicSize = OrthographicSize * 7000 / XnaFlash.FlashDocument.WH.Y ;
         //Microsoft.Xna.Framework.Vector2 vector2 = XnaFlash.FlashDocument.WH;
         //Camera.main .transform.position = new Vector3(Pos.x + vector2.X / Value * AddValue, Pos.y + vector2.Y / Value * AddValue, Pos.z);
     }
