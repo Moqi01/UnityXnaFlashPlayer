@@ -104,8 +104,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             if(unityTexture==null)
             {
-                UnityEngine.Texture2D unityTexture2D = new UnityEngine.Texture2D(1024, 1024);
+                UnityEngine.Texture2D unityTexture2D = new UnityEngine.Texture2D(m_width, m_height);
                 unityTexture2D.LoadImage(dataNew);
+                unityTexture2D.Apply();
                 unityTexture = unityTexture2D;
                 m_width = unityTexture.width;
                 m_height = unityTexture.height;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using XnaFlashPlayer;
+using UnityEngine.PSVita;
 
 public class startScript : MonoBehaviour
 {
@@ -17,8 +18,7 @@ public class startScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        System.GC.Collect();
-        Resources.UnloadUnusedAssets();
+        Unload();
         form = new MainForm();
         form.ShowMainMenu();
         form.Show();
@@ -27,6 +27,13 @@ public class startScript : MonoBehaviour
         Pos = Camera.main.transform.position;
         //UnityEngine.PSVita.Diagnostics.enableHUD = true;
         OrthographicSize  = MainCamera.orthographicSize;
+    }
+
+    void Unload()
+    {
+        //if(UnityEngine.PSVita.Diagnostics.GetFreeMemoryCDRAM()<10)
+        System.GC.Collect();
+        Resources.UnloadUnusedAssets();
     }
 
     // Update is called once per frame

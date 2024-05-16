@@ -488,6 +488,7 @@ namespace XnaFlash.Swf
 
             Version = mBitStream.ReadByte();
             //if (Version > SupportedVersion) throw new SwfCorruptedException("Only SWF up to version " + SupportedVersion + " are supported!");
+            UnityEngine.Debug.Log("Swf Version: " +Version);
 
             Length = ReadUInt();
             Compressed = code == "CWS";
@@ -512,11 +513,14 @@ namespace XnaFlash.Swf
             while(i < data.Length);
             mBitStream = new BitStream(new MemoryStream(data));
         }
+        static int num;
 
         List<int> TagSkipId = new List<int>();
         internal ISwfTag ReadTag()
         {
+            num++;
             ushort v  = ReadUShort();
+            //UnityEngine.Debug.Log("id:" + v + "Num: " + num);
             ushort id = v;
             v >>= 6;
 
@@ -541,27 +545,22 @@ namespace XnaFlash.Swf
             //UnityEngine.Debug.Log(num++);
             if (tag == null)
             {
-                if(!TagSkipId.Contains(id))
-                {
-                    UnityEngine.Debug.LogWarning(string.Format("tag {0} Skip", id));
-                    TagSkipId.Add(id);
-                }
-                mBitStream.Skip(length);
+                BitStreamSkip(length,id,tag);
                 if (!mUnknownTags.Contains(id))
                     mUnknownTags.Add(id);
             }else
             {
-                if (tag is DefineShapeTag || tag is DefineShape2Tag || tag is DefineShape3Tag || tag is DefineShape4Tag)
+                //if (tag is DefineShapeTag || tag is DefineShape2Tag || tag is DefineShape3Tag || tag is DefineShape4Tag)
+                if (!(tag is DefineSpriteTag ))
                 {
                     long end = mTagStart + length;
                     if (end > mBitStream.Position)
                     {
-                        UnityEngine.Debug.Log(tag.ToString());
-                        mBitStream.Skip(end - mBitStream.Position);
+                        BitStreamSkip(end - mBitStream.Position,id,tag);
                     }
                     else if (end < mBitStream.Position)
                     {
-                        throw new Exception("Error " + tag.ToString());
+                        throw new Exception("Error " + tag.ToString()+ " Offset:" +  (mBitStream.Position-end));
                     }
                 }
                 
@@ -569,7 +568,16 @@ namespace XnaFlash.Swf
             
             return tag;
         }
-        int num;
+
+        void BitStreamSkip(long lengh,int id,ISwfTag tag)
+        {
+            mBitStream.Skip(lengh);
+            if (!TagSkipId.Contains(id))
+            {
+                UnityEngine.Debug.LogWarning(string.Format("Tag: {0} Id:{1} SkipLengh: {2}",tag==null?"Null": tag.ToString(), id, lengh));
+                TagSkipId.Add(id);
+            }
+        }
         #endregion
 
         public void Dispose()

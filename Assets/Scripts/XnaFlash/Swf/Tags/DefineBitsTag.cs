@@ -17,7 +17,9 @@ namespace XnaFlash.Swf.Tags
         public virtual void Load(SwfStream stream, uint length, byte version)
         {
             CharacterID = stream.ReadUShort();
-            ImageData = BitmapUtils.ComposeJpeg(stream.JpegTables.JpegData, BitmapUtils.RepairJpegMarkers(stream.ReadByteArray(length - 2)));
+            //ImageData = BitmapUtils.ComposeJpeg(stream.JpegTables.JpegData, BitmapUtils.RepairJpegMarkers(stream.ReadByteArray(length - 2)));
+            //ImageData = stream.ReadByteArray(length - 2);
+            ImageData = BitmapUtils.RepairJpegMarkers(stream.ReadByteArray(length - 2));
         }
 
         #endregion

@@ -48,7 +48,6 @@ namespace XnaFlashPlayer
                 instance.Root.NextFrame();
                 instance.MouseCallback += MouseCallbackEvent;
                 lastDraw = startTime = DateTime.Now;
-                UnityEngine.Debug.Log("Version: " + document.Version);
                 return true;
             }
 #if !UNITY_EDITOR
@@ -328,7 +327,9 @@ namespace XnaFlashPlayer
             get;
             set;
         }
-        public void Log(string message, params object[] objects) { }
+        public void Log(string message, params object[] objects) {
+            UnityEngine.Debug.LogWarning(string .Format ( message,objects));
+        }
         public VGFont LoadFont(string name) { return null; }
 
 #endregion

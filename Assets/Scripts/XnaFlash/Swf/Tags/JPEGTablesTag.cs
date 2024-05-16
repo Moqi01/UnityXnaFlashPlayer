@@ -19,8 +19,11 @@ namespace XnaFlash.Swf.Tags
 
         public void Load(SwfStream stream, uint length, byte version)
         {
-            if(length==0)
+            if((int)length<=0)
+            {
                 JpegData = new byte[0];
+                UnityEngine.Debug .LogWarning(string.Format("JPEGTablesTag JpegData Length:{0}", length));
+            }
             else
                JpegData = BitmapUtils.RepairJpegMarkers(stream.ReadByteArray(length));
         }

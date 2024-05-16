@@ -37,7 +37,8 @@ namespace XnaFlash.Swf.Tags
             Language = stream.ReadLanguage();
             Name = stream.ReadString(stream.ReadByte());
             ushort count = stream.ReadUShort();
-            stream.Skip((count + 1) * (((Flags & FontFlags.WideOffsets) != 0) ? 4 : 2)); // Offsets
+            if(count>0)
+               stream.Skip((count + 1) * (((Flags & FontFlags.WideOffsets) != 0) ? 4 : 2)); // Offsets
 
             Glyphs = new FontGlyph[count];
             for (int i = 0; i < count; i++)

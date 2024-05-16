@@ -40,7 +40,11 @@ namespace XnaFlash.Content
                 else if (tag is FrameLabelTag)
                 {
                     FrameLabelTag frameLabelTag=(tag as FrameLabelTag);
-                    //if (!_frameLabels.ContainsKey(frameLabelTag.Label))
+                    if (_frameLabels.ContainsKey(frameLabelTag.Label))
+                    {
+                        _frameLabels[frameLabelTag.Label]= frame;
+                    }
+                    else
                         _frameLabels.Add(frameLabelTag.Label, frame);
                 }
                 else if (tag is PlaceObjectTag)
