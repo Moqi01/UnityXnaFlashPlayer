@@ -10,7 +10,7 @@
 
     public sealed class UnityWinForms : UE.MonoBehaviour
     {
-        public AppResources Resources;
+        public AppResources Resources=new AppResources();
 
         [UE.Tooltip("Delay between first KeyDown event and following ones")]
         public float ShiftDownDelayTime = .8f;

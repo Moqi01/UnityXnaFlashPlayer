@@ -10,7 +10,7 @@ using uFont = UnityEngine.Font;
 [Serializable]
 public class AppResources
 {
-    public List<uFont> Fonts;
+    public List<uFont> Fonts = new List<uFont>();
     public List<Image> Textures;
     public ReservedResources Images;
 

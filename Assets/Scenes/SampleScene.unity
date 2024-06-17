@@ -1478,7 +1478,6 @@ GameObject:
   - component: {fileID: 1866729514}
   - component: {fileID: 1866729516}
   - component: {fileID: 1866729515}
-  - component: {fileID: 1866729517}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -1528,62 +1527,8 @@ MonoBehaviour:
   AddValue: 400
   OrthographicSize: 0
   MainCamera: {fileID: 519420031}
---- !u!114 &1866729517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1866729513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fa6984937305ff48bd06b82cf7b58a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Resources:
-    Fonts:
-    - {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    Textures: []
-    Images:
-      ArrowDown: {fileID: 0}
-      ArrowLeft: {fileID: 0}
-      ArrowRight: {fileID: 0}
-      ArrowUp: {fileID: 0}
-      Circle: {fileID: 0}
-      Checked: {fileID: 0}
-      Close: {fileID: 0}
-      Cursors:
-        Default: {fileID: 0}
-        Hand: {fileID: 0}
-        Help: {fileID: 0}
-        HSplit: {fileID: 0}
-        IBeam: {fileID: 0}
-        SizeAll: {fileID: 0}
-        SizeNESW: {fileID: 0}
-        SizeNS: {fileID: 0}
-        SizeNWSE: {fileID: 0}
-        SizeWE: {fileID: 0}
-        VSplit: {fileID: 0}
-      CurvedArrowDown: {fileID: 0}
-      CurvedArrowLeft: {fileID: 0}
-      CurvedArrowRight: {fileID: 0}
-      CurvedArrowUp: {fileID: 0}
-      DateTimePicker: {fileID: 0}
-      DropDownRightArrow: {fileID: 0}
-      FileDialogBack: {fileID: 0}
-      FileDialogFile: {fileID: 0}
-      FileDialogFolder: {fileID: 0}
-      FileDialogRefresh: {fileID: 0}
-      FileDialogUp: {fileID: 0}
-      FormResize: {fileID: 0}
-      NumericDown: {fileID: 0}
-      NumericUp: {fileID: 0}
-      RadioButton_Checked: {fileID: 0}
-      RadioButton_Hovered: {fileID: 0}
-      RadioButton_Unchecked: {fileID: 0}
-      TreeNodeCollapsed: {fileID: 0}
-      TreeNodeExpanded: {fileID: 0}
-  ShiftDownDelayTime: 0.8
-  ShiftDownTime: 0.05
+  font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  WinForms: {fileID: 0}
 --- !u!1 &1912754888
 GameObject:
   m_ObjectHideFlags: 0

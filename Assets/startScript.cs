@@ -15,9 +15,16 @@ public class startScript : MonoBehaviour
     public static Vector2 vector2;
     public float OrthographicSize = 0;
     public Camera MainCamera;
+    public Font font;
+    public Unity.API.UnityWinForms WinForms;
     // Start is called before the first frame update
     void Start()
     {
+        if (WinForms == null)
+        {
+            WinForms= gameObject.AddComponent<Unity.API.UnityWinForms>();
+            WinForms.Resources.Fonts.Add(font);
+        }
         Unload();
         form = new MainForm();
         form.ShowMainMenu();

@@ -76,14 +76,21 @@ namespace XnaFlash.Actions
 
         public ActionVar RunSafe(ActionContext context)
         {
-            try
+            if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.WindowsEditor)
             {
                 return RunUnsafe(context);
             }
-            catch (Exception e)
+            else
             {
-                context.RootClip.Trace("Action exception: {0}", e.Message);
-                return new ActionVar();
+                try
+                {
+                    return RunUnsafe(context);
+                }
+                catch (Exception e)
+                {
+                    context.RootClip.Trace("Action exception: {0}", e.Message);
+                    return new ActionVar();
+                }
             }
         }
         public ActionVar RunUnsafe(ActionContext context)
