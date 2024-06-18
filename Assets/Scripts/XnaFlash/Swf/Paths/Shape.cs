@@ -4,6 +4,7 @@ using XnaFlash.Swf.Structures;
 
 namespace XnaFlash.Swf.Paths
 {
+    using UnityEngine;
     using FillStyles = Dictionary<FillStyle, PathBuilder>;
     using LineStyles = Dictionary<LineStyle, PathBuilder>;
 
@@ -14,11 +15,11 @@ namespace XnaFlash.Swf.Paths
         public int TotalFillStyles { get; private set; }
         public int TotalLineStyles { get; private set; }
 
-        public Shape(IEnumerable<ShapeRecord> records, bool reverse)
+        public Shape(IEnumerable<ShapeRecord> records, bool reverse,bool isFont=false)
         {
-            LoadEdges(records, reverse);
+            LoadEdges(records, reverse,isFont);
         }
-        private void LoadEdges(IEnumerable<ShapeRecord> records, bool rtReverse)
+        private void LoadEdges(IEnumerable<ShapeRecord> records, bool rtReverse, bool isFont)
         {
             bool ltReverse = !rtReverse;
             int x = 0, y = 0, tx, ty, cx, cy;
@@ -34,7 +35,7 @@ namespace XnaFlash.Swf.Paths
                 {
                     subShape = new SubShape(this);
                 }
-                if (DrawGL.ins.isNewDraw)
+                if (DrawGL.ins.isNewDraw&&!isFont)
                 {
                     switch (r.Type)
                     {

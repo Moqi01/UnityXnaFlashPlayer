@@ -15,7 +15,7 @@ public class DrawGL : MonoBehaviour
     public UnityEngine.Transform DrawP;
     public DrawShape drawShapePrefab;
     public string[] PropertyNames;
-    public Text Text;
+    public Text FileNameText;
     // Start is called before the first frame update
     void Start()
     {
@@ -166,7 +166,7 @@ public class DrawGL : MonoBehaviour
 
     internal void SetFileText(string fileName)
     {
-        Text.text = fileName;
+        FileNameText.text = fileName;
         Debug.Log(fileName);
     }
 

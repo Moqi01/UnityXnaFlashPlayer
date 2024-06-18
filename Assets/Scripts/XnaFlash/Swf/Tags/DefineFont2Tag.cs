@@ -57,7 +57,7 @@ namespace XnaFlash.Swf.Tags
                     Glyphs[i].GlyphPath.Scale(DefineFontTag.EMSquareInv);
                 }
                 else
-                    Glyphs[i] = new FontGlyph { GlyphPath = new VGPath(), ReferencePoint = Vector2.Zero };
+                    Glyphs[i] = new FontGlyph { GlyphPath = new VGPath(), ReferencePoint = Vector2.Zero, SubShape = shape };
             }
 
 

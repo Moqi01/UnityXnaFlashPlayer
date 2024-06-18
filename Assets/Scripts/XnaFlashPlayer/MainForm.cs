@@ -115,6 +115,7 @@ namespace XnaFlashPlayer
                 exportToolStripMenuItem.Enabled =
                 přehráváníToolStripMenuItem.Enabled = flashPlayer.Open(openSwf.FileName);
                 DrawGL.ins.SetFileText( openSwf.FileName);
+                StartScript.ins.RefreshLocalScale();
             }
         }
 

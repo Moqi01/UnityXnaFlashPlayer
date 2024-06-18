@@ -5,10 +5,10 @@ using UnityEngine.UI;
 using XnaFlashPlayer;
 using UnityEngine.PSVita;
 
-public class startScript : MonoBehaviour
+public class StartScript : MonoBehaviour
 {
     MainForm form;
-    public Text n;
+    public DrawGL DrawGL;
     public Vector3 Pos;
     public float Value = 5000;
     public float AddValue = 100;
@@ -17,6 +17,13 @@ public class startScript : MonoBehaviour
     public Camera MainCamera;
     public Font font;
     public Unity.API.UnityWinForms WinForms;
+    public static StartScript ins;
+
+    private void Awake()
+    {
+        ins = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,10 +61,10 @@ public class startScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)|| Input.GetKeyDown(KeyCode.JoystickButton3))
         {
             form.Play();
-            SetCameraPos();
+            RefreshLocalScale();
 
         }
-        if (n.text == "")
+        if (DrawGL.FileNameText.text == "")
         {
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.JoystickButton11))
             {
@@ -82,7 +89,6 @@ public class startScript : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.JoystickButton1))
             {
                 form.OpenFile();
-                SetCameraPos();
             }
         }
            
@@ -97,13 +103,19 @@ public class startScript : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.G))
-            SetCameraPos();
+            RefreshLocalScale();
     }
 
     public void SetCameraPos()
     {
-        MainCamera.orthographicSize = OrthographicSize * 7000 / XnaFlash.FlashDocument.WH.Y ;
+        //MainCamera.orthographicSize = OrthographicSize * 7000 / XnaFlash.FlashDocument.WH.Y ;
+       
         //Microsoft.Xna.Framework.Vector2 vector2 = XnaFlash.FlashDocument.WH;
         //Camera.main .transform.position = new Vector3(Pos.x + vector2.X / Value * AddValue, Pos.y + vector2.Y / Value * AddValue, Pos.z);
+    }
+
+    public void RefreshLocalScale()
+    {
+        transform.localScale = Vector3.one * (-10000) / XnaFlash.FlashDocument.WH.Y;
     }
 }

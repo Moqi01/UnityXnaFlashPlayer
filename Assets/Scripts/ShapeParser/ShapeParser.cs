@@ -25,7 +25,7 @@ namespace Unity.Flash
 		List<Style> m_AllStyles;
 		Dictionary<int, Style> m_Styles;
         public List<Mesh> mesh;
-
+        public Mesh oneMesh;
 
         public ShapeParser()
         {

@@ -49,7 +49,7 @@ namespace XnaFlash.Content
 
                     for ( ; i < shape.shapeParser.FillStyles.Count; i++)
                     {
-                        if(shape.shapeParser.FillStyles[i].FillType!= FillStyleType.Solid)
+                        //if(shape.shapeParser.FillStyles[i].FillType!= FillStyleType.Solid)
                                shape.shapeParser.Paint.Add( MakeFill(shape.shapeParser.FillStyles[i], services.VectorDevice, document));
                     }
                 }
@@ -107,18 +107,20 @@ namespace XnaFlash.Content
                     Texture2D texture = null;
                     bool isSolidFill=false;
                     //DrawGL.ins.SetMatrices(state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
-                    for (int index = 0; index < shape.shapeParser.FillStyles.Count; index++)
+                    //for (int index = 0; index < shape.shapeParser.FillStyles.Count; index++)
+                    for (int index = 0; index < shape.shapeParser.shapes.Count; index++)
                     {
                         if (shape.shapeParser.shapes[index].Fill is SolidFill)
                         {
                             isSolidFill = true;
-                            break;
+                            //break;
                         }
                         else
                         {
+                            VGPaint paint = shape.shapeParser.Paint[index];
+
                             if (shape.shapeParser.shapes[index].Fill is TextureFill)
                             {
-                                VGPaint paint = shape.shapeParser.Paint[index];
                                 if (paint is VGPatternPaint)
                                 {
                                     texture = (paint as VGPatternPaint).Pattern.Texture;
@@ -126,15 +128,27 @@ namespace XnaFlash.Content
                             }
                             else if (shape.shapeParser.shapes[index].Fill is GradientFill)
                             {
-                                VGPaint paint = shape.shapeParser.Paint[index];
-                                texture = (paint as VGGradientPaint).Gradient;
+                                //VGPaint paint = shape.shapeParser.Paint[index];
+                                if (paint is VGGradientPaint)
+                                {
+                                    texture = (paint as VGGradientPaint).Gradient;
+                                }
                             }
-                            if (shape.shapeParser.mesh.Count <=index)
+                            else if (shape.shapeParser.shapes[index].Fill is PatternFill)
                             {
-                                shape.shapeParser.mesh .Add( DrawGL.ins.SetMesh(shape.shapeParser.shapes[index], texture));
+                                //VGPaint paint = shape.shapeParser.Paint[index];
+                                if (paint is VGPatternPaint)
+                                {
+                                    texture = (paint as VGPatternPaint).Pattern.Texture;
+                                }
                             }
-                            DrawGL.ins.SetDrawShape(shape.shapeParser.mesh[index], state.PathToSurface.Matrix, state.Projection.Matrix, texture);
+
                         }
+                        if (shape.shapeParser.mesh.Count <= index)
+                        {
+                            shape.shapeParser.mesh.Add(DrawGL.ins.SetMesh(shape.shapeParser.shapes[index], texture));
+                        }
+                        DrawGL.ins.SetDrawShape(shape.shapeParser.mesh[index], state.PathToSurface.Matrix, state.Projection.Matrix, texture);
                     }
                     /* if (shape.shapeParser.shapes.Count > 0)
                      {
@@ -249,14 +263,14 @@ namespace XnaFlash.Content
                      }*/
                     //else if (shape._strokes.Length > 0)
                     //    target.DrawPath(shape._strokes[0].Path, VGPaintMode.Stroke);
-                    if (isSolidFill)
-                    {
-                        if (shape.mesh == null)
-                        {
-                            shape.mesh = DrawGL.ins.SetMesh(shape.shapeParser.shapes, texture);
-                        }
-                        DrawGL.ins.SetDrawShape(shape.mesh, state.PathToSurface.Matrix, state.Projection.Matrix, texture);
-                    }
+                    //if (isSolidFill)
+                    //{
+                    //    if (shape.shapeParser.oneMesh == null)
+                    //    {
+                    //        shape.shapeParser.oneMesh = DrawGL.ins.SetMesh(shape.shapeParser.shapes, texture);
+                    //    }
+                    //    DrawGL.ins.SetDrawShape(shape.shapeParser.oneMesh, state.PathToSurface.Matrix, state.Projection.Matrix, texture);
+                    //}
                 }
                 else
                 {
@@ -388,7 +402,6 @@ namespace XnaFlash.Content
             public SubShapeFill[] _fills;
             public SubShapeStroke[] _strokes;
             public Unity.Flash.ShapeParser shapeParser;
-            public UnityEngine.Mesh mesh;
 
         }
 

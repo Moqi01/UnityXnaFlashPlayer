@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Unity.VectorGraphics;
 using XnaFlash.Movie;
 using XnaFlash.Swf;
 using XnaFlash.Swf.Tags;
 using XnaVG;
 using XnaVG.Loaders;
+using XnaVG.Paints;
+using static XnaFlash.Swf.Paths.Shape;
 
 namespace XnaFlash.Content
 {
@@ -19,6 +22,7 @@ namespace XnaFlash.Content
         public VGPreparedPath[] TextParts { get; private set; }
         public Rectangle? Bounds { get; private set; }
         public CharacterType Type { get { return CharacterType.Text; } }
+        private List<SubShape> _subShapes = new List<SubShape>();
 
         public Text(DefineTextTag tag, ISystemServices services, FlashDocument document)
         {
@@ -29,8 +33,8 @@ namespace XnaFlash.Content
             var path = new VGPath();
             var parts = new List<VGPreparedPath>();
             var scale = Vector2.One;
+            var scaleP = Vector2.One;
             var leftTop = new Vector2(tag.Bounds.Left, tag.Bounds.Top);
-
             Font font = null;
             ushort? lastFont = null;
             VGColor? lastColor = null;
@@ -53,7 +57,7 @@ namespace XnaFlash.Content
                 if (rec.HasFont)
                 {
                     font = document[rec.FontId] as Font;
-                    scale = scale = new Vector2(rec.FontSize, rec.FontSize);
+                    scale = new Vector2(rec.FontSize, rec.FontSize);
                     if (font != null) lastFont = rec.FontId;
                 }
 
@@ -80,7 +84,34 @@ namespace XnaFlash.Content
                     p.Offset(offset + xoff);
                     path.Append(p);
 
+                    if (fg.SubShape!=null)
+                    {
+                        _subShapes.Add(fg.SubShape);
+                        for (int i = 0; i < fg.SubShape.shapeParser.shapes.Count; i++)
+                        {
+                            Vector2 NewOffset = offset + xoff;
+                            //Matrix2D matrix2D = fg.SubShape.shapeParser.shapes[i].FillTransform;
+                            //matrix2D.m00 *= scale.X;
+                            //matrix2D.m11 *= scale.Y;
+                            //matrix2D.m02 += offsets.X;
+                            //matrix2D.m12 += offsets.Y;
+                            //fg.SubShape.shapeParser.shapes[i].FillTransform= matrix2D;
+                            for (int j = 0; j < fg.SubShape.shapeParser.shapes[i].Contours.Length; j++)
+                            {
+                                for (int s = 0; s < fg.SubShape.shapeParser.shapes[i].Contours[j].Segments.Length; s++)
+                                {
+                                    fg.SubShape.shapeParser.shapes[i].Contours[j].Segments[s].P0.x+= NewOffset.X;
+                                    fg.SubShape.shapeParser.shapes[i].Contours[j].Segments[s].P0.y+= NewOffset.Y;
+                                    fg.SubShape.shapeParser.shapes[i].Contours[j].Segments[s].P1.x += NewOffset.X;
+                                    fg.SubShape.shapeParser.shapes[i].Contours[j].Segments[s].P1.y += NewOffset.Y;
+                                    fg.SubShape.shapeParser.shapes[i].Contours[j].Segments[s].P2.x += NewOffset.X;
+                                    fg.SubShape.shapeParser.shapes[i].Contours[j].Segments[s].P2.y += NewOffset.Y;
+                                }
+                            }
+                        }
+                    }
                     xoff.X += g.GlyphAdvance;
+
                 }
             }
 
@@ -92,6 +123,8 @@ namespace XnaFlash.Content
             }
 
             TextParts = parts.ToArray();
+
+            
         }
 
         public Movie.IDrawable MakeInstance(Movie.DisplayObject container, RootMovieClip root) { return this; }
@@ -103,8 +136,66 @@ namespace XnaFlash.Content
                 target.State.SetFillPaint(part.Tag as VGPaint);
                 target.DrawPath(part, VGPaintMode.Fill);
             }
+            var state = target.State;
+            foreach (var shape in _subShapes)
+            {
+                if (DrawGL.ins.isNewDraw)
+                {
+                    Texture2D texture = null;
+                    bool isSolidFill = false;
+                    //DrawGL.ins.SetMatrices(state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
+                    for (int index = 0; index < shape.shapeParser.shapes.Count; index++)
+                    {
+                        if (shape.shapeParser.shapes[index].Fill is SolidFill)
+                        {
+                            isSolidFill = true;
+                            //break;
+                        }
+                        else
+                        {
+                            VGPaint paint = shape.shapeParser.Paint[index];
+
+                            if (shape.shapeParser.shapes[index].Fill is TextureFill)
+                            {
+                                //if (paint is VGPatternPaint)
+                                {
+                                    texture = (paint as VGPatternPaint).Pattern.Texture;
+                                }
+                            }
+                            else if (shape.shapeParser.shapes[index].Fill is GradientFill)
+                            {
+                                //VGPaint paint = shape.shapeParser.Paint[index];
+                                //if (paint is VGGradientPaint)
+                                {
+                                    texture = (paint as VGGradientPaint).Gradient;
+                                }
+                            }
+                            else if (shape.shapeParser.shapes[index].Fill is PatternFill)
+                            {
+                                //VGPaint paint = shape.shapeParser.Paint[index];
+                                //if (paint is VGPatternPaint)
+                                {
+                                    texture = (paint as VGPatternPaint).Pattern.Texture;
+                                }
+                            }
+
+                        }
+                        if (shape.shapeParser.mesh.Count <= index)
+                        {
+                            shape.shapeParser.mesh.Add(DrawGL.ins.SetMesh(shape.shapeParser.shapes[index], texture));
+                        }
+                        DrawGL.ins.SetDrawShape(shape.shapeParser.mesh[index], state.PathToSurface.Matrix, state.Projection.Matrix, texture);
+                    }
+                }
+                else
+                {
+                   
+                }
+
+            }
             target.State.PathToSurface.Pop();
-        }        
+
+        }
         public void SetParent(StageObject parent) { }
         public void OnNextFrame() { }
 
