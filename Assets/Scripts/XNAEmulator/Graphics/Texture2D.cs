@@ -104,7 +104,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             if(unityTexture==null)
             {
-                UnityEngine.Texture2D unityTexture2D = new UnityEngine.Texture2D(m_width, m_height);
+                //UnityEngine.Texture2D unityTexture2D = new UnityEngine.Texture2D(m_width, m_height);
+                UnityEngine.Texture2D unityTexture2D = new UnityEngine.Texture2D(1, 1);
                 unityTexture2D.LoadImage(dataNew);
                 unityTexture2D.Apply();
                 unityTexture = unityTexture2D;
@@ -263,7 +264,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Format = format;
             MipMap = mipMap;
             if(format==SurfaceFormat.Color)
-                UnityTexture = new UnityEngine.Texture2D(width, height,TextureFormat.ARGB32,MipMap);
+                UnityTexture = new UnityEngine.Texture2D(width, height,TextureFormat.ARGB32, MipMap);
             else
                 UnityTexture = new UnityEngine.Texture2D(width, height, TextureFormat.RGBA32, MipMap);
             UnityTexture.wrapMode = TextureWrapMode.Clamp;

@@ -237,7 +237,7 @@ public class DrawGL : MonoBehaviour
         Index = 0;
     }
     public int Index;
-    public void SetDrawShape(Mesh mesh, VGMatrix matrices, VGMatrix projection, Microsoft.Xna.Framework.Graphics.Texture2D texture = null)
+    public void SetDrawShape(Mesh mesh, VGMatrix matrices, VGMatrix projection, Microsoft.Xna.Framework.Graphics.Texture2D texture = null, VGCxForm cxForm=null)
     {
         
         DrawShape drawShape;
@@ -250,8 +250,8 @@ public class DrawGL : MonoBehaviour
             drawShape = drawShapes[Index];
         Index++;
         if (texture != null)
-            drawShape.SetDraw(mesh, matrices, projection, texture.unityTexture2D);
+            drawShape.SetDraw(mesh, matrices, projection, texture.unityTexture2D, cxForm);
         else
-            drawShape.SetDraw(mesh, matrices, projection);
+            drawShape.SetDraw(mesh, matrices, projection,null, cxForm);
     }
 }

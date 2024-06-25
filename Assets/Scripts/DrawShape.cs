@@ -40,7 +40,7 @@ public class DrawShape : MonoBehaviour {
         IsShow = isShow;
     }
 
-    public void SetDraw(Mesh mesh,VGMatrix matrices,VGMatrix projection,Texture2D texture=null)
+    public void SetDraw(Mesh mesh,VGMatrix matrices,VGMatrix projection,Texture2D texture=null, VGCxForm cxForm=null)
     {
         meshFilter.mesh = mesh;
         if (texture != null)
@@ -59,7 +59,8 @@ public class DrawShape : MonoBehaviour {
         material.SetVector("_Transformation", t);
         material.SetVector("_Scale", s);
         material.SetVector("_Rotation", r);
-
+        material.SetVector("_AddTerm", new Vector4 ( cxForm.AddTerm.X, cxForm.AddTerm.Y, cxForm.AddTerm.Z, cxForm.AddTerm.W));
+        material.SetVector("_MulTerm", new Vector4 ( cxForm.MulTerm.X, cxForm.MulTerm.Y, cxForm.MulTerm.Z, cxForm.MulTerm.W));
 
         //Vector4 pt = new Vector4(projection.M31, projection.M32);
         ////Vector4 ps = new Vector4(projection.M11 * 1000, projection.M22 * 1000);

@@ -3,6 +3,7 @@ Shader "Unlit/VectorUnlitShader"
     Properties
     {
         _MainTex("Texture", 2D) = "white" {}
+		_Mask("MaskTexture", 2D) = "white" {}
         _Transformation("Transformation",Vector) = (0,0,0,0)
         _ProjectionT("ProjectionT",Vector) = (0,0,0,0)
         _ProjectionR("ProjectionR",Vector) = (0,0,0,0)
@@ -13,8 +14,14 @@ Shader "Unlit/VectorUnlitShader"
         _AddTerm("AddTerm",Vector) = (0,0,0,0)
         _MulTerm("MulTerm",Vector) = (1,1,1,1)
         _Offset("Offset",Vector) = (0,0,0,0)
+        _MaskChannels("MaskChannels",Vector) = (0,0,0,0)
         _IsTex("_IsTex",float) = 0
-        _Z("_Z",float) = 0
+        _Z("_Z",float) = 1
+
+		//_p("_p",float3x3) =(1,1,1,1,1,1,1,1,1,1,1,1)
+		//[Enum(UnityEngine.Rendering.BlendOp  )] _BlendOp  ("BlendOp" , Int) = 0
+		//[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("SrcBlend", Int) = 1
+		//[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("DstBlend", Int) = 10
     }
         SubShader
         {
@@ -22,18 +29,32 @@ Shader "Unlit/VectorUnlitShader"
             //Tags { "Queue" = "AlphaTest" "IgnoreProjector" = "True"  }
             //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
             LOD 100
+		/*	Tags {
+			"Queue"             = "Transparent"
+			"IgnoreProjector"   = "True"
+			"RenderType"        = "Transparent"
+			"PreviewType"       = "Plane"
+			"CanUseSpriteAtlas" = "True"
+		}*/
 
+		//Cull     Off
+		//Lighting Off
+		//ZWrite   Off
+
+		//BlendOp [_BlendOp]
+		//Blend [_SrcBlend] [_DstBlend]
             Pass
             {
                 //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
                 //Blend SrcAlpha OneMinusSrcAlpha
-				Blend One OneMinusSrcAlpha, One OneMinusSrcAlpha
+				//Blend OneMinusSrcAlpha One
+				Blend One OneMinusSrcAlpha
 			    ZClip Off
 			    ZWrite Off
 			    Cull Off
-                CGPROGRAM
-                #pragma vertex vert
-                #pragma fragment frag
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
             #pragma multi_compile_instancing //这里,第一步
@@ -49,6 +70,7 @@ Shader "Unlit/VectorUnlitShader"
             uniform float4 _AddTerm;
             uniform float4 _MulTerm;
             uniform float4 _Offset;
+            uniform float4 _MaskChannels;
             uniform float _IsTex;
             uniform float _Z;
             struct appdata
@@ -80,6 +102,8 @@ Shader "Unlit/VectorUnlitShader"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+			sampler2D _Mask;
+            float4 _Mask_ST;
 
             v2f vert(appdata v)
             {
@@ -88,38 +112,59 @@ Shader "Unlit/VectorUnlitShader"
                 UNITY_TRANSFER_INSTANCE_ID(v, o); //第三步 
                 v.vertex.z = _Z;
                 v.vertex.xy = v.vertex.xy + _Offset.xy;
-                v.vertex = mul(Translational(_Transformation,_Rotation,_Scale), v.vertex);
-				//v.vertex = mul(Translational(_ProjectionT,_ProjectionR,_ProjectionS), v.vertex);
+                v.vertex = mul(Translational(_Transformation,_Rotation,_Scale),v.vertex);
                 o.vertex = UnityObjectToClipPos(v.vertex);
+				//v.vertex = mul(Translational(_ProjectionT,_ProjectionR,_ProjectionS), v.vertex);
                 o.color = v.color;
                 /* if(_IsTex>0)
                    o.color = v.color;
                  else
                    o.color = _Color;*/
-                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                 //o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				 o.uv=v.uv;
                  //UNITY_TRANSFER_FOG(o,o.vertex);
 
                  return o;
              }
 
+			float4 CxForm(float4 color)
+            {
+	            return clamp(color * _MulTerm + _AddTerm, 0, 1);
+            }
+
+			float4 Premultiply(float4 color)
+            {
+	            color.rgb *= color.a;
+	            return color;
+            }
+
+			//float4 MaskPixel(float4 coords, float4 color)
+            //{
+	           // float alpha = clamp(dot(tex2D(Mask, coords.zw), _MaskChannels), 0, 1);
+	          //  return color * alpha;
+            //}
+
              fixed4 frag(v2f i) : SV_Target
              {
                  // sample the texture
                  //fixed4 col = _Color * _MulTerm + _AddTerm;
-                 fixed4 col = i.color * _MulTerm + _AddTerm;
+                 //fixed4 col = i.color * _MulTerm + _AddTerm;
+                 fixed4 col = i.color;
                  if (_IsTex > 0)
                  {
                      col = tex2D(_MainTex, i.uv);
                      //clip((col.a - 0.1f) < 0);
+					 //col.rgb*=col.a;
                      if ((col.a - 0.4f) < 0)
                      {
-                         discard;
+                       // discard;
                      }
+					
                  }
                  UNITY_SETUP_INSTANCE_ID(i); //最后一步
                  // apply fog
                  //UNITY_APPLY_FOG(i.fogCoord, col);
-                 return col;
+                 return Premultiply(CxForm(col));
              }
          ENDCG
      }
