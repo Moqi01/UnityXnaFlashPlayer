@@ -44,7 +44,7 @@ namespace XnaFlash.Content
                 int i = 0;
                 VGPaint paint;
 
-                if (DrawGL.ins.isNewDraw)
+                if (DrawGL.ins.isNewMeshMake)
                 {
 
                     for ( ; i < shape.shapeParser.FillStyles.Count; i++)
@@ -102,7 +102,7 @@ namespace XnaFlash.Content
             
             foreach (var shape in _subShapes)
             {
-                if (DrawGL.ins.isNewDraw)
+                if (DrawGL.ins.isNewMeshMake)
                 {
                     Texture2D texture = null;
                     bool isSolidFill=false;

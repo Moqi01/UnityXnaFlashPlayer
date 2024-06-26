@@ -12,17 +12,39 @@ using Unity.VectorGraphics;
 public class DrawGL : MonoBehaviour
 {
     public List<DrawShape> drawShapes = new List<DrawShape>();
-    public UnityEngine.Transform DrawP;
+    public bool isNewMeshMake;
+    public int Index;
+
     public DrawShape drawShapePrefab;
     public string[] PropertyNames;
     public Text FileNameText;
+    public Material mat;
+    public Material Tmat;
+
+    public UnityEngine.Transform P;
+    public Matrix4x4[] matrices;
+    public static DrawGL ins;
+
+    List<VGMatrix> PaintTransformations = new List<VGMatrix>();
+    List<VGMatrix> Projections = new List<VGMatrix>();
+    List<Material> MaterialTemp = new List<Material>();
+
+    List<Mesh> Meshs = new List<Mesh>();
+    public List<Vector2> uvs;
+
+    private MaterialPropertyBlock block;
+
+    private void Awake()
+    {
+        ins = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         PropertyNames = Tmat.GetTexturePropertyNames();
         block = new MaterialPropertyBlock();
         matrices = new Matrix4x4[] { Matrix4x4.identity };
-        //RenderQueue = mat.renderQueue;
 
         foreach (UnityEngine.Transform t in P)
         {
@@ -30,35 +52,6 @@ public class DrawGL : MonoBehaviour
             drawShapes.Add(d);
         }
     }
-    private void Awake()
-    {
-        ins = this;
-    }
-    public static int MaxNum = 50000;
-    public List< Vector2> uvs7 = new List<Vector2>();
-
-    public Vector2[] uvs = new Vector2[12];
-    public List<Vector2> uvs2 = new List<Vector2>();
-    public bool isNewDraw;
-
-    private MaterialPropertyBlock block;
-    public Matrix4x4[] matrices;
-    public static DrawGL ins;
-    public UnityEngine.Transform P;
-    // Update is called once per frame
-
-
-    public int num;
-    List<VGMatrix> PaintTransformations = new List<VGMatrix>();
-    List<VGMatrix> Projections = new List<VGMatrix>();
-    List<Material> MaterialTemp = new List<Material>();
-    // Draws 2 triangles in the left side of the screen
-    // that look like a square
-    public bool isShow;
-    public   Material mat;
-    public bool isDrow;
-    public bool isGraphicDrow;
-    List<Mesh> Meshs = new List<Mesh>();
    
     public GameObject CreateObj()
     {
@@ -77,7 +70,7 @@ public class DrawGL : MonoBehaviour
     {
         //primitiveTypes.Add(triangleList);
     }
-    public Material Tmat;
+
     internal void SetTextures(Microsoft.Xna.Framework.Graphics.Texture2D texture)
     {
         //if (isNewDraw)
@@ -143,7 +136,7 @@ public class DrawGL : MonoBehaviour
             if (isTextureFill)
                 VectorUtils.GenerateAtlasAndFillUVs(geometry, 32);
             // Debug Meshs
-#if true
+
             var mesh = new Mesh();
             //mesh.Clear();
             VectorUtils.FillMesh(mesh, geometry, 1f);
@@ -154,7 +147,7 @@ public class DrawGL : MonoBehaviour
             //mesh.name = PlaceObject.CharacterID.ToString();
             return mesh;
             //UnityEditor.AssetDatabase.CreateAsset(mesh, "Assets/Vectors/" + "ttt.asset");
-#endif
+
         }
         catch (System.Exception exc)
         {
@@ -164,7 +157,7 @@ public class DrawGL : MonoBehaviour
         }
     }
 
-    internal void SetFileText(string fileName)
+    public void SetFileText(string fileName)
     {
         FileNameText.text = fileName;
         Debug.Log(fileName);
@@ -177,40 +170,28 @@ public class DrawGL : MonoBehaviour
        return SetMesh(new List<Shape>() { shape }, texture);
     }
 
-    public bool isShowCapsule=true;
-
-    public float Scale = 1;
-    public float UseScale = 1;
-    public XnaVG.Rendering.Tesselation.StencilVertex[] vertices;
-    public Vector3[] VEs;
-    public float vX = 12 * Screen.width;
-    public float vY = 12 * Screen.height;
-    public float HMax = 1;
-    public float VMax = 1;
-    //public Vector3[] Vectors;
-    public int VIndex;
+    //public StencilVertex[] vertices;
     public List<Color> Colors = new List<Color>();
-    public List<Matrix4x4> Matrices = new List<Matrix4x4>();
-    public List<Matrix4x4> RotMatrices = new List<Matrix4x4>();
-    public List<Vector2 > ScValues = new List<Vector2>();
-    public List<Microsoft.Xna.Framework.Graphics.PrimitiveType> primitiveTypes = new List<Microsoft.Xna.Framework.Graphics.PrimitiveType>();
-    public List<XnaVG.Rendering.Tesselation.StencilVertex[]> Vertors=new List<XnaVG.Rendering.Tesselation.StencilVertex[]>();
-    public List<int> Depths = new List<int>();
+    //public List<Matrix4x4> Matrices = new List<Matrix4x4>();
+    //public List<Matrix4x4> RotMatrices = new List<Matrix4x4>();
+    //public List<Vector2 > ScValues = new List<Vector2>();
+    //public List<Microsoft.Xna.Framework.Graphics.PrimitiveType> primitiveTypes = new List<Microsoft.Xna.Framework.Graphics.PrimitiveType>();
+    public List<StencilVertex[]> Vertors=new List<StencilVertex[]>();
+    //public List<int> Depths = new List<int>();
     public bool OpenStencil;
-    public float sortingOrder=0.05f;
 
     public void SetVectors(XnaVG.Rendering.Tesselation.StencilVertex[] v)
     {
         if (v == null)
         {
-
+            Debug.LogWarning("StencilVertex null");
         }
         else
             Vertors.Add(v);
     }
     public void SetVectors(Microsoft.Xna.Framework.Vector2[] v)
     {
-        XnaVG.Rendering.Tesselation.StencilVertex[] vertices = new XnaVG.Rendering.Tesselation.StencilVertex[v.Length];
+        StencilVertex[] vertices = new StencilVertex[v.Length];
         for (int i = 0; i < v.Length; i++)
         {
             StencilVertex sv = new StencilVertex();
@@ -236,7 +217,8 @@ public class DrawGL : MonoBehaviour
         }
         Index = 0;
     }
-    public int Index;
+
+
     public void SetDrawShape(Mesh mesh, VGMatrix matrices, VGMatrix projection, Microsoft.Xna.Framework.Graphics.Texture2D texture = null, VGCxForm cxForm=null)
     {
         

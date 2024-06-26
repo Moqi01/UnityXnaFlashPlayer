@@ -174,7 +174,7 @@ namespace XnaVG.Rendering.Tesselation
             mesh.SetVertices(vertices);
             if (vertices.Count == 12)
             {
-                mesh.SetUVs(0,DrawGL.ins. uvs2);
+                mesh.SetUVs(0,DrawGL.ins.uvs);
             }
             mesh.SetColors(colors);
             mesh.SetTriangles(triangles, 0);

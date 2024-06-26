@@ -285,7 +285,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawShapes: []
-  DrawP: {fileID: 0}
+  isNewMeshMake: 1
+  Index: 0
   drawShapePrefab: {fileID: 114235131736372110, guid: 663fb855b3cf81d42bd21c746584b45e,
     type: 2}
   PropertyNames:
@@ -300,14 +301,10 @@ MonoBehaviour:
   - _DetailAlbedoMap
   - _MetallicGlossMap
   FileNameText: {fileID: 1335836125}
-  uvs7:
-  - {x: -1, y: 1}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 1}
-  - {x: 0, y: 0}
-  - {x: -1, y: 0}
-  - {x: 0, y: 0}
+  mat: {fileID: 2100000, guid: 8aa7634b696e5274e917fa0de3015b5a, type: 2}
+  Tmat: {fileID: 2100000, guid: 0d16c565ebbeff24389548b4f5c13724, type: 2}
+  P: {fileID: 1866729514}
+  matrices: []
   uvs:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -321,46 +318,8 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
-  uvs2:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 1}
-  - {x: -1, y: 0}
-  - {x: 0, y: 1}
-  - {x: -1, y: 1}
-  - {x: -1, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  isNewDraw: 1
-  matrices: []
-  P: {fileID: 1866729514}
-  num: 0
-  isShow: 0
-  mat: {fileID: 2100000, guid: 8aa7634b696e5274e917fa0de3015b5a, type: 2}
-  isDrow: 1
-  isGraphicDrow: 0
-  Tmat: {fileID: 2100000, guid: 0d16c565ebbeff24389548b4f5c13724, type: 2}
-  isShowCapsule: 0
-  Scale: 0.33333334
-  UseScale: 2
-  VEs: []
-  vX: 11280
-  vY: 6768
-  HMax: 0.8
-  VMax: -0.2
-  VIndex: 0
   Colors: []
-  Matrices: []
-  RotMatrices: []
-  ScValues: []
-  primitiveTypes: 
-  Depths: 
   OpenStencil: 0
-  sortingOrder: 0.05
-  Index: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1523,8 +1482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DrawGL: {fileID: 519420030}
   Pos: {x: 0, y: 0, z: 0}
-  Value: 5000
-  AddValue: 400
+  Value: 10000
   OrthographicSize: 0
   MainCamera: {fileID: 519420031}
   font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}

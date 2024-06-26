@@ -139,7 +139,7 @@ namespace XnaFlash.Content
             var state = target.State;
             foreach (var shape in _subShapes)
             {
-                if (DrawGL.ins.isNewDraw)
+                if (DrawGL.ins.isNewMeshMake)
                 {
                     Texture2D texture = null;
                     bool isSolidFill = false;

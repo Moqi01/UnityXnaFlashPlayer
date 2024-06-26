@@ -35,7 +35,7 @@ namespace XnaFlash.Swf.Paths
                 {
                     subShape = new SubShape(this);
                 }
-                if (DrawGL.ins.isNewDraw&&!isFont)
+                if (DrawGL.ins.isNewMeshMake&&!isFont)
                 {
                     switch (r.Type)
                     {
@@ -118,7 +118,7 @@ namespace XnaFlash.Swf.Paths
 
             if (subShape != null)
             {
-                if (!DrawGL.ins.isNewDraw)
+                if (!DrawGL.ins.isNewMeshMake)
                 {
                     foreach (var s in subShape.Fills.Values) s.Flush();
                     foreach (var s in subShape.Lines.Values) s.Flush();

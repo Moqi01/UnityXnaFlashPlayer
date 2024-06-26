@@ -10,9 +10,9 @@ public class StartScript : MonoBehaviour
     MainForm form;
     public DrawGL DrawGL;
     public Vector3 Pos;
-    public float Value = 5000;
-    public float AddValue = 100;
-    public static Vector2 vector2;
+    public float Value = 10000;
+    //public float AddValue = 100;
+    //public static Vector2 vector2;
     public float OrthographicSize = 0;
     public Camera MainCamera;
     public Font font;
@@ -116,6 +116,6 @@ public class StartScript : MonoBehaviour
 
     public void RefreshLocalScale()
     {
-        transform.localScale = Vector3.one * (-10000) / XnaFlash.FlashDocument.WH.Y;
+        transform.localScale = Vector3.one * (-Value) / XnaFlash.FlashDocument.WH.Y;
     }
 }
