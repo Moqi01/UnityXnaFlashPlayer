@@ -25,7 +25,8 @@ Shader "Unlit/VectorUnlitShader"
     }
         SubShader
         {
-            Tags { "RenderType" = "Opaque" }
+            Tags { "RenderType" = "Transparent" "Queue" = "AlphaTest"}
+            //Tags { "RenderType" = "Opaque" }
             //Tags { "Queue" = "AlphaTest" "IgnoreProjector" = "True"  }
             //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
             LOD 100
@@ -45,6 +46,7 @@ Shader "Unlit/VectorUnlitShader"
 		//Blend [_SrcBlend] [_DstBlend]
             Pass
             {
+                Tags { "RenderType" = "Transparent" "Queue" = "AlphaTest"}
                 //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
                 //Blend SrcAlpha OneMinusSrcAlpha
 				//Blend OneMinusSrcAlpha One
@@ -147,19 +149,15 @@ Shader "Unlit/VectorUnlitShader"
              fixed4 frag(v2f i) : SV_Target
              {
                  // sample the texture
-                 //fixed4 col = _Color * _MulTerm + _AddTerm;
-                 //fixed4 col = i.color * _MulTerm + _AddTerm;
                  fixed4 col = i.color;
                  if (_IsTex > 0)
                  {
                      col = tex2D(_MainTex, i.uv);
-                     //clip((col.a - 0.1f) < 0);
-					 //col.rgb*=col.a;
-                     if ((col.a - 0.4f) < 0)
+                    // clip(col.a < 0.5f);
+                     if (col.a < 0.4f)
                      {
-                       // discard;
+                         discard;
                      }
-					
                  }
                  UNITY_SETUP_INSTANCE_ID(i); //最后一步
                  // apply fog

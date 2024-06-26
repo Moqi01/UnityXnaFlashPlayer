@@ -37,7 +37,7 @@ namespace XnaFlashPlayer
             try
 #endif
             {
-                using (var fs = new FileStream(file, FileMode.Open))
+                using (var fs = new FileStream(file, FileMode.Open,FileAccess.Read))
                     document = new FlashDocument("document", new XnaFlash.Swf.SwfStream(fs), this);
                 instance = new Flash(gameServiceContainer, document, Math.Min(GraphicsDevice.Adapter.CurrentDisplayMode.Width, VectorDevice.MaxTextureSize), Math.Min(GraphicsDevice.Adapter.CurrentDisplayMode.Height, VectorDevice.MaxTextureSize));
                 instance.Visible = true;
