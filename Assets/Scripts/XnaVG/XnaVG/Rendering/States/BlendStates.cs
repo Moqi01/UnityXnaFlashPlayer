@@ -15,6 +15,7 @@ namespace XnaVG.Rendering.States
         };
 
         private BS[] _blendStates;
+        public static BlendStates BlendStatesIns;
 
         internal BlendStates()
         {
@@ -64,6 +65,7 @@ namespace XnaVG.Rendering.States
             createSeparate(VGBlendMode.Lighten, BlendFunction.Add, Blend.SourceAlpha, Blend.InverseSourceAlpha, BlendFunction.Max, Blend.One, Blend.One);
             createSeparate(VGBlendMode.LinearDodge, BlendFunction.Add, Blend.SourceAlpha, Blend.InverseSourceAlpha, BlendFunction.Add, Blend.One, Blend.InverseSourceAlpha);
             createSeparate(VGBlendMode.LinearBurn, BlendFunction.Add, Blend.SourceAlpha, Blend.InverseSourceAlpha, BlendFunction.ReverseSubtract, Blend.One, Blend.InverseSourceAlpha);
+            BlendStatesIns = this;
         }
 
         internal BS GetBlendState(VGBlendMode blendMode, ColorWriteChannels channels)

@@ -30,6 +30,7 @@ using System.ComponentModel;
 //using Microsoft.Xna.Framework.Design;
 using System.Text;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Microsoft.Xna.Framework
 {
@@ -103,6 +104,11 @@ namespace Microsoft.Xna.Framework
             this.Y = y;
             this.Z = z;
             this.W = w;
+        }
+
+        internal UnityEngine.Vector4 ToVector4()
+        {
+            return new UnityEngine.Vector4(X, Y, Z, W);
         }
 
         public Vector4(Vector2 value, float z, float w)

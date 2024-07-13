@@ -31,17 +31,22 @@ namespace XnaFlash.Swf.Tags
             byte[] data;
             var inflater = new Inflater();
             inflater.SetInput(compressed);
-           // byte[] _uncompressedData = Flazzy.Compression.ZLIB.Decompress(compressed);
+            byte[] result = new byte[Height * Width * 4];
+
+            // byte[] _uncompressedData = Flazzy.Compression.ZLIB.Decompress(compressed);
             if (format == 3)
             {
                 int rem = Width % 4;
-               
+
                 //data = new byte[((rem == 0) ? Width : (Width + 4 - rem)) * Height * 4];
-                data = new byte[((table+1)* (hasAlpha?4:3)) + Height*Width];
+                data = new byte[((table + 1) * (hasAlpha ? 4 : 3)) + Height * Width];
                 int len = inflater.Inflate(data,0,data .Length);
                 if (len != data.Length)
                     throw new SwfCorruptedException("Bitmap data are not valid ZLIB stream!");
                 Pixels = BitmapUtils.UnpackIndexed(data, Width, Height, table, hasAlpha);
+
+                //BitmapUtils.UnpackIndexedToByte(data, Width, Height, table, hasAlpha, result);
+
             }
             else if (format == 4 && !hasAlpha)
             {
@@ -56,14 +61,18 @@ namespace XnaFlash.Swf.Tags
                 if (inflater.Inflate(data) != data.Length)
                     return true;
                 //System.Array.Reverse(data, 0, data.Length);
-                isFlip = true;
+                //isFlip = true;
                 
-               // Pixels = BitmapUtils.UnpackPIX24(data, Width, Height, hasAlpha);
+                for (int i = 0; i < Height; i++)
+                {
+                    System.Array.Copy(data, i*Width*4, result,( Height- i-1)*Width*4, Width*4);
+                }
+                // Pixels = BitmapUtils.UnpackPIX24(data, Width, Height, hasAlpha);
 
             }
             else
                 throw new SwfCorruptedException("Invalid lossless bitmap format found!");
-            Dates = data;
+            Dates = result;
 
             return true;
         }

@@ -102,8 +102,8 @@ namespace XnaFlashPlayer
 
         public void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (openSwf.ShowDialog(Open) != System.Windows.Forms.DialogResult.OK)
-                return;
+             if (openSwf.ShowDialog(Open) != System.Windows.Forms.DialogResult.OK)
+                   return;
         }
 
         public string FileName => openSwf?.FileName;
@@ -112,10 +112,18 @@ namespace XnaFlashPlayer
         {
             if(dialogResult== DialogResult.OK)
             {
-                exportToolStripMenuItem.Enabled =
-                přehráváníToolStripMenuItem.Enabled = flashPlayer.Open(openSwf.FileName);
-                DrawGL.ins.SetFileText( openSwf.FileName);
-                StartScript.ins.RefreshLocalScale();
+                if(File.Exists(openSwf.FileName))
+                {
+                    exportToolStripMenuItem.Enabled =
+                    přehráváníToolStripMenuItem.Enabled = flashPlayer.Open(openSwf.FileName);
+                    DrawGL.ins.SetFileText(openSwf.FileName);
+                    StartScript.ins.RefreshLocalScale();
+                }
+                else
+                {
+                    ToolStripMenuItem_Click(null, null);
+                }
+                
             }
         }
 

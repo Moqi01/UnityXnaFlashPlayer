@@ -146,5 +146,73 @@ namespace XnaFlash.Swf
             return res;
         }
 
+        public static byte[] UnpackIndexedToByte(byte[] data, int width, int height, int table, bool hasAlpha, byte[] res)
+        {
+            VGColor[] colors = new VGColor[table + 1];
+            int j = 0;
+            if (hasAlpha)
+            {
+                for (int i = 0; i <= table; i++, j += 4)
+                    colors[i] = new VGColor(data[j], data[j + 1], data[j + 2], data[j + 3]);
+            }
+            else
+            {
+                for (int i = 0; i <= table; i++, j += 3)
+                    colors[i] = new VGColor(data[j], data[j + 1], data[j + 2]);
+            }
+
+
+            int lineSize = (data.Length - j) / height;
+            int pix = 0, pos = 0;
+            for (; height > 0; height--, j += lineSize)
+            {
+                pos = j;
+                for (int x = 0; x < width; x++, pos++)
+                {
+                    int index = data[pos];
+                    res[pix] = colors[index].R;
+                    res[pix+1] = colors[index].G;
+                    res[pix+2] = colors[index].B;
+                    res[pix+3] = colors[index].A;
+                    pix += 4;
+                }
+            }
+            return res;
+        }
+
+        //public static byte[] UnpackIndexedToByte(byte[] data, int width, int height, int table, bool hasAlpha, byte[] result)
+        //{
+        //    VGColor[] colors = new VGColor[table + 1];
+        //    int z = 0;
+        //    if (hasAlpha)
+        //    {
+        //        for (int i = 0; i <= table; i++, z += 4)
+        //            colors[i] = new VGColor(data[z], data[z + 1], data[z + 2], data[z + 3]);
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i <= table; i++, z += 3)
+        //            colors[i] = new VGColor(data[z], data[z + 1], data[z + 2]);
+        //    }
+
+        //    var palette_pitch = width % 4 == 0
+        //            ? width
+        //            : width + (4 - width % 4);
+        //    for (var i = 0; i < height; ++i)
+        //    {
+        //        for (var j = 0; j < width; ++j)
+        //        {
+        //            var result_index = j + i * width;
+        //            var palette_index = data[j + i * palette_pitch+z];
+        //            var palette_color = colors[palette_index];
+        //            result[result_index * 4 + 0] = palette_color.A;
+        //            result[result_index * 4 + 1] = palette_color.R;
+        //            result[result_index * 4 + 2] = palette_color.G;
+        //            result[result_index * 4 + 3] = palette_color.B;
+        //        }
+        //    }
+        //    return result;
+        //}
+
     }
 }

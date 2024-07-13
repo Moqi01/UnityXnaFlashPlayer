@@ -8,6 +8,7 @@ using XnaFlash.Swf;
 using XnaFlash.Swf.Structures;
 using XnaFlash.Swf.Structures.Gradients;
 using XnaFlash.Swf.Tags;
+using XnaFlashPlayer;
 using XnaVG;
 using XnaVG.Paints;
 using static XnaFlash.Swf.Structures.FillStyle;
@@ -17,7 +18,7 @@ namespace XnaFlash.Content
     public class Shape : ICharacter, Movie.IDrawable
     {
         private SubShape[] _subShapes;
-
+        private FlashPlayerControl _playerControl;
         public ushort ID { get; private set; }
         public CharacterType Type { get { return CharacterType.Shape; } }
         public Rectangle? Bounds { get; private set; }
@@ -27,6 +28,8 @@ namespace XnaFlash.Content
             var state = services.VectorDevice.State;
             var t = tag as DefineShapeTag;
             var shapes = t.Shape.SubShapes;
+
+            _playerControl = (FlashPlayerControl)services;
 
             ID = tag.CharacterID;
             Bounds = t.ShapeBounds;
@@ -49,8 +52,7 @@ namespace XnaFlash.Content
 
                     for ( ; i < shape.shapeParser.FillStyles.Count; i++)
                     {
-                        //if(shape.shapeParser.FillStyles[i].FillType!= FillStyleType.Solid)
-                               shape.shapeParser.Paint.Add( MakeFill(shape.shapeParser.FillStyles[i], services.VectorDevice, document));
+                          shape.shapeParser.Paint.Add( MakeFill(shape.shapeParser.FillStyles[i], services.VectorDevice, document));
                     }
                 }
                 i = 0;
@@ -105,15 +107,14 @@ namespace XnaFlash.Content
                 if (DrawGL.ins.isNewMeshMake)
                 {
                     Texture2D texture = null;
-                    bool isSolidFill=false;
-                    //DrawGL.ins.SetMatrices(state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix);
-                    //for (int index = 0; index < shape.shapeParser.FillStyles.Count; index++)
+                
+                    Rectangle source=default(Rectangle);
+          
                     for (int index = 0; index < shape.shapeParser.shapes.Count; index++)
                     {
                         if (shape.shapeParser.shapes[index].Fill is SolidFill)
                         {
-                            isSolidFill = true;
-                            //break;
+                           
                         }
                         else
                         {
@@ -121,15 +122,17 @@ namespace XnaFlash.Content
 
                             if (shape.shapeParser.shapes[index].Fill is TextureFill)
                             {
-                                if (paint is VGPatternPaint)
+                                //if (paint is VGPatternPaint)
                                 {
-                                    texture = (paint as VGPatternPaint).Pattern.Texture;
+                                    VGImage image = (paint as VGPatternPaint).Pattern;
+                                    texture = image.Texture;
+                                    source = image.Texture.Bounds;
                                 }
                             }
                             else if (shape.shapeParser.shapes[index].Fill is GradientFill)
                             {
                                 //VGPaint paint = shape.shapeParser.Paint[index];
-                                if (paint is VGGradientPaint)
+                                //if (paint is VGGradientPaint)
                                 {
                                     texture = (paint as VGGradientPaint).Gradient;
                                 }
@@ -137,7 +140,7 @@ namespace XnaFlash.Content
                             else if (shape.shapeParser.shapes[index].Fill is PatternFill)
                             {
                                 //VGPaint paint = shape.shapeParser.Paint[index];
-                                if (paint is VGPatternPaint)
+                                //if (paint is VGPatternPaint)
                                 {
                                     texture = (paint as VGPatternPaint).Pattern.Texture;
                                 }
@@ -149,129 +152,40 @@ namespace XnaFlash.Content
                             shape.shapeParser.mesh.Add(DrawGL.ins.SetMesh(shape.shapeParser.shapes[index], texture));
                         }
                         var cxForm = state.ColorTransformationEnabled ? state.ColorTransformation.CxForm : VGCxForm.Identity;
-                        DrawGL.ins.SetDrawShape(shape.shapeParser.mesh[index], state.PathToSurface.Matrix, state.Projection.Matrix, texture, cxForm);
-                    }
-                    /* if (shape.shapeParser.shapes.Count > 0)
-                     {
-                         if (shape.shapeParser.shapes[0].Fill is TextureFill)
-                         {
-                             //TextureFill Fill = shape.shapeParser.shapes[0].Fill as TextureFill;
-                             if (shape.shapeParser.Paint != null)
-                             {
+                        DrawGL.ins.SetDrawShape(shape.shapeParser.mesh[index], state.PathToSurface.Matrix, state.Projection.Matrix, state.PathToFillPaint.Matrix, texture, cxForm);
 
-                                 var pattern = (shape.shapeParser.Paint as VGPatternPaint);
-                                 if (pattern != null)
-                                 {
-                                     texture = pattern.Pattern.Texture;
-                                 }
-                                 else
-                                 {
-                                     VGRadialPaint RadialPaint = (shape.shapeParser.Paint as VGRadialPaint);
-                                     if (RadialPaint != null)
-                                     {
-                                         texture = RadialPaint.Gradient;
+                        if (state.WriteStencilMask != VGStencilMasks.None)
+                        {
+                            //Device.EffectManager.StencilSolid.Apply(state.Projection.Matrix, state.ImageToSurface.Matrix);
 
-                                     }
-                                     else
-                                     {
-                                         VGLinearPaint LinearPaint = (shape.shapeParser.Paint as VGLinearPaint);
-                                         if (LinearPaint != null)
-                                         {
-                                             texture = LinearPaint.Gradient;
+                            //_device.BlendState = Device.BlendStates.NoColor;
+                            //_device.DepthStencilState = state.Stencils.Set;
 
-                                         }
-                                         else
-                                         {
-                                             //VGPaint Paint = (shape.shapeParser.Paint as VGPaint);
-                                             //if (Paint != null)
-                                             //{
-                                             //    texture = Paint.Gradient;
+                            //Vector4 extents = new Vector4(0, 0, source.Width, source.Height);
+                            //RenderRectangle(ref extents);
+                        }
+                        else
+                        {
+                            //var cxForm = state.ColorTransformationEnabled ? state.ColorTransformation.CxForm : VGCxForm.Identity;
+                            //var effect = Device.EffectManager.Cover;
 
-                                             //}
-                                             //else
-                                             //{
+                            //_device.BlendState = Device.BlendStates.GetBlendState(state.BlendMode, state.ColorChannels);
+                            //_device.DepthStencilState = DepthStencilState.None;
 
-                                             //}
-                                         }
-                                     }
-                                 }
+                            //effect.SetParameters(state.Projection.Matrix, state.ImageToSurface.Matrix, cxForm);
+                            //effect.SetMask(state.MaskingEnabled ? state.Mask : null, state.MaskChannels);
+                            //effect.SetImagePaint(image, VGMatrix.PaintToRectangle(-source.X, -source.Y, image.Texture.Width, image.Texture.Height));
+                            //effect.Apply();
+
+                            //Vector4 extents = new Vector4(0, 0, source.Width, source.Height);
+                            //RenderRectangle(ref extents);
+                        }
 
 
-                                 DrawGL.ins.SetTextures(texture);
-                             }
-
-                         }
-                         else if (shape.shapeParser.shapes[0].Fill is GradientFill)
-                         {
-                             //GradientFill gradientFill = shape.shapeParser.shapes[0].Fill as GradientFill;
-                             if (shape.shapeParser.Paint != null)
-                             {
-                                 texture = (shape.shapeParser.Paint as VGGradientPaint).Gradient;
-                                 //_effect.GraphicsDevice.Textures[1] = pattern.Texture;
-                                 //_effect.GraphicsDevice.SamplerStates[1] = pattern.GetSamplerState();
-                                 //DrawGL.ins.SetColor(UnityEngine.Color.white);
-                                 //DrawGL.ins.SetTextures(tex);
-                             }
-
-                         }
-                         else if (shape.shapeParser.shapes[0].Fill is PatternFill)
-                         {
-                             //PatternFill Fill = shape.shapeParser.shapes[0].Fill as PatternFill;
-                             if (shape.shapeParser.Paint != null)
-                             {
-
-                                 var pattern = (shape.shapeParser.Paint as VGPatternPaint);
-                                 if (pattern != null)
-                                 {
-                                     texture = pattern.Pattern.Texture;
-                                 }
-                                 else
-                                 {
-                                     VGRadialPaint RadialPaint = (shape.shapeParser.Paint as VGRadialPaint);
-                                     if (RadialPaint != null)
-                                     {
-                                         texture = RadialPaint.Gradient;
-
-                                     }
-                                     else
-                                     {
-                                         VGLinearPaint LinearPaint = (shape.shapeParser.Paint as VGLinearPaint);
-                                         if (LinearPaint != null)
-                                         {
-                                             texture = LinearPaint.Gradient;
-
-                                         }
-                                         else
-                                         {
-                                             //VGPaint Paint = (shape.shapeParser.Paint as VGPaint);
-                                             //if (Paint != null)
-                                             //{
-                                             //    texture = Paint.Gradient;
-
-                                             //}
-                                             //else
-                                             //{
-
-                                             //}
-                                         }
-                                     }
-                                 }
-
-
-                                 DrawGL.ins.SetTextures(texture);
-                             }
-                         }
-                     }*/
-                    //else if (shape._strokes.Length > 0)
-                    //    target.DrawPath(shape._strokes[0].Path, VGPaintMode.Stroke);
-                    //if (isSolidFill)
-                    //{
-                    //    if (shape.shapeParser.oneMesh == null)
-                    //    {
-                    //        shape.shapeParser.oneMesh = DrawGL.ins.SetMesh(shape.shapeParser.shapes, texture);
-                    //    }
-                    //    DrawGL.ins.SetDrawShape(shape.shapeParser.oneMesh, state.PathToSurface.Matrix, state.Projection.Matrix, texture);
-                    //}
+                        DrawGL.ins.SetDrawMask(state.MaskingEnabled ? state.Mask : null, state.MaskChannels);
+                        DrawGL.ins.SetBlendState(XnaVG.Rendering.States.BlendStates.BlendStatesIns.GetBlendState(state.BlendMode, state.ColorChannels));
+                }
+                   
                 }
                 else
                 {

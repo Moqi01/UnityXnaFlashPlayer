@@ -165,7 +165,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentNullException("data");
             }
            
-            this.unityTexture2D.SetPixels(GetColors(data));
+            //this.unityTexture2D.SetPixels(GetColors(data));
+            this.unityTexture2D.SetPixels32(GetColors32(data));
             this.unityTexture2D.Apply();
         }
 

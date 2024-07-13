@@ -153,8 +153,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data is Color[])
             {
                 Color[] mydata = (Color[])Convert.ChangeType(data, typeof(Color[]));
-               UnityEngine. Texture2D texture2D = unityTexture as UnityEngine. Texture2D;
-                texture2D.SetPixels(GetColors(mydata));
+                UnityEngine. Texture2D texture2D = unityTexture as UnityEngine. Texture2D;
+                //texture2D.SetPixels(GetColors(mydata));
+                texture2D.SetPixels32(GetColors32(mydata));
                 texture2D.Apply();
 
             }
@@ -220,7 +221,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 Color[] mydata = (Color[])Convert.ChangeType(data, typeof(Color[]));
                 UnityEngine.Texture2D texture2D = unityTexture as UnityEngine.Texture2D;
 
-                texture2D.SetPixels(GetColors(mydata));
+                //texture2D.SetPixels(GetColors(mydata));
+                texture2D.SetPixels32(GetColors32(mydata));
             }
             if (data is byte[])
             {
@@ -244,6 +246,19 @@ namespace Microsoft.Xna.Framework.Graphics
                 color[i].b = data[i].B/255f;
                 color[i].g = data[i].G/25f;
                 color[i].r = data[i].R/255f;
+            }
+            return color;
+        }
+
+        public UnityEngine.Color32[] GetColors32(Color[] data)
+        {
+            UnityEngine.Color32[] color = new UnityEngine.Color32[data.Length];
+            for (int i = 0; i < data.Length; i++)
+            {
+                color[i].a = data[i].A ;
+                color[i].b = data[i].B ;
+                color[i].g = data[i].G ;
+                color[i].r = data[i].R ;
             }
             return color;
         }

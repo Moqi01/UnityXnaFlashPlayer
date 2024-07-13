@@ -4,53 +4,59 @@ Shader "Unlit/VectorUnlitShader"
     {
         _MainTex("Texture", 2D) = "white" {}
 		_Mask("MaskTexture", 2D) = "white" {}
+        _Color("Color",Color) = (1,1,1,1)
+       
         _Transformation("Transformation",Vector) = (0,0,0,0)
-        _ProjectionT("ProjectionT",Vector) = (0,0,0,0)
+        _Rotation("Rotation",Vector) = (0,0,0,0)
+        _Scale("Scale",Vector) = (1,1,1,1)
+		_FocalPoint("FocalPoint",Vector)=(0,0,0,0)
+
+		_ProjectionT("ProjectionT",Vector) = (0,0,0,0)
         _ProjectionR("ProjectionR",Vector) = (0,0,0,0)
         _ProjectionS("ProjectionS",Vector) = (0,0,0,0)
-        _Color("Color",Color) = (1,1,1,1)
-        _Scale("Scale",Vector) = (1,1,1,1)
-        _Rotation("Rotation",Vector) = (0,0,0,0)
+
+		_PaintTransformationT("PaintTransformationT",Vector) = (0,0,0,0)
+        _PaintTransformationR("PaintTransformationR",Vector) = (0,0,0,0)
+        _PaintTransformationS("PaintTransformationS",Vector) = (0,0,0,0)
+
         _AddTerm("AddTerm",Vector) = (0,0,0,0)
         _MulTerm("MulTerm",Vector) = (1,1,1,1)
         _Offset("Offset",Vector) = (0,0,0,0)
         _MaskChannels("MaskChannels",Vector) = (0,0,0,0)
         _IsTex("_IsTex",float) = 0
-        _Z("_Z",float) = 1
+        _IsRadial("_IsRadial",float) = 0
 
-		//_p("_p",float3x3) =(1,1,1,1,1,1,1,1,1,1,1,1)
-		//[Enum(UnityEngine.Rendering.BlendOp  )] _BlendOp  ("BlendOp" , Int) = 0
-		//[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("SrcBlend", Int) = 1
-		//[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("DstBlend", Int) = 10
+
+		[Enum(UnityEngine.Rendering.BlendOp  )] _BlendOp  ("BlendOp" , Int) = 0
+		[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("SrcBlend", Int) = 1
+		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("DstBlend", Int) = 10
     }
         SubShader
         {
-            Tags { "RenderType" = "Transparent" "Queue" = "AlphaTest"}
+		    //Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+            //Tags { "RenderType" = "Transparent" "Queue" = "AlphaTest"}
             //Tags { "RenderType" = "Opaque" }
             //Tags { "Queue" = "AlphaTest" "IgnoreProjector" = "True"  }
             //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
             LOD 100
-		/*	Tags {
+			Tags {
 			"Queue"             = "Transparent"
 			"IgnoreProjector"   = "True"
 			"RenderType"        = "Transparent"
 			"PreviewType"       = "Plane"
 			"CanUseSpriteAtlas" = "True"
-		}*/
+		}
 
-		//Cull     Off
-		//Lighting Off
-		//ZWrite   Off
 
-		//BlendOp [_BlendOp]
-		//Blend [_SrcBlend] [_DstBlend]
+		BlendOp [_BlendOp]
+		Blend [_SrcBlend] [_DstBlend]
             Pass
             {
-                Tags { "RenderType" = "Transparent" "Queue" = "AlphaTest"}
+                //Tags { "RenderType" = "Transparent" "Queue" = "AlphaTest"}
                 //Tags { "QUEUE" = "AlphaTest" "IGNOREPROJECTOR" = "true" "RenderType" = "TransparentCutout" }
                 //Blend SrcAlpha OneMinusSrcAlpha
 				//Blend OneMinusSrcAlpha One
-				Blend One OneMinusSrcAlpha
+				//Blend One OneMinusSrcAlpha
 			    ZClip Off
 			    ZWrite Off
 			    Cull Off
@@ -58,7 +64,8 @@ Shader "Unlit/VectorUnlitShader"
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
-            #pragma multi_compile_fog
+            //#pragma multi_compile_fog
+			#pragma fragmentoption ARB_precision_hint_fastest
             #pragma multi_compile_instancing //这里,第一步
             #include "UnityCG.cginc"
             uniform float4 _Color;
@@ -69,16 +76,23 @@ Shader "Unlit/VectorUnlitShader"
             uniform float4 _Transformation;
             uniform float4 _Rotation;
             uniform float4 _Scale;
+
+			uniform float4 _PaintTransformationT;
+            uniform float4 _PaintTransformationR;
+            uniform float4 _PaintTransformationS;
+
             uniform float4 _AddTerm;
             uniform float4 _MulTerm;
             uniform float4 _Offset;
             uniform float4 _MaskChannels;
             uniform float _IsTex;
-            uniform float _Z;
+            uniform float _IsRadial;
+            uniform float4 _FocalPoint;
+
             struct appdata
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
                 float4 color : COLOR;
                
 			   UNITY_VERTEX_INPUT_INSTANCE_ID //这里,第二步
@@ -86,7 +100,7 @@ Shader "Unlit/VectorUnlitShader"
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
                 //UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float4 color : COLOR;
@@ -112,21 +126,24 @@ Shader "Unlit/VectorUnlitShader"
                 v2f o;
                 UNITY_SETUP_INSTANCE_ID(v); //这里第三步
                 UNITY_TRANSFER_INSTANCE_ID(v, o); //第三步 
-                v.vertex.z = _Z;
+                //v.vertex.z = _Z;
+				//float4 tcTransform=float4(1, 1, 0.5, 0.5);
+				float4 tcTransform=float4(0, 0, 1, 1);
                 v.vertex.xy = v.vertex.xy + _Offset.xy;
+				v.vertex.z=1;
+
+                //v.uv.xy = mul(Translational(_PaintTransformationT,_PaintTransformationR,_PaintTransformationS),v.vertex).xy;
+				//v.uv.xy = (v.uv.xy + tcTransform.xy) * tcTransform.zw - _FocalPoint.xy;
+
                 v.vertex = mul(Translational(_Transformation,_Rotation,_Scale),v.vertex);
-                o.vertex = UnityObjectToClipPos(v.vertex);
 				//v.vertex = mul(Translational(_ProjectionT,_ProjectionR,_ProjectionS), v.vertex);
+                o.vertex = UnityObjectToClipPos(v.vertex);
                 o.color = v.color;
-                /* if(_IsTex>0)
-                   o.color = v.color;
-                 else
-                   o.color = _Color;*/
-                 //o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-				 o.uv=v.uv;
+                // o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				o.uv=v.uv;
                  //UNITY_TRANSFER_FOG(o,o.vertex);
 
-                 return o;
+                return o;
              }
 
 			float4 CxForm(float4 color)
@@ -140,11 +157,22 @@ Shader "Unlit/VectorUnlitShader"
 	            return color;
             }
 
-			//float4 MaskPixel(float4 coords, float4 color)
-            //{
-	           // float alpha = clamp(dot(tex2D(Mask, coords.zw), _MaskChannels), 0, 1);
-	          //  return color * alpha;
-            //}
+			float4 RadialFill(float4 coords)
+            {
+	          return CxForm(tex2D(_MainTex, float2(length(coords.xy), 0.5)));
+            }
+
+			float4 MaskPixel(float4 coords, float4 color)
+            {
+	            float alpha = clamp(dot(tex2D(_Mask, coords.zw), _MaskChannels), 0, 1);
+	            return color * alpha;
+            }
+
+			float4 FromLinear(float4 color)
+            {
+	            // http://chilliant.blogspot.cz/2012/08/srgb-approximations-for-hlsl.html
+	            return max(1.055 * pow(color, 0.416666667) - 0.055, 0);
+             }
 
              fixed4 frag(v2f i) : SV_Target
              {
@@ -152,12 +180,14 @@ Shader "Unlit/VectorUnlitShader"
                  fixed4 col = i.color;
                  if (_IsTex > 0)
                  {
-                     col = tex2D(_MainTex, i.uv);
-                    // clip(col.a < 0.5f);
-                     if (col.a < 0.4f)
-                     {
-                         discard;
-                     }
+				 if(_IsRadial>0)
+				 {
+				    return FromLinear( RadialFill(i.uv));
+				    //return RadialFill(i.uv);
+				 }
+                     col = tex2D(_MainTex, i.uv.xy);
+                     //clip(col.a - 0.1f);
+                    
                  }
                  UNITY_SETUP_INSTANCE_ID(i); //最后一步
                  // apply fog

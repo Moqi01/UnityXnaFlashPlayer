@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using XnaVG;
 using UnityEngine.UI;
-using Microsoft.Xna.Framework.Graphics;
-using PrimitiveType = Microsoft.Xna.Framework.Graphics.PrimitiveType;
 using XnaVG.Rendering.Tesselation;
 using Unity.VectorGraphics;
+using Microsoft.Xna.Framework.Graphics;
+//using Microsoft.Xna.Framework;
 
 public class DrawGL : MonoBehaviour
 {
@@ -219,7 +219,7 @@ public class DrawGL : MonoBehaviour
     }
 
 
-    public void SetDrawShape(Mesh mesh, VGMatrix matrices, VGMatrix projection, Microsoft.Xna.Framework.Graphics.Texture2D texture = null, VGCxForm cxForm=null)
+    public void SetDrawShape(Mesh mesh, VGMatrix transformation, VGMatrix projection, VGMatrix paintTransformation, Microsoft.Xna.Framework.Graphics.Texture2D texture = null, VGCxForm cxForm=null)
     {
         
         DrawShape drawShape;
@@ -232,8 +232,24 @@ public class DrawGL : MonoBehaviour
             drawShape = drawShapes[Index];
         Index++;
         if (texture != null)
-            drawShape.SetDraw(mesh, matrices, projection, texture.unityTexture2D, cxForm);
+            drawShape.SetDraw(mesh, transformation, projection, paintTransformation, texture.unityTexture2D, cxForm);
         else
-            drawShape.SetDraw(mesh, matrices, projection,null, cxForm);
+            drawShape.SetDraw(mesh, transformation, projection, paintTransformation, null, cxForm);
+    }
+
+    public void SetDrawMask(VGImage vGImage, Microsoft.Xna.Framework.Vector4 maskChannels)
+    {
+        DrawShape drawShape = drawShapes[Index-1];
+        if(vGImage==null)
+            drawShape.SetDrawMask(null, maskChannels);
+        else
+            drawShape.SetDrawMask(vGImage.Texture.unityTexture2D, maskChannels);
+    }
+
+    public void SetBlendState(BlendState blendState)
+    {
+        DrawShape drawShape = drawShapes[Index - 1];
+        
+        drawShape.SetBlendState(blendState);
     }
 }

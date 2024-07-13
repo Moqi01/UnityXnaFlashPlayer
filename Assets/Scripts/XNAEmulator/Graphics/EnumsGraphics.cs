@@ -31,19 +31,38 @@ using System.Text;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
+    //public enum Blend
+    //{
+    //    Zero = 1,
+    //    One = 2,
+    //    SourceColor = 3,
+    //    InverseSourceColor = 4,
+    //    SourceAlpha = 5,
+    //    InverseSourceAlpha = 6,
+    //    DestinationAlpha = 7,
+    //    InverseDestinationAlpha = 8,
+    //    DestinationColor = 9,
+    //    InverseDestinationColor = 10,
+    //    SourceAlphaSaturation = 11,
+    //    BothSourceAlpha = 12,
+    //    BothInverseSourceAlpha = 13,
+    //    BlendFactor = 14,
+    //    InverseBlendFactor = 15,
+    //}
+
     public enum Blend
     {
         Zero = 1,
         One = 2,
-        SourceColor = 3,
-        InverseSourceColor = 4,
-        SourceAlpha = 5,
-        InverseSourceAlpha = 6,
-        DestinationAlpha = 7,
-        InverseDestinationAlpha = 8,
-        DestinationColor = 9,
-        InverseDestinationColor = 10,
-        SourceAlphaSaturation = 11,
+        DestinationColor = 3,
+        SourceColor = 4,
+        InverseDestinationColor = 5,
+        SourceAlpha = 6,
+        InverseSourceColor = 7,
+        DestinationAlpha = 8,
+        InverseDestinationAlpha = 9,
+        SourceAlphaSaturation = 10,
+        InverseSourceAlpha = 11,
         BothSourceAlpha = 12,
         BothInverseSourceAlpha = 13,
         BlendFactor = 14,
